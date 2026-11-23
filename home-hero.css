@@ -1,0 +1,248 @@
+/* HOME / The Beginning — botanical editorial hero.
+   Purposefully scoped to slide 01; the other four scenes and flower
+   animation have not been altered. */
+.slide-welcome .home-hero{
+  top:49%;
+  width:min(calc(100% - 50px),880px);
+  max-width:880px;
+  color:#f9f5e9;
+  z-index:16;
+  isolation:isolate;
+}
+.slide-welcome .home-hero::before{
+  inset:-16% -9%;
+  background:radial-gradient(
+    ellipse 50% 58% at center,
+    rgba(46,57,34,.84) 0%,
+    rgba(46,57,34,.51) 40%,
+    rgba(46,57,34,.13) 76%,
+    transparent 100%);
+  filter:blur(19px);
+}
+.slide-welcome .home-hero::after{
+  content:"";
+  position:absolute;
+  z-index:-1;
+  left:7%;right:7%;top:-28px;bottom:-28px;
+  pointer-events:none;
+  border-left:1px solid rgba(227,216,159,.08);
+  border-right:1px solid rgba(227,216,159,.08);
+  mask-image:linear-gradient(to bottom,transparent,black 19%,black 81%,transparent);
+}
+.slide-welcome .home-eyebrow{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:17px;
+  font-family:var(--mono);
+  font-size:10px;
+  font-weight:500;
+  line-height:1.6;
+  letter-spacing:.28em;
+  color:#ded8ac;
+  text-transform:uppercase;
+}
+.slide-welcome .home-eyebrow-line{
+  display:block;
+  flex:0 0 clamp(25px,4.1vw,62px);
+  height:1px;
+  background:linear-gradient(90deg,transparent,rgba(226,215,155,.83));
+}
+.slide-welcome .home-eyebrow-line:last-child{
+  transform:rotate(180deg);
+}
+.slide-welcome .home-name{
+  font-family:var(--serif);
+  font-size:clamp(77px,9.3vw,153px);
+  font-weight:400;
+  line-height:.90;
+  letter-spacing:-.072em;
+  margin:clamp(12px,2.4vh,24px) 0 9px;
+  text-wrap:nowrap;
+  text-shadow:0 6px 32px rgba(10,26,15,.19);
+}
+.slide-welcome .home-name .home-first-name,
+.slide-welcome .home-name .home-last-name{
+  display:block;
+  white-space:nowrap;
+}
+.slide-welcome .home-name .home-first-name{
+  color:#fbf7ec;
+}
+.slide-welcome .home-name .home-last-name{
+  font-family:var(--serif);
+  color:#e4dfb5;
+  font-style:italic;
+  font-weight:400;
+  font-size:.91em;
+  letter-spacing:-.068em;
+  line-height:1.03;
+  padding-right:.14em;
+}
+.slide-welcome .home-name .home-period{
+  color:#c7b880;
+}
+.slide-welcome .home-japanese{
+  color:#e6e6d2;
+  font-size:13px;
+  font-weight:400;
+  letter-spacing:.53em;
+  margin:13px auto 0;
+  line-height:1.8;
+}
+.slide-welcome .home-divider{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:15px;
+  margin:clamp(13px,2.2vh,22px) auto 14px;
+  color:#d9c38a;
+}
+.slide-welcome .home-divider span{
+  width:clamp(30px,5vw,69px);
+  height:1px;
+  background:linear-gradient(90deg,transparent,rgba(231,212,151,.75));
+}
+.slide-welcome .home-divider span:last-child{
+  transform:rotate(180deg);
+}
+.slide-welcome .home-divider b{
+  font-size:16px;
+  font-weight:400;
+}
+.slide-welcome .home-discipline{
+  margin:0 auto 12px;
+  color:#eadfac;
+  font-family:var(--serif);
+  font-size:clamp(15px,1.5vw,21px);
+  font-weight:400;
+  letter-spacing:.012em;
+  line-height:1.35;
+}
+.slide-welcome .home-discipline span{
+  color:#d2c38b;
+  padding:0 5px;
+}
+.slide-welcome .home-research-intro{
+  margin:0 auto;
+  max-width:650px;
+  font-family:var(--sans);
+  font-size:clamp(13px,1.15vw,16px);
+  font-weight:400;
+  line-height:1.77;
+  letter-spacing:.013em;
+  color:#e4e8d9;
+  text-wrap:balance;
+}
+.slide-welcome .home-identity{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  justify-content:center;
+  column-gap:18px;
+  row-gap:6px;
+  margin:clamp(13px,2.3vh,21px) auto 0;
+  font-family:var(--mono);
+  font-size:9px;
+  font-weight:400;
+  line-height:1.7;
+  letter-spacing:.13em;
+  color:#c6d4ba;
+}
+.slide-welcome .home-identity-spark{
+  color:#dfc993;
+  font-size:12px;
+}
+.slide-welcome .home-discover{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:15px;
+  margin:clamp(11px,2.1vh,20px) auto 0;
+  padding:8px 2px 9px;
+  border-bottom:1px solid rgba(239,218,154,.65);
+  color:#fbf2cf;
+  font-family:var(--mono);
+  font-size:9px;
+  font-weight:500;
+  line-height:1.2;
+  letter-spacing:.24em;
+  text-decoration:none;
+  pointer-events:auto;
+  transition:color .35s,border-color .35s,transform .35s;
+}
+.slide-welcome .home-discover:hover,
+.slide-welcome .home-discover:focus-visible{
+  color:#fff;
+  border-color:#fff8d7;
+  transform:translateY(-3px);
+}
+.slide-welcome .home-discover-arrow{
+  font-family:var(--sans);
+  font-size:19px;
+  line-height:11px;
+  transition:transform .3s;
+}
+.slide-welcome .home-discover:hover .home-discover-arrow{
+  transform:translate(3px,-3px);
+}
+.slide-welcome .home-vertical-note,
+.slide-welcome .home-edge-caption{
+  color:#e6e4c5;
+  letter-spacing:.20em;
+}
+.slide-welcome .home-edge-caption span{color:#ead29b}
+@media(max-width:780px){
+  .slide-welcome .home-hero{top:48.5%;width:calc(100% - 42px)}
+  .slide-welcome .home-name{font-size:clamp(58px,11.5vw,103px)}
+  .slide-welcome .home-eyebrow{font-size:9px;letter-spacing:.17em;gap:11px}
+  .slide-welcome .home-eyebrow-line{flex-basis:24px}
+  .slide-welcome .home-discipline{font-size:clamp(14px,2.2vw,18px)}
+  .slide-welcome .home-research-intro{font-size:13.5px;max-width:470px}
+  .slide-welcome .home-identity{font-size:8.5px;letter-spacing:.07em;column-gap:13px}
+}
+@media(max-width:480px){
+  .slide-welcome .home-hero{top:47.5%;width:calc(100% - 34px)}
+  .slide-welcome .home-hero::after{left:2%;right:2%}
+  .slide-welcome .home-name{
+    font-size:clamp(52px,12.85vw,67px);
+    line-height:.94;
+    margin-top:13px;
+    margin-bottom:7px;
+  }
+  .slide-welcome .home-name .home-last-name{font-size:.98em}
+  .slide-welcome .home-eyebrow{font-size:8px;letter-spacing:.12em;gap:9px}
+  .slide-welcome .home-eyebrow-line{flex-basis:16px}
+  .slide-welcome .home-japanese{font-size:11px;margin-top:7px;letter-spacing:.40em}
+  .slide-welcome .home-divider{margin:10px auto 9px}
+  .slide-welcome .home-discipline{
+    font-size:14px;max-width:330px;line-height:1.4;margin-bottom:10px;
+  }
+  .slide-welcome .home-discipline span{padding:0 2px}
+  .slide-welcome .home-research-intro{
+    font-size:12.5px;line-height:1.65;max-width:329px;
+  }
+  .slide-welcome .home-desktop-break{display:none}
+  .slide-welcome .home-identity{
+    font-size:7.5px;gap:3px 10px;
+    letter-spacing:.05em;margin-top:12px;
+  }
+  .slide-welcome .home-identity-spark{font-size:10px}
+  .slide-welcome .home-discover{font-size:8px;margin-top:12px;letter-spacing:.16em}
+}
+@media(max-height:690px){
+  .slide-welcome .home-hero{top:48%}
+  .slide-welcome .home-name{font-size:clamp(61px,12vh,105px);margin-top:8px}
+  .slide-welcome .home-divider{margin:8px auto}
+  .slide-welcome .home-identity{margin-top:8px}
+  .slide-welcome .home-discover{margin-top:7px}
+}
+@media(max-width:480px) and (max-height:690px){
+  .slide-welcome .home-hero{top:49%}
+  .slide-welcome .home-name{font-size:clamp(47px,10vh,61px)}
+  .slide-welcome .home-japanese{margin-top:5px}
+  .slide-welcome .home-discipline{font-size:12.8px;margin-bottom:6px}
+  .slide-welcome .home-research-intro{font-size:11.5px;line-height:1.55}
+  .slide-welcome .home-identity{font-size:7px;margin-top:7px}
+  .slide-welcome .home-discover{margin-top:6px}
+}
