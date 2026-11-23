@@ -1,0 +1,143 @@
+/* Restored botanical motion across the research site.
+   Original photo cutout validation and independent trajectories live in
+   research-flowers.js, derived from the preserved HOME flower choreography.
+   This layer is presentation-only; the original research typography remains. */
+.research-hero,.research-section,.research-finale{isolation:isolate}
+.research-flower-stage{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  z-index:1;
+  overflow:hidden;
+  pointer-events:none;
+  contain:layout paint;
+}
+.research-flower-canvas{
+  display:block;
+  width:100%;
+  height:100%;
+  image-rendering:auto;
+  pointer-events:none;
+}
+.research-flower-stage::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  z-index:1;
+  background:radial-gradient(
+    ellipse 46% 62% at 50% 49%,
+    rgba(19,48,36,.88) 0%,
+    rgba(19,48,36,.62) 38%,
+    rgba(19,48,36,.08) 74%,
+    transparent 100%
+  );
+}
+.research-hero{
+  min-height:min(890px,calc(100svh - 89px));
+  grid-template-columns:minmax(0,1fr);
+  place-items:center;
+  text-align:center;
+  background:
+    radial-gradient(ellipse at 10% 73%,rgba(95,122,69,.22),transparent 48%),
+    radial-gradient(ellipse at 88% 19%,rgba(112,127,77,.20),transparent 49%),
+    linear-gradient(120deg,#173528,#283e2b 48%,#19362c 100%);
+}
+.research-hero .research-flower-stage{z-index:2}
+.research-hero .research-flower-stage::after{
+  background:radial-gradient(
+    ellipse 40% 58% at 50% 48%,
+    rgba(22,49,36,.96) 0%,
+    rgba(25,55,40,.77) 36%,
+    rgba(25,55,40,.09) 73%,
+    transparent 100%
+  );
+}
+.research-hero .hero-copy{
+  width:min(100%,850px);
+  margin:0 auto;
+  position:relative;
+  z-index:5;
+}
+.research-hero h1{
+  font-size:clamp(69px,8.5vw,132px);
+  line-height:1;
+  margin:24px auto 26px;
+  max-width:850px;
+  text-shadow:0 7px 24px rgba(11,28,19,.38);
+}
+.research-hero .section-eyebrow{justify-content:center}
+.research-hero .hero-description{
+  margin:0 auto 23px;
+  max-width:650px;
+  text-shadow:0 2px 10px rgba(12,33,21,.36);
+}
+.research-hero .hero-credentials{justify-content:center}
+.research-hero .hero-actions{justify-content:center}
+.research-hero .hero-art{display:none}
+.research-hero .hero-atmosphere{
+  z-index:1;
+  background:radial-gradient(
+    ellipse 50% 70% at 50% 48%,
+    rgba(34,62,40,.56),transparent 84%
+  )
+}
+.research-hero .hero-footer{z-index:6}
+.research-section > :not(.research-flower-stage),
+.research-finale > :not(.research-flower-stage){
+  position:relative;
+  z-index:3;
+}
+.question-section .research-flower-stage::after{
+  background:radial-gradient(ellipse 58% 68% at 53% 49%,rgba(24,55,43,.92),rgba(24,55,43,.52) 48%,transparent 86%);
+}
+.framework-section .research-flower-stage::after{
+  background:radial-gradient(ellipse 60% 70% at 50% 51%,rgba(35,60,46,.93),rgba(35,60,46,.55) 52%,transparent 88%);
+}
+.directions-section .research-flower-stage::after{
+  background:radial-gradient(ellipse 55% 75% at 50% 50%,rgba(20,47,38,.92),rgba(20,47,38,.48) 51%,transparent 89%);
+}
+.details-section .research-flower-stage::after{
+  background:radial-gradient(ellipse 58% 71% at 50% 50%,rgba(40,61,46,.92),rgba(40,61,46,.54) 52%,transparent 87%);
+}
+.work-section .research-flower-stage::after{
+  background:radial-gradient(ellipse 58% 73% at 50% 50%,rgba(23,53,41,.91),rgba(23,53,41,.47) 53%,transparent 90%);
+}
+.research-finale .research-flower-stage::after{
+  background:radial-gradient(ellipse 45% 65% at 50% 50%,rgba(20,46,36,.93),rgba(20,46,36,.63) 41%,transparent 85%);
+}
+.research-finale .finale-bloom{display:none}
+.research-hero .hero-copy,
+.research-section h2,
+.research-finale h2{text-wrap:balance}
+@media(max-width:980px){
+  .research-hero{min-height:min(820px,calc(100svh - 74px))}
+  .research-hero h1{font-size:clamp(60px,8.4vw,108px)}
+}
+@media(max-width:700px){
+  .research-hero{
+    min-height:max(680px,calc(100svh - 70px));
+    padding:85px 24px 105px;
+  }
+  .research-hero .hero-copy{width:100%}
+  .research-hero h1{font-size:clamp(56px,11.6vw,84px)}
+  .research-hero .hero-description{font-size:15px;max-width:410px}
+  .research-hero .hero-credentials{max-width:410px;margin-left:auto;margin-right:auto}
+  .research-hero .hero-actions{flex-direction:column;align-items:center;gap:8px}
+  .research-hero .hero-actions .primary-link{min-width:215px}
+  .research-hero .hero-footer{align-items:end}
+  .research-hero .research-flower-stage::after{
+    background:radial-gradient(ellipse 55% 58% at 50% 48%,rgba(22,49,36,.97),rgba(22,49,36,.77) 46%,rgba(22,49,36,.13) 84%,transparent 100%);
+  }
+}
+@media(max-width:430px){
+  .research-hero h1{font-size:clamp(50px,12.2vw,64px);letter-spacing:-.067em}
+  .research-hero{padding-left:19px;padding-right:19px}
+  .research-hero .section-eyebrow{font-size:8px}
+  .research-hero .hero-description{font-size:14px;line-height:1.7}
+  .research-hero .hero-credentials{font-size:7.5px;letter-spacing:.06em}
+}
+@media(prefers-reduced-motion:reduce){
+  .research-flower-canvas{transition:none!important}
+}
