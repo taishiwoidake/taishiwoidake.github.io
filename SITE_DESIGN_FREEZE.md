@@ -2,6 +2,23 @@
 
 **Owner directive (23 November 2026):** The floral website is approved. Preserve the approved versions and do not alter their design, content, photo animations, petal-blizzard transitions, slide layout, or background palette without a new, specific request from the owner.
 
+## Extension — Four research deep dives (23 November 2026)
+
+This is an **additive development snapshot**, not a replacement for the previously owner-approved original floral design.
+
+- Exact extension snapshot commit: `b4b4b431e36bb13e1caa5919a1994acb30d9ba97`
+- Recovery branch: `snapshot-four-research-programmes-horizontal-2026-11-23`
+- Earlier backup before all modifications: `backup-before-four-research-deep-dives-2026-11-23`
+- Added five-scene horizontal research pages: `qtrac.html`, `ximeste-maluna.html`, `physical-records.html`, `publications.html`.
+- Four clickable programme cards were added to scene 4 of `research.html` using `research-atlas-index.css`.
+- Shared detail-page presentation is in `research-atlas.css`, scoped to `.deep-dive-root`.
+- ABOUT's QTRAC link now opens `qtrac.html`, while HOME's EXPLORE MY RESEARCH continues to open `research.html`.
+- Google sitemap now includes all six canonical pages.
+- **Integrity checks:** original `photo-garden.js`, `photo-garden.css`, `dark-garden.css` and `styles.css` remain byte-for-byte unchanged from the pre-extension snapshot. Existing HOME layout and petals must continue to be preserved.
+- Each new detail page uses **exactly the same flower JavaScript and photo library**, 150 independently animated real-photo cutouts per scene, and the same flower-petal slide transition. None is a conventional vertical-scroll research webpage.
+- New research copy deliberately identifies exploratory/conditional arguments and does not claim peer review or independent novelty without evidence.
+- Preserve both the original approved baseline branch and this new extension snapshot. Do not rewrite either recovery branch.
+
 ## Current approved baseline — HOME + Horizontal Research (23 November 2026)
 
 **The owner expressly approved the current site and asked to preserve it as the foundation for all future additions.**
