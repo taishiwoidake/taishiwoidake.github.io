@@ -53,7 +53,7 @@
   function photoUrl(entry) {
     const file = encodeURIComponent(entry[0]).replace(/%2F/g,"/");
     const h = entry[1];
-    const size = 260;
+    const size = 250;
     return "https://thumb.wikimedia.org/wikipedia/commons/thumb/"+h[0]+"/"+h+"/"+file+"/"+size+"px-"+file;
   }
   function commonsUrl(entry){
@@ -181,7 +181,7 @@
         img.onload=null;img.onerror=null;
         resolve(value);
       };
-      const timeout=setTimeout(()=>done(null),12000);
+      const timeout=setTimeout(()=>done(null),9000);
       img.crossOrigin="anonymous";
       img.decoding="async";
       img.onload=()=>{
