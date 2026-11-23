@@ -189,3 +189,9 @@
   .portal-wipe{will-change:auto}
   .portal-ring{display:none}
 }
+
+/* Gesture navigation owns horizontal swipes so they use the botanical
+   transition instead of silently jumping via native browser scrolling. */
+@media(hover:none) and (pointer:coarse){
+  .horizontal-world{touch-action:pan-y pinch-zoom}
+}
