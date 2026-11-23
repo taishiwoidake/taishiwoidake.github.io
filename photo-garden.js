@@ -567,6 +567,134 @@
   creditLink.addEventListener("click",()=>dialog.showModal());
   dialog.addEventListener("click",e=>{if(e.target===dialog)dialog.close();});
 
+  // A short botanical curtain between chapters. It uses the same verified
+  // real-photo cutouts; no new image requests and no changes to scene artwork.
+  const portal=document.createElement("div");
+  portal.className="botanical-portal";
+  portal.setAttribute("aria-hidden","true");
+  portal.innerHTML='<div class="portal-wipe"></div><div class="portal-aura"></div><div class="portal-ring ring-one"></div><div class="portal-ring ring-two"></div><canvas class="portal-flowers"></canvas>';
+  root.appendChild(portal);
+  const portalCanvas=portal.querySelector(".portal-flowers");
+  const transitionDuration=1280;
+  let transitionLocked=false;
+  let transitionToken=0;
+  let portalFrame=0;
+  let portalFlowers=[];
+  let portalRatio=1;
+
+  function portalComposition(direction,index){
+    if(!accepted.length)return [];
+    const random=seeded(871921+index*3553+Math.floor(performance.now()/1400));
+    const count=window.innerWidth<650?20:33;
+    const w=world.clientWidth,h=world.clientHeight;
+    const composition=[];
+    for(let k=0;k<count;k++){
+      const image=accepted[Math.floor(random()*accepted.length)].img;
+      const side=k%5;
+      let x,y;
+      if(side===0){x=direction===1?-w*.22:w*1.22;y=random()*h;}
+      else if(side===1){x=random()*w;y=h*1.27;}
+      else if(side===2){x=random()*w;y=-h*.27;}
+      else if(side===3){x=direction===1?w*1.18:-w*.18;y=random()*h;}
+      else{x=direction===1?-w*.25:w*1.25;y=random()*h;}
+      const maxSide=(window.innerWidth<650?100:140)+random()*(window.innerWidth<650?110:190);
+      const size=Math.min(maxSide/image.width,maxSide/image.height);
+      composition.push({
+        image,x,y,dx:direction*(w*.8+random()*w*.65),
+        dy:(random()-.5)*h*.72,
+        sway:35+random()*135,
+        angle:(random()-.5)*2.4,
+        spin:(random()>.5?1:-1)*(.8+random()*8),
+        phase:random()*6.283,
+        delay:random()*.24,
+        width:image.width*size,height:image.height*size,
+        zoom:.65+random()*1.35,
+      });
+    }
+    return composition;
+  }
+
+  function renderPortal(now,start){
+    portalFrame=0;
+    if(!transitionLocked)return;
+    const elapsed=Math.max(0,now-start);
+    const t=Math.min(1,elapsed/transitionDuration);
+    const w=world.clientWidth,h=world.clientHeight;
+    if(!w||!h)return;
+    const ctx=portalCanvas.getContext("2d",{alpha:true});
+    if(!ctx)return;
+    const pixelBudget=window.innerWidth<650?900000:1600000;
+    const ratio=Math.min(window.devicePixelRatio||1,1.25,Math.sqrt(pixelBudget/(w*h)));
+    const pw=Math.max(1,Math.round(w*ratio)),ph=Math.max(1,Math.round(h*ratio));
+    if(portalCanvas.width!==pw||portalCanvas.height!==ph){
+      portalCanvas.width=pw;portalCanvas.height=ph;
+      portalRatio=ratio;
+    }
+    ctx.setTransform(portalRatio,0,0,portalRatio,0,0);
+    ctx.clearRect(0,0,w,h);
+    const petalVisibility=Math.sin(Math.PI*t);
+    for(const flower of portalFlowers){
+      const p=Math.max(0,Math.min(1,(t-flower.delay)/(.88-flower.delay)));
+      if(p===0)continue;
+      const smoothed=p*p*(3-2*p);
+      const bend=Math.sin(p*Math.PI);
+      const x=flower.x+flower.dx*smoothed+Math.sin(p*Math.PI*3+flower.phase)*flower.sway*bend;
+      const y=flower.y+flower.dy*smoothed+Math.cos(p*Math.PI*2+flower.phase)*flower.sway*.58*bend;
+      const rotation=flower.angle+flower.spin*smoothed;
+      const opacity=Math.min(1,p*7,(1-p)*5,petalVisibility*2);
+      if(opacity<=0)continue;
+      ctx.save();
+      ctx.globalAlpha=opacity;
+      ctx.translate(x,y);
+      ctx.rotate(rotation);
+      const size=(.65+Math.sin(p*Math.PI)*.50)*flower.zoom;
+      ctx.scale(size,size);
+      ctx.drawImage(flower.image,-flower.width/2,-flower.height/2,flower.width,flower.height);
+      ctx.restore();
+    }
+    if(t<1&&!document.hidden)portalFrame=requestAnimationFrame(next=>renderPortal(next,start));
+  }
+
+  function stopPortal(){
+    if(portalFrame)cancelAnimationFrame(portalFrame);
+    portalFrame=0;
+    portal.classList.remove("is-playing");
+    root.classList.remove("is-scene-changing");
+    transitionLocked=false;
+    portalCanvas.width=0;portalCanvas.height=0;
+    portalFlowers=[];
+  }
+
+  function startPortal(target){
+    if(transitionLocked)return;
+    transitionLocked=true;
+    const source=current;
+    const forward=(source===slides.length-1&&target===0)||(target>source&&!(source===0&&target===slides.length-1));
+    const direction=forward?1:-1;
+    const token=++transitionToken;
+    portal.dataset.direction=forward?"forward":"backward";
+    portal.classList.remove("is-playing");
+    portal.style.setProperty("--scene-direction",String(direction));
+    root.style.setProperty("--scene-direction",String(direction));
+    // Re-adding the class restarts CSS keyframes on every transition.
+    void portal.offsetWidth;
+    portal.classList.add("is-playing");
+    root.classList.add("is-scene-changing");
+    portalFlowers=portalComposition(direction,target);
+    const start=performance.now();
+    if(portalFrame)cancelAnimationFrame(portalFrame);
+    portalFrame=requestAnimationFrame(now=>renderPortal(now,start));
+    // At 49% the curtain is fully opaque: jump to the destination invisibly.
+    setTimeout(()=>{
+      if(token!==transitionToken)return;
+      world.scrollTo({left:target*world.clientWidth,behavior:"instant"});
+      activate(target);
+    },transitionDuration*.49);
+    setTimeout(()=>{
+      if(token===transitionToken)stopPortal();
+    },transitionDuration+45);
+  }
+
   let current=0;
   let handlingScroll=false;
   const pad=n=>String(n).padStart(2,"0");
@@ -578,8 +706,9 @@
     root.classList.toggle("is-dark",current===slides.length-1);
     if(counter)counter.innerHTML=pad(current+1)+' <span>/</span> '+pad(slides.length)+' <small>'+slides[current].dataset.label+'</small>';
     if(progress)progress.style.transform="scaleX("+((current+1)/slides.length)+")";
-    if(previous)previous.disabled=current===0;
-    if(next)next.disabled=current===slides.length-1;
+    // Both arrows always work. The chapters form an endless circular garden.
+    if(previous){previous.disabled=false;previous.title="Previous chapter (wraps around)";}
+    if(next){next.disabled=false;next.title="Next chapter (wraps around)";}
     nav.forEach(a=>{
       if(a.hash==="#"+slides[current].id)a.setAttribute("aria-current","page");
       else a.removeAttribute("aria-current");
@@ -587,10 +716,16 @@
     if(hint)hint.classList.toggle("hidden",current>0);
     renderNearScenes();
   }
-  function go(index){
-    const i=Math.max(0,Math.min(slides.length-1,index));
-    world.scrollTo({left:i*world.clientWidth,behavior:reduced?"instant":"smooth"});
-    activate(i);
+  function go(index,immediate=false){
+    const target=((index%slides.length)+slides.length)%slides.length;
+    if(transitionLocked&&!immediate)return;
+    if(target===current)return;
+    if(immediate||reduced){
+      world.scrollTo({left:target*world.clientWidth,behavior:"instant"});
+      activate(target);
+    }else{
+      startPortal(target);
+    }
   }
   if(previous)previous.addEventListener("click",()=>go(current-1));
   if(next)next.addEventListener("click",()=>go(current+1));
@@ -607,22 +742,41 @@
     handlingScroll=true;
     requestAnimationFrame(()=>{
       handlingScroll=false;
+      // Programmatic midpoint jumps are already handled by activate().
+      if(transitionLocked)return;
       activate(Math.round(world.scrollLeft/Math.max(world.clientWidth,1)));
     });
   },{passive:true});
   let lastWheel=0;
   window.addEventListener("wheel",event=>{
-    if(dialog.open||event.ctrlKey||event.metaKey)return;
-    if(Math.abs(event.deltaY)<4||Math.abs(event.deltaX)>Math.abs(event.deltaY)*1.05)return;
+    if(dialog.open||event.ctrlKey||event.metaKey||transitionLocked)return;
+    const x=event.deltaX,y=event.deltaY;
+    if(Math.max(Math.abs(x),Math.abs(y))<5)return;
     event.preventDefault();
     const now=performance.now();
-    if(now-lastWheel<710)return;
-    const direction=event.deltaY>0?1:-1;
-    const at=Math.round(world.scrollLeft/Math.max(1,world.clientWidth));
-    if((at===0&&direction<0)||(at===slides.length-1&&direction>0))return;
+    if(now-lastWheel<250)return;
+    const direction=(Math.abs(x)>Math.abs(y)*.7?x:y)>0?1:-1;
     lastWheel=now;
-    go(at+direction);
+    go(current+direction);
   },{passive:false});
+  // Trackpads, keyboard arrows, buttons and swipe gestures all use one
+  // consistent transition pipeline (including the wrap from last to first).
+  let touchStart=null;
+  world.addEventListener("touchstart",event=>{
+    if(event.touches.length!==1||dialog.open)return;
+    const t=event.touches[0];
+    touchStart={x:t.clientX,y:t.clientY,time:performance.now()};
+  },{passive:true});
+  world.addEventListener("touchend",event=>{
+    if(!touchStart||transitionLocked)return;
+    const t=event.changedTouches[0];
+    const dx=t.clientX-touchStart.x,dy=t.clientY-touchStart.y;
+    touchStart=null;
+    if(Math.abs(dx)>45&&Math.abs(dx)>Math.abs(dy)*1.13){
+      go(current+(dx<0?1:-1));
+    }
+  },{passive:true});
+  world.addEventListener("touchcancel",()=>{touchStart=null;},{passive:true});
   window.addEventListener("keydown",event=>{
     if(dialog.open||event.altKey||event.ctrlKey||event.metaKey)return;
     if(["ArrowRight","PageDown"].includes(event.key)){event.preventDefault();go(current+1);}
@@ -642,6 +796,6 @@
     document.body.classList.add("motion");
     const target=decodeURIComponent(location.hash.slice(1));
     const index=slides.findIndex(s=>s.id===target);
-    if(index>0)go(index);
+    if(index>0)go(index,true);
   });
 })();
