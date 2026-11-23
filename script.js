@@ -407,6 +407,7 @@
   },{passive:true});
   let lastWheel=0;
   window.addEventListener('wheel',event=>{
+    if(event.ctrlKey||event.metaKey)return;
     if(Math.abs(event.deltaY)<5||Math.abs(event.deltaX)>Math.abs(event.deltaY)*1.05)return;
     event.preventDefault();
     const now=performance.now();
