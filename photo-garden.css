@@ -80,40 +80,37 @@
   isolation:isolate;
 }
 .botanical-portal.is-playing{visibility:visible}
+/* Petal blizzard: a soft floral veil masks the midpoint of the change.
+   Unlike the old green rectangular curtain, petals are the main event. */
 .portal-wipe{
   position:absolute;
   inset:-2%;
   z-index:0;
+  opacity:0;
   background:
-    radial-gradient(ellipse 45% 85% at 18% 45%,rgba(243,215,159,.30),transparent 80%),
-    radial-gradient(ellipse 35% 75% at 83% 65%,rgba(234,148,164,.26),transparent 83%),
-    radial-gradient(ellipse 78% 75% at 44% 52%,rgba(120,166,116,.74),transparent 85%),
-    linear-gradient(125deg,#1b503a 4%,#477a59 35%,#a1b785 60%,#325f49 100%);
-  clip-path:inset(0 100% 0 0);
-  will-change:clip-path;
+    radial-gradient(ellipse 48% 65% at 20% 32%,rgba(245,205,215,.78),transparent 86%),
+    radial-gradient(ellipse 42% 65% at 75% 69%,rgba(199,222,181,.78),transparent 88%),
+    radial-gradient(ellipse 38% 42% at 54% 40%,rgba(255,248,218,.90),transparent 100%),
+    linear-gradient(112deg,#e6e9d3,#f9ece0 27%,#f6dce5 54%,#f5eedc 76%,#cadfcd);
+  transform:scale(.94);
 }
 .portal-wipe:after{
   content:"";
   position:absolute;
   inset:0;
-  opacity:.20;
-  background:repeating-linear-gradient(132deg,transparent 0px,transparent 24px,rgba(249,248,215,.28) 24.5px,transparent 25px,transparent 84px);
+  background:radial-gradient(circle,rgba(251,252,238,.36) .8px,transparent 1.3px);
+  background-size:18px 18px;
+  opacity:.17;
 }
-.botanical-portal.is-playing[data-direction="forward"] .portal-wipe{
-  animation:flowerCurtainForward 1.28s cubic-bezier(.51,.03,.19,.99) both;
+.botanical-portal.is-playing .portal-wipe{
+  animation:petalBlizzardVeil 1.28s cubic-bezier(.24,.61,.34,1) both;
 }
-.botanical-portal.is-playing[data-direction="backward"] .portal-wipe{
-  animation:flowerCurtainBackward 1.28s cubic-bezier(.51,.03,.19,.99) both;
-}
-@keyframes flowerCurtainForward{
-  0%{clip-path:inset(0 100% 0 0)}
-  39%,62%{clip-path:inset(0 0 0 0)}
-  100%{clip-path:inset(0 0 0 100%)}
-}
-@keyframes flowerCurtainBackward{
-  0%{clip-path:inset(0 0 0 100%)}
-  39%,62%{clip-path:inset(0 0 0 0)}
-  100%{clip-path:inset(0 100% 0 0)}
+@keyframes petalBlizzardVeil{
+  0%{opacity:0;transform:scale(.93)}
+  24%{opacity:.34;transform:scale(.97)}
+  40%,61%{opacity:1;transform:scale(1)}
+  82%{opacity:.35;transform:scale(1.03)}
+  100%{opacity:0;transform:scale(1.05)}
 }
 .portal-aura{
   position:absolute;
@@ -195,3 +192,7 @@
 @media(hover:none) and (pointer:coarse){
   .horizontal-world{touch-action:pan-y pinch-zoom}
 }
+
+/* The falling petals, not geometric rings, own the transition. */
+.botanical-portal .portal-ring{display:none}
+.botanical-portal .portal-aura{opacity:0}
