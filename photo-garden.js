@@ -72,8 +72,10 @@
   const round=v=>Math.round(v*100)/100;
   // Four lightweight Canvas layers per scene replace 750 individual DOM images.
   // Every image must pass an actual pixel-alpha inspection before it can be drawn.
+  // Eight directionally animated photographic layers.
+  // Flower density remains unchanged: 150 cutouts per scene, cached as 8 canvases.
   const FLOWERS_PER_SCENE=150;
-  const BAND_NAMES=["left","right","top","bottom"];
+  const DIRECTIONS=["northwest","north","northeast","east","southeast","south","southwest","west"];
   const contexts=new Map();
   const accepted=[];
   let renderTimer=0;
@@ -83,14 +85,15 @@
     const field=slide.querySelector(".flower-field");
     if(!field)continue;
     const canvases=[];
-    for(const name of BAND_NAMES){
+    for(let k=0;k<DIRECTIONS.length;k++){
       const canvas=document.createElement("canvas");
-      canvas.className="photo-canvas edge-"+name;
+      canvas.className="photo-canvas from-"+DIRECTIONS[k];
+      canvas.style.setProperty("--stagger",(k%4*95+(k>3?100:0))+"ms");
       canvas.setAttribute("aria-hidden","true");
       field.appendChild(canvas);
       canvases.push(canvas);
     }
-    contexts.set(slide, {canvases,drawnVersion:-1,width:0,height:0});
+    contexts.set(slide,{canvases,drawnVersion:-1});
   }
 
   function verifyAndTrimCutout(img) {
@@ -217,32 +220,37 @@
     const signature=vw+"x"+vh+"-"+renderVersion;
     if(!force&&entry.drawnVersion===signature)return;
 
-    for(let edge=0;edge<4;edge++){
-      const canvas=entry.canvases[edge];
-      const w=edge<2?Math.ceil(vw*.36):vw;
-      const h=edge<2?vh:Math.ceil(vh*.34);
+    const small=vw<650;
+    for(let direction=0;direction<DIRECTIONS.length;direction++){
+      const canvas=entry.canvases[direction];
+      // The canvas pixel dimensions follow the CSS-positioned edge patches.
+      const w=canvas.clientWidth,h=canvas.clientHeight;
+      if(w<2||h<2)continue;
       const ctx=setBacking(canvas,w,h);
       if(!ctx)continue;
-      // Stable layout seeded by the scene and edge for consistent composition.
-      const rand=seeded(194173+sceneIndex*857+edge*73);
-      const count=FLOWERS_PER_SCENE/4;
+      const rand=seeded(194173+sceneIndex*857+direction*129);
+      const count=Math.floor(FLOWERS_PER_SCENE/DIRECTIONS.length)
+        +(direction<FLOWERS_PER_SCENE%DIRECTIONS.length?1:0);
       for(let i=0;i<count;i++){
-        const index=Math.floor(rand()*accepted.length);
-        const resource=accepted[index];
+        const resource=accepted[Math.floor(rand()*accepted.length)];
         const img=resource.img;
-        const maxSide=92+rand()*168+(i%13===0?62:0);
+        const maxSide=(small?55:88)+rand()*(small?100:148)+(i%9===0?36:0);
         const scale=Math.min(maxSide/img.width,maxSide/img.height);
-        const dw=img.width*scale, dh=img.height*scale;
-        let x=rand()*w,y=rand()*h;
-        if(edge===0)x=w*(.12+rand()*.8);
-        if(edge===1)x=w*(.1+rand()*.8);
-        if(edge===2)y=h*(.05+rand()*.86);
-        if(edge===3)y=h*(.1+rand()*.85);
+        const dw=img.width*scale,dh=img.height*scale;
+        // Edge patches overlap to produce one continuous, layered wild garden.
+        // Scatter outward with fewer flowers toward the text in the centre.
+        let x=w*rand(),y=h*rand();
+        if(direction===0||direction===6)x=w*(.24+rand()*.63);
+        if(direction===2||direction===4)x=w*(.12+rand()*.63);
+        if(direction===1)y=h*(.10+rand()*.67);
+        if(direction===5)y=h*(.18+rand()*.70);
+        if(direction===3||direction===7)y=h*(.05+rand()*.90);
+        const angle=(rand()-.5)*2.8+(direction%2?.21:-.21);
         ctx.save();
         ctx.translate(x,y);
-        ctx.rotate((rand()-.5)*.93);
-        ctx.globalAlpha=.86+rand()*.14;
-        ctx.drawImage(img,-dw/2,-dh/2,dw,dh);
+        ctx.rotate(angle);
+        ctx.globalAlpha=.90+rand()*.10;
+        ctx.drawImage(img,-dw*.5,-dh*.5,dw,dh);
         ctx.restore();
       }
     }
