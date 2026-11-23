@@ -1,29 +1,21 @@
-/* Eight cutout-photo clusters enter from the eight compass directions.
-   Photos are still composed into canvas patches: no hundreds of animated DOM images. */
-.photo-canvas{
-  position:absolute;display:block;pointer-events:none;z-index:3;
-  opacity:1;backface-visibility:hidden;
-  transition:transform 1.35s cubic-bezier(.15,.84,.18,1),opacity 1.08s ease;
-  transition-delay:var(--stagger,0ms);
+/* Botanical theatre: one Canvas for 150 independently moving flower cutouts.
+   Each blossom has its own animation in JavaScript; no rigid group transform. */
+.individual-flower-canvas{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  display:block;
+  z-index:3;
+  pointer-events:none;
+  contain:strict;
+  transform:translateZ(0);
+  image-rendering:auto;
 }
-.photo-canvas.from-northwest{left:-3%;top:-4%;width:42%;height:49%;transform-origin:0 0}
-.photo-canvas.from-north{left:24%;top:-4%;width:52%;height:37%;transform-origin:50% 0}
-.photo-canvas.from-northeast{right:-3%;top:-4%;width:42%;height:49%;transform-origin:100% 0}
-.photo-canvas.from-east{right:-5%;top:27%;width:38%;height:48%;transform-origin:100% 50%}
-.photo-canvas.from-southeast{right:-3%;bottom:-5%;width:42%;height:49%;transform-origin:100% 100%}
-.photo-canvas.from-south{left:24%;bottom:-5%;width:52%;height:37%;transform-origin:50% 100%}
-.photo-canvas.from-southwest{left:-3%;bottom:-5%;width:42%;height:49%;transform-origin:0 100%}
-.photo-canvas.from-west{left:-5%;top:27%;width:38%;height:48%;transform-origin:0 50%}
-body.motion .slide:not(.active) .photo-canvas{opacity:0;transition-delay:0ms}
-body.motion .slide:not(.active) .photo-canvas.from-northwest{transform:translate3d(-34vw,-33vh,0) rotate(-31deg) scale(.75)}
-body.motion .slide:not(.active) .photo-canvas.from-north{transform:translate3d(0,-38vh,0) rotate(15deg) scale(.77)}
-body.motion .slide:not(.active) .photo-canvas.from-northeast{transform:translate3d(34vw,-33vh,0) rotate(31deg) scale(.75)}
-body.motion .slide:not(.active) .photo-canvas.from-east{transform:translate3d(38vw,0,0) rotate(24deg) scale(.80)}
-body.motion .slide:not(.active) .photo-canvas.from-southeast{transform:translate3d(34vw,33vh,0) rotate(-31deg) scale(.75)}
-body.motion .slide:not(.active) .photo-canvas.from-south{transform:translate3d(0,38vh,0) rotate(-15deg) scale(.77)}
-body.motion .slide:not(.active) .photo-canvas.from-southwest{transform:translate3d(-34vw,33vh,0) rotate(31deg) scale(.75)}
-body.motion .slide:not(.active) .photo-canvas.from-west{transform:translate3d(-38vw,0,0) rotate(-24deg) scale(.80)}
-body.motion .slide.active .photo-canvas{transform:translate3d(0,0,0) rotate(0) scale(1);opacity:1;will-change:transform,opacity}
+.slide.active .individual-flower-canvas{opacity:1}
+@media(prefers-reduced-motion:reduce){
+  .individual-flower-canvas{transition:none!important;animation:none!important}
+}
 .slide .flower-field{z-index:3}
 .slide .flower-field::after{pointer-events:none;z-index:6;opacity:1;background:radial-gradient(ellipse 31% 43% at 50% 50%,rgba(246,241,229,.90) 0%,rgba(246,241,229,.68) 33%,rgba(246,241,229,.12) 72%,transparent 100%)}
 .slide-garden .flower-field::after{background:radial-gradient(ellipse 35% 46% at 50% 48%,rgba(233,238,220,.92),rgba(233,238,220,.70) 36%,rgba(233,238,220,.08) 83%,transparent 100%)}
@@ -72,7 +64,4 @@ body.motion .slide.active .photo-canvas{transform:translate3d(0,0,0) rotate(0) s
 
  .photo-credit-trigger{bottom:77px}
  .slide-inner::before{inset:-18% -10%;filter:blur(12px)}
-}
-@media(prefers-reduced-motion:reduce){
-  .photo-canvas{transition:none!important;transform:none!important;opacity:1!important}
 }
