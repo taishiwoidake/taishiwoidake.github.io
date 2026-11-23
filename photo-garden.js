@@ -53,8 +53,8 @@
   function photoUrl(entry) {
     const file = encodeURIComponent(entry[0]).replace(/%2F/g,"/");
     const h = entry[1];
-    const size = entry[0] === "YosriDec04MawarKampung1_Extracted.png" ? 240 : 360;
-    return "https://upload.wikimedia.org/wikipedia/commons/thumb/"+h[0]+"/"+h+"/"+file+"/"+size+"px-"+file;
+    const size = entry[0] === "YosriDec04MawarKampung1_Extracted.png" ? 250 : 330;
+    return "https://thumb.wikimedia.org/wikipedia/commons/thumb/"+h[0]+"/"+h+"/"+file+"/"+size+"px-"+file;
   }
   function commonsUrl(entry){
     return "https://commons.wikimedia.org/wiki/File:"+encodeURIComponent(entry[0]).replace(/%20/g,"_");
@@ -113,8 +113,8 @@
       image.decoding="async";
       image.loading=s===0&&i<38?"eager":"lazy";
       image.setAttribute("referrerpolicy","no-referrer");
-      image.width=360;
-      image.height=360;
+      image.width=330;
+      image.height=330;
       el.appendChild(image);
       el.style.setProperty("--x",round(x)+"%");
       el.style.setProperty("--y",round(y)+"%");
