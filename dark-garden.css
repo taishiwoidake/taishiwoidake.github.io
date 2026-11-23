@@ -1,0 +1,162 @@
+/* Deep Botanical Palette — approved variation of the preserved petal-blizzard site.
+   All five scene backgrounds are dark khaki-to-forest greens.
+   Flower photography, motion paths, petal confetti, content and layout remain unchanged. */
+:root{
+  --garden-ivory:#f3f3df;
+  --garden-text:#e2e8d6;
+  --garden-muted:#c9d6be;
+  --garden-gold:#e4d7a5;
+}
+/* Distinct dark landscapes. The fifth scene keeps its previously loved forest color. */
+.slide-welcome{
+  --scene-wash:rgba(51,62,37,.96);
+  --scene-wash-soft:rgba(51,62,37,.78);
+  background:
+    radial-gradient(ellipse at 8% 70%,rgba(127,144,78,.24),transparent 44%),
+    radial-gradient(ellipse at 85% 18%,rgba(149,137,77,.21),transparent 50%),
+    linear-gradient(125deg,#39422a 0%,#414b30 51%,#303e2e 100%);
+}
+.slide-garden{
+  --scene-wash:rgba(29,64,43,.95);
+  --scene-wash-soft:rgba(29,64,43,.78);
+  background:
+    radial-gradient(ellipse at 78% 38%,rgba(97,147,89,.24),transparent 49%),
+    radial-gradient(ellipse at 14% 72%,rgba(89,132,85,.22),transparent 52%),
+    linear-gradient(130deg,#244c36 0%,#31563c 48%,#21452f 100%);
+}
+.slide-wonders{
+  --scene-wash:rgba(31,61,57,.96);
+  --scene-wash-soft:rgba(31,61,57,.78);
+  background:
+    radial-gradient(ellipse at 16% 28%,rgba(86,130,119,.25),transparent 52%),
+    radial-gradient(ellipse at 86% 75%,rgba(99,133,112,.19),transparent 51%),
+    linear-gradient(128deg,#24453f 0%,#2e534d 50%,#203d39 100%);
+}
+.slide-ideas{
+  --scene-wash:rgba(47,57,31,.96);
+  --scene-wash-soft:rgba(47,57,31,.77);
+  background:
+    radial-gradient(ellipse at 85% 32%,rgba(132,141,78,.27),transparent 52%),
+    radial-gradient(ellipse at 16% 78%,rgba(112,130,65,.20),transparent 53%),
+    linear-gradient(125deg,#343c26 0%,#424c2e 49%,#293927 100%);
+}
+.slide-connect{
+  --scene-wash:rgba(23,61,48,.95);
+  --scene-wash-soft:rgba(23,61,48,.77);
+  background:
+    radial-gradient(ellipse at 38% 54%,rgba(98,148,93,.26),transparent 55%),
+    radial-gradient(ellipse at 85% 17%,rgba(154,125,87,.14),transparent 40%),#173d30;
+}
+.site-root{background:#243c30}
+body{background:#243c30;color:var(--garden-ivory)}
+.slide{color:var(--garden-ivory)}
+.slide::before,.slide-connect::before{border-color:rgba(230,242,210,.17)}
+.slide .paper-texture{mix-blend-mode:screen;opacity:.115}
+/* Former white center masks made a bright patch; use scene-matching green masks. */
+.slide .flower-field::after,
+.slide-welcome .flower-field::after,
+.slide-garden .flower-field::after,
+.slide-wonders .flower-field::after,
+.slide-ideas .flower-field::after,
+.slide-connect .flower-field::after{
+  opacity:1;
+  background:radial-gradient(
+    ellipse 38% 53% at 50% 49%,
+    var(--scene-wash) 0%,
+    var(--scene-wash-soft) 37%,
+    rgba(25,53,35,.09) 76%,
+    transparent 100%
+  );
+}
+.slide .slide-inner::before,
+.slide-welcome .slide-inner::before,
+.slide-garden .slide-inner::before,
+.slide-wonders .slide-inner::before,
+.slide-ideas .slide-inner::before,
+.slide-connect .slide-inner::before{
+  background:radial-gradient(
+    ellipse 57% 62% at center,
+    var(--scene-wash-soft) 0%,
+    rgba(27,45,27,.18) 62%,
+    transparent 100%
+  );
+  filter:blur(17px);
+}
+.slide-inner h1,.slide-inner h2{
+  text-shadow:0 2px 16px rgba(10,22,13,.24);
+}
+.slide .overline,
+.slide .japanese-name,
+.slide .welcome-marker,
+.slide .scene-caption{color:#e0e6d1}
+.slide .display-name,
+.slide .display-title{color:#f8f5e9}
+.slide-welcome .display-name em{color:#b9d6af}
+.slide-garden .display-title em{color:#dfc9a1}
+.slide-wonders .display-title em{color:#eac3d5}
+.slide-ideas .display-title em{color:#cfd8a1}
+.slide-connect .display-title em{color:#d3d1a0}
+.slide .body-copy,
+.slide-wonders .body-copy,
+.slide-connect .body-copy{color:var(--garden-text)}
+.slide .welcome-sub{color:#e2ddba}
+.slide .small-signature{color:#c5d7b6}
+.slide .hero-rule{background:rgba(233,229,192,.7)}
+.slide .garden-seal{
+  border-color:rgba(221,233,194,.56);
+  color:#d9e3bd;
+}
+.slide .garden-seal span:nth-child(2){color:#e6d9a3}
+.slide .flora-notes{color:#e5d9d9}
+.slide .flora-notes span{border-top-color:rgba(243,225,216,.34);opacity:.95}
+.slide .research-links>div,
+.slide .research-links>a{
+  color:var(--garden-ivory);
+  background:rgba(17,37,27,.53);
+  border:1px solid rgba(226,232,203,.35);
+  backdrop-filter:blur(3px);
+}
+.slide .research-links>a:hover{
+  color:#fff9e4;
+  background:rgba(32,62,40,.82);
+}
+.slide .research-links small{color:#d3dcbf}
+.slide .research-links strong{color:#faf6e6}
+.slide .end-note{color:#d7dec9}
+/* Keep global navigation and source credit readable on every dark scene.
+   Previously only chapter five used the white variant. */
+.site-root .site-header,
+.site-root.is-dark .site-header,
+.site-root .site-controls,
+.site-root.is-dark .site-controls{color:#eff0dc}
+.site-root .scroll-hint,
+.site-root.is-dark .scroll-hint,
+.site-root .photo-credit-trigger,
+.site-root.is-dark .photo-credit-trigger{color:#dce6c9}
+.site-root .site-header::before,
+.site-root.is-dark .site-header::before{
+  background:linear-gradient(to bottom,rgba(18,37,27,.60),rgba(18,37,27,.17) 62%,transparent);
+}
+.site-root .scene-arrows button{background:rgba(19,42,29,.30)}
+.site-root .scene-arrows button:hover:not(:disabled){background:rgba(123,158,102,.49)}
+.site-root .scene-progress span{background:#ead19a}
+/* Retain petal-blizzard motion. Change just the connecting veil into a
+   dark olive/forest wash so no pastel screen interrupts the green palette. */
+.botanical-portal .portal-wipe{
+  background:
+    radial-gradient(ellipse 48% 65% at 20% 32%,rgba(124,148,91,.40),transparent 86%),
+    radial-gradient(ellipse 42% 65% at 75% 69%,rgba(85,144,113,.37),transparent 88%),
+    radial-gradient(ellipse 38% 42% at 54% 40%,rgba(159,172,107,.29),transparent 100%),
+    linear-gradient(112deg,#1a3c2e,#3c4d2d 28%,#31523f 55%,#263e30 78%,#162f26);
+}
+@media(max-width:780px){
+  .slide .flower-field::after{
+    background:radial-gradient(
+      ellipse 52% 48% at 50% 49%,
+      var(--scene-wash) 0%,
+      var(--scene-wash-soft) 41%,
+      rgba(19,45,31,.13) 84%,
+      transparent 100%
+    );
+  }
+}
