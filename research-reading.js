@@ -2,10 +2,10 @@
 (() => {
   // Additive usability fix for long scholarly text. Does not modify the
   // original photo garden or its circular slide / petal transition logic.
-  if (!document.querySelector(".deep-dive-root")) return;
+  if (!document.querySelector(".research-root")) return;
   window.addEventListener("wheel", event => {
     if (event.ctrlKey || event.metaKey) return;
-    const panel=event.target.closest(".dd-panel");
+    const panel=event.target.closest(".dd-panel, .research-inner");
     if (!panel) return;
     if (Math.abs(event.deltaX)>Math.abs(event.deltaY)*0.85) return;
     const delta=event.deltaY;
