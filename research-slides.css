@@ -1,0 +1,275 @@
+/* Research in Bloom — identical five-scene horizontal floral architecture
+   and exact real-photo flower animation as the approved HOME.
+   All selectors are scoped to .research-root, keeping HOME untouched. */
+
+.research-root .research-back-link{
+  display:inline-flex;align-items:center;gap:11px;white-space:nowrap;
+  color:#e9deb8;font:500 9px var(--mono);
+  letter-spacing:.11em;border-bottom:1px solid rgba(232,215,158,.53);
+  padding:10px 0;transition:color .25s,border-color .25s
+}
+.research-root .research-back-link:hover{color:#fff6d4;border-color:#fff6d4}
+.research-root .research-back-link span{font-size:14px}
+.research-root .wordmark{letter-spacing:.11em}
+.research-root .research-scene{min-height:0}
+.research-root .slide-inner.research-inner{
+  z-index:16;
+  top:49%;
+  width:min(calc(100% - 66px),970px);
+  max-height:calc(100dvh - 178px);
+  padding:6px 7px;
+  overflow-y:auto;
+  overflow-x:hidden;
+  scrollbar-width:thin;
+  scrollbar-color:rgba(229,219,169,.23) transparent;
+  overscroll-behavior-y:contain
+}
+.research-root .research-inner::before{
+  background:radial-gradient(ellipse 54% 67% at center,rgba(37,53,31,.82) 0%,rgba(37,53,31,.52) 42%,transparent 100%);
+  filter:blur(18px)
+}
+.research-root .slide-garden .research-inner::before{background:radial-gradient(ellipse 55% 68% at center,rgba(30,64,42,.84),rgba(30,64,42,.49) 48%,transparent 100%)}
+.research-root .slide-wonders .research-inner::before{background:radial-gradient(ellipse 55% 69% at center,rgba(31,61,57,.87),rgba(31,61,57,.50) 48%,transparent 100%)}
+.research-root .slide-ideas .research-inner::before{background:radial-gradient(ellipse 56% 70% at center,rgba(47,57,31,.87),rgba(47,57,31,.55) 48%,transparent 100%)}
+.research-root .slide-connect .research-inner::before{background:radial-gradient(ellipse 57% 72% at center,rgba(23,61,48,.87),rgba(23,61,48,.49) 48%,transparent 100%)}
+.research-root .slide-inner.research-inner a{pointer-events:auto}
+.research-root .research-eyebrow{
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  color:#e6daae;font:500 clamp(8px,.78vw,10px)/1.6 var(--mono);
+  letter-spacing:.22em;text-transform:uppercase
+}
+.research-root .research-eyebrow span{color:#d3bf84;font-size:14px}
+.research-root .research-headline{
+  font:400 clamp(66px,8.6vw,130px)/.975 var(--serif);
+  letter-spacing:-.071em;max-width:950px;margin:clamp(18px,2.8vh,33px) auto 0;
+  text-shadow:0 7px 26px rgba(11,25,13,.27);
+  color:#fff9e9;text-wrap:balance
+}
+.research-root .research-headline em,
+.research-root .research-title em{font-weight:400;font-style:italic;color:#dfd6a4}
+.research-root .research-ornamental-rule{
+  display:flex;justify-content:center;align-items:center;gap:18px;
+  margin:clamp(12px,2vh,21px) auto 15px;color:#e1d09b
+}
+.research-root .research-ornamental-rule span{
+  width:clamp(36px,5vw,78px);height:1px;
+  background:linear-gradient(90deg,transparent,rgba(236,226,175,.65))
+}
+.research-root .research-ornamental-rule span:last-child{transform:rotate(180deg)}
+.research-root .research-ornamental-rule b{font:400 17px var(--serif)}
+.research-root .research-intro-lead{
+  color:#e4e8d7;font:400 clamp(14px,1.27vw,18px)/1.75 var(--sans);
+  max-width:590px;margin:0 auto;text-wrap:balance
+}
+.research-root .research-small-meta{
+  display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:12px;
+  margin:clamp(11px,1.8vh,22px) auto 0;
+  color:#d7dab7;font:400 9px/1.6 var(--mono);letter-spacing:.13em
+}
+.research-root .research-small-meta span:nth-child(2){color:#e6c98d;font-size:12px}
+.research-root .research-next-link{
+  display:inline-flex;align-items:center;gap:20px;
+  margin:clamp(11px,2vh,23px) auto 0;
+  padding:8px 1px 10px;
+  border-bottom:1px solid #e3d3a5;
+  color:#f6eec9;font:500 9px var(--mono);
+  letter-spacing:.18em;transition:color .3s,transform .3s
+}
+.research-root .research-next-link:hover{color:#fff;transform:translateY(-3px)}
+.research-root .research-next-link span{font-size:16px}
+.research-root .research-margin-note{
+  position:absolute;z-index:6;top:26%;left:6.7%;
+  writing-mode:vertical-rl;transform:rotate(180deg);
+  color:#dee3bb;letter-spacing:.15em;
+  font:400 10px var(--mono);opacity:.72
+}
+.research-root .research-margin-note span{margin:8px 0}
+.research-root .research-content{width:min(calc(100% - 56px),1050px)}
+.research-root .research-title{
+  color:#f8f4e6;font:400 clamp(59px,6.45vw,102px)/1.04 var(--serif);
+  letter-spacing:-.059em;text-wrap:balance;
+  margin:clamp(15px,2.4vh,26px) auto 18px;
+  text-shadow:0 3px 23px rgba(11,26,13,.24)
+}
+.research-root .research-description{
+  max-width:690px;color:#e5e8da;
+  font:400 clamp(14px,1.25vw,17px)/1.85 var(--sans);
+  letter-spacing:.002em;margin:0 auto;text-wrap:balance
+}
+.research-root .research-description strong{font-weight:600;color:#fff5d8}
+.research-root .research-footnote{
+  max-width:760px;margin:clamp(13px,2vh,23px) auto 0;
+  color:#d2dbc8;font:400 clamp(10px,.88vw,12px)/1.7 var(--sans);
+  text-wrap:balance
+}
+.research-root .research-three-notes{
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:13px;max-width:870px;margin:clamp(18px,3vh,35px) auto 0;text-align:left
+}
+.research-root .research-three-notes>div{
+  padding:18px 19px;min-height:92px;
+  background:rgba(12,36,24,.42);border:1px solid rgba(224,232,195,.25);
+  backdrop-filter:blur(3px);
+  display:flex;flex-direction:column;justify-content:center;gap:9px
+}
+.research-root .research-three-notes span,
+.research-root .research-step-index{
+  font:500 9px/1.5 var(--mono);letter-spacing:.12em;color:#e6d6a1
+}
+.research-root .research-three-notes strong{
+  font:400 clamp(15px,1.65vw,21px)/1.32 var(--serif);color:#f5f3e3
+}
+.research-root .research-timeline{
+  display:flex;justify-content:center;align-items:stretch;gap:8px;
+  max-width:990px;margin:clamp(18px,2.9vh,32px) auto 0
+}
+.research-root .research-timeline>div{
+  flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;gap:9px;
+  min-height:148px;padding:16px 9px;
+  border:1px solid rgba(231,229,197,.24);background:rgba(15,39,34,.56)
+}
+.research-root .research-timeline>i{
+  display:grid;place-items:center;font:400 18px var(--serif);font-style:normal;color:#e4d6ac;
+  flex:0 0 20px
+}
+.research-root .research-step-glyph{
+  display:grid;place-items:center;border:1px solid rgba(238,222,160,.50);
+  width:47px;height:47px;border-radius:50%;color:#f4e9b6;font:400 28px var(--serif)
+}
+.research-root .research-timeline strong{
+  font:400 clamp(12px,1.18vw,16px)/1.3 var(--serif);color:#f5f2e2;text-align:center
+}
+.research-root .research-direction-grid{
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:13px;max-width:1010px;margin:clamp(18px,2.8vh,28px) auto 0;text-align:left
+}
+.research-root .research-direction-card{
+  display:flex;flex-direction:column;min-height:214px;
+  padding:22px 20px 19px;
+  border:1px solid rgba(230,230,192,.28);
+  background:linear-gradient(155deg,rgba(17,40,26,.74),rgba(23,47,33,.57));
+  backdrop-filter:blur(3px)
+}
+.research-root .research-direction-card>span{
+  color:#dfd5a9;font:500 9px/1.6 var(--mono);letter-spacing:.06em
+}
+.research-root .research-direction-card h3{
+  font:400 clamp(20px,2.03vw,30px)/1.15 var(--serif);
+  color:#f8f2dd;margin:13px 0 11px;letter-spacing:-.032em
+}
+.research-root .research-direction-card p{
+  color:#d8dfce;font:400 clamp(11px,.99vw,13px)/1.72 var(--sans);margin:0
+}
+.research-root .research-work-links{
+  display:grid;grid-template-columns:1fr 1fr;gap:10px;
+  margin:clamp(18px,2.5vh,28px) auto 0;
+  max-width:750px;text-align:left
+}
+.research-root .research-work-links>a{
+  display:flex;justify-content:space-between;align-items:center;gap:12px;
+  min-height:82px;padding:15px 17px;
+  border:1px solid rgba(232,229,186,.33);background:rgba(14,43,32,.60);
+  transition:background .25s,transform .25s
+}
+.research-root .research-work-links>a:first-child{grid-column:1/-1}
+.research-root .research-work-links>a:hover{background:rgba(55,82,53,.78);transform:translateY(-3px)}
+.research-root .research-work-links>a span{display:flex;flex-direction:column;gap:8px}
+.research-root .research-work-links small{
+  color:#ded7b0;font:500 8px var(--mono);letter-spacing:.095em
+}
+.research-root .research-work-links strong{font:400 clamp(16px,1.5vw,22px)/1.3 var(--serif);color:#f8f4e6}
+.research-root .research-work-links b{font-size:20px;color:#e8d6a0;font-weight:400}
+.research-root .research-end-actions{
+  display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:30px;
+  margin:clamp(15px,2.2vh,24px) auto 0
+}
+.research-root .research-end-actions>a{
+  display:inline-flex;align-items:center;gap:13px;
+  border-bottom:1px solid rgba(234,222,182,.68);
+  color:#f2e6bb;font:500 9px var(--mono);
+  letter-spacing:.12em;padding-bottom:9px;transition:color .25s
+}
+.research-root .research-end-actions>a:hover{color:#fff}
+.research-root .research-end-actions>a span{font-size:17px}
+.research-root .research-scene-work .research-footnote{max-width:710px;font-size:10px}
+.research-root .site-controls{color:#f0efdd}
+.research-root .scroll-hint{color:#d5dec4}
+@media(max-width:1180px){
+  .research-root .research-back-link{display:none}
+  .research-root .site-header{gap:15px}
+  .research-root .top-nav{gap:clamp(11px,2.1vw,26px)}
+}
+@media(max-width:780px){
+  .research-root .slide-inner.research-inner{top:48%;width:calc(100% - 35px);max-height:calc(100dvh - 134px)}
+  .research-root .research-headline{font-size:clamp(56px,10.2vw,93px)}
+  .research-root .research-title{font-size:clamp(49px,8.0vw,79px)}
+  .research-root .research-description{font-size:14px;line-height:1.76;max-width:570px}
+  .research-root .research-intro-lead{font-size:14px}
+  .research-root .research-direction-card{min-height:196px;padding:16px 14px}
+  .research-root .research-direction-card h3{font-size:clamp(18px,2.8vw,25px)}
+  .research-root .research-direction-card p{font-size:11px;line-height:1.6}
+  .research-root .research-margin-note{display:none}
+}
+@media(max-width:560px){
+  .research-root .wordmark{font-size:9px;letter-spacing:.05em}
+  .research-root .top-nav{gap:9px}
+  .research-root .top-nav a{font-size:8px;letter-spacing:.05em}
+  .research-root .top-nav a:nth-child(2),.research-root .top-nav a:nth-child(4){display:none}
+  .research-root .slide-inner.research-inner{width:calc(100% - 35px);top:47.5%;max-height:calc(100dvh - 143px)}
+  .research-root .research-eyebrow{font-size:8px;letter-spacing:.10em}
+  .research-root .research-headline{font-size:clamp(52px,12.4vw,77px);line-height:1.03;margin-top:19px}
+  .research-root .research-title{font-size:clamp(45px,10.4vw,63px);line-height:1.04;margin-top:10px;margin-bottom:13px}
+  .research-root .research-description{font-size:12.6px;line-height:1.66}
+  .research-root .research-intro-lead{font-size:13px;line-height:1.65;max-width:320px}
+  .research-root .research-small-meta{font-size:8px;gap:8px;letter-spacing:.04em}
+  .research-root .research-ornamental-rule{margin:12px auto 11px}
+  .research-root .research-three-notes{grid-template-columns:1fr;gap:7px;margin-top:16px;max-width:340px}
+  .research-root .research-three-notes>div{min-height:52px;flex-direction:row;align-items:center;justify-content:space-between;padding:10px 13px;gap:12px}
+  .research-root .research-three-notes span{font-size:8px;white-space:nowrap}
+  .research-root .research-three-notes strong{font-size:15px;text-align:right}
+  .research-root .research-timeline{display:grid;grid-template-columns:1fr 1fr;gap:7px;max-width:370px;margin-top:15px}
+  .research-root .research-timeline>div{min-height:103px;padding:8px;gap:5px}
+  .research-root .research-timeline>i{display:none}
+  .research-root .research-step-glyph{width:32px;height:32px;font-size:19px}
+  .research-root .research-step-index{font-size:7px}
+  .research-root .research-timeline strong{font-size:12px}
+  .research-root .research-direction-grid{grid-template-columns:1fr;gap:7px;margin-top:13px;max-width:380px}
+  .research-root .research-direction-card{min-height:0;padding:12px 15px}
+  .research-root .research-direction-card>span{font-size:8px}
+  .research-root .research-direction-card h3{font-size:18px;margin:4px 0 5px}
+  .research-root .research-direction-card h3 br{display:none}
+  .research-root .research-direction-card p{font-size:10.5px;line-height:1.4}
+  .research-root .research-footnote{font-size:10px;line-height:1.5;margin-top:11px}
+  .research-root .research-work-links{grid-template-columns:1fr;gap:7px;margin-top:15px;max-width:370px}
+  .research-root .research-work-links>a:first-child{grid-column:auto}
+  .research-root .research-work-links>a{min-height:60px;padding:10px 13px}
+  .research-root .research-work-links small{font-size:7px}
+  .research-root .research-work-links strong{font-size:16px}
+  .research-root .research-work-links>a span{gap:4px}
+  .research-root .research-end-actions{gap:20px;margin-top:13px}
+  .research-root .research-end-actions>a{font-size:8px;letter-spacing:.08em}
+  .research-root .research-scene-work .research-footnote{font-size:9px}
+}
+@media(max-height:690px){
+  .research-root .slide-inner.research-inner{top:47%;max-height:calc(100dvh - 120px)}
+  .research-root .research-headline{font-size:clamp(53px,11vh,90px);margin-top:10px}
+  .research-root .research-title{font-size:clamp(43px,9.2vh,74px);margin-top:9px;margin-bottom:12px}
+  .research-root .research-ornamental-rule{margin:9px auto 8px}
+  .research-root .research-three-notes{margin-top:14px}
+  .research-root .research-timeline{margin-top:13px}
+  .research-root .research-direction-grid{margin-top:13px}
+  .research-root .research-direction-card{min-height:0}
+}
+@media(max-width:560px) and (max-height:690px){
+  .research-root .slide-inner.research-inner{top:49%;max-height:calc(100dvh - 119px)}
+  .research-root .research-headline{font-size:clamp(45px,10.4vh,65px)}
+  .research-root .research-title{font-size:clamp(41px,8.8vh,60px)}
+  .research-root .research-intro-lead{font-size:12px}
+  .research-root .research-description{font-size:12px}
+  .research-root .research-three-notes>div{min-height:42px;padding:7px 10px}
+  .research-root .research-direction-card{padding:9px 12px}
+  .research-root .research-direction-card h3{font-size:17px}
+  .research-root .research-direction-card p{font-size:10px}
+  .research-root .research-work-links>a{min-height:52px;padding:8px 10px}
+}
