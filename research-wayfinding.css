@@ -1,0 +1,56 @@
+/* Research overview wayfinding. Scoped; original floral presentation untouched. */
+.research-root .research-access-shortcuts,
+.research-root .research-more-branches{
+  display:flex;flex-wrap:wrap;justify-content:center;align-items:center;
+  gap:14px;margin:12px auto 0;max-width:840px
+}
+.research-root .research-access-shortcuts a,
+.research-root .research-more-branches a{
+  display:inline-flex;align-items:center;gap:7px;
+  padding:8px 11px;
+  border:1px solid rgba(238,229,188,.42);
+  background:rgba(19,52,35,.68);
+  font:500 9px/1.5 var(--mono);
+  letter-spacing:.10em;color:#f7eac6;
+  transition:border-color .25s,background .25s,transform .25s
+}
+.research-root .research-access-shortcuts a:hover,
+.research-root .research-more-branches a:hover{
+  border-color:#ffedc2;
+  background:rgba(72,99,60,.85);
+  transform:translateY(-2px)
+}
+.research-root .research-access-shortcuts a:first-child{
+  border-color:rgba(255,231,167,.78)
+}
+.research-root .research-more-branches{
+  margin:13px auto 0;gap:9px
+}
+.research-root .research-more-branches a{
+  font-size:9px;padding:9px 14px
+}
+.research-root .research-more-branches a:first-child{
+  border-color:#f2dca8;color:#fff4d8
+}
+.research-root .research-end-actions{flex-wrap:wrap;justify-content:center}
+.research-root .research-end-actions>a{white-space:nowrap}
+@media(max-width:560px){
+ .research-root .research-access-shortcuts{gap:7px;margin-top:8px}
+ .research-root .research-access-shortcuts a{
+   padding:7px 9px;font-size:8px;letter-spacing:.04em
+ }
+ .research-root .research-more-branches{gap:7px;margin-top:8px}
+ .research-root .research-more-branches a{
+   font-size:8px;padding:6px 10px;letter-spacing:.03em
+ }
+}
+@media(max-height:690px){
+ .research-root .research-access-shortcuts{margin-top:7px;gap:7px}
+ .research-root .research-access-shortcuts a{padding:5px 8px;font-size:8px}
+ .research-root .research-more-branches{margin-top:6px}
+ .research-root .research-more-branches a{padding:6px 9px}
+}
+@media(prefers-reduced-motion:reduce){
+ .research-root .research-access-shortcuts a,
+ .research-root .research-more-branches a{transition:none}
+}
