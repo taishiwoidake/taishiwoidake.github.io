@@ -1,0 +1,210 @@
+/* QTRAC-first ABOUT chapter; preserves existing botanical motion and palette. */
+.slide-about .about-qtrac-content{
+  top:49%;
+  width:min(calc(100% - 64px),880px);
+  max-width:880px;
+  color:#f7f4e7;
+}
+.slide-about .about-qtrac-content .about-title{
+  font-size:clamp(56px,6.4vw,90px);
+  line-height:1;
+  margin:clamp(12px,2vh,22px) auto clamp(12px,2.1vh,23px);
+}
+.slide-about .about-qtrac-focus{
+  width:min(100%,760px);
+  margin:0 auto clamp(15px,2.3vh,24px);
+  padding:clamp(17px,2.1vw,24px) clamp(18px,3vw,38px);
+  border-top:1px solid rgba(234,224,166,.75);
+  border-bottom:1px solid rgba(234,224,166,.46);
+  background:rgba(13,47,32,.38);
+  backdrop-filter:blur(3px);
+}
+.slide-about .about-qtrac-label{
+  font:500 9px/1.5 var(--mono);
+  letter-spacing:.13em;
+  color:#f0dbad;
+}
+.slide-about .about-qtrac-label span{color:#ebc984;font-size:12px;padding:0 8px}
+.slide-about .about-qtrac-focus h3{
+  font:400 clamp(24px,2.7vw,37px)/1.22 var(--serif);
+  letter-spacing:-.026em;
+  color:#fff8e3;
+  margin:10px auto 10px;
+}
+.slide-about .about-qtrac-focus p{
+  margin:0 auto;max-width:640px;
+  font:400 clamp(12.8px,1.11vw,15px)/1.75 var(--sans);
+  color:#e4ebd9;
+  text-wrap:balance;
+}
+.slide-about .about-qtrac-content .about-education{
+  max-width:760px;
+  margin:0 auto;
+  gap:12px;
+}
+.slide-about .about-qtrac-content .about-education-row{
+  min-height:94px;
+  padding:14px 18px;
+  background:rgba(13,43,29,.47);
+  border:1px solid rgba(233,234,198,.31);
+}
+.slide-about .about-qtrac-content .about-education-value{
+  font-size:clamp(17px,1.6vw,23px);
+}
+.slide-about .about-school-open{
+  appearance:none;
+  border-radius:0;
+  display:flex;
+  width:100%;
+  text-align:left;
+  cursor:pointer;
+  color:inherit;
+  font:inherit;
+  transition:background .25s,border-color .25s,transform .25s;
+}
+.slide-about .about-school-open:hover,
+.slide-about .about-school-open:focus-visible{
+  border-color:rgba(252,239,181,.82);
+  background:rgba(63,97,59,.75);
+  transform:translateY(-2px);
+}
+.slide-about .about-school-hint{
+  color:#f0deaa;
+  font-size:8px;
+  letter-spacing:.035em;
+}
+.slide-about .about-qtrac-content .about-education-value small{
+  color:#dfe9ce;
+  font-size:10px;
+}
+.slide-about .about-research-link{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:18px;
+  padding:9px 2px;
+  margin:clamp(12px,1.7vh,20px) auto 0;
+  border-bottom:1px solid rgba(244,224,165,.81);
+  color:#f9eac0;
+  font:500 9px var(--mono);
+  letter-spacing:.15em;
+  transition:color .25s,transform .25s;
+}
+.slide-about .about-research-link:hover{color:#fff;transform:translateY(-3px)}
+.slide-about .about-research-link span{font-size:18px}
+.slide-about .about-qtrac-footer{
+  color:#d5ddc4;
+  font:400 11px/1.5 var(--serif);
+  font-style:italic;
+  margin:13px auto 0;
+}
+.school-project-dialog{
+  width:min(760px,calc(100vw - 32px));
+  max-width:760px;
+  max-height:min(88dvh,880px);
+  margin:auto;
+  padding:0;
+  overflow-y:auto;
+  overflow-x:hidden;
+  overscroll-behavior:contain;
+  border:1px solid rgba(232,225,177,.42);
+  border-radius:2px;
+  background:
+    radial-gradient(ellipse at 95% 10%,rgba(99,126,77,.22),transparent 52%),
+    linear-gradient(135deg,#1a392b,#294a35 56%,#192f27);
+  color:#f7f1df;
+  box-shadow:0 30px 110px rgba(0,0,0,.67);
+}
+.school-project-dialog::backdrop{background:rgba(5,24,15,.78);backdrop-filter:blur(7px)}
+.school-project-content{padding:clamp(22px,4.5vw,43px)}
+.school-project-toolbar{
+  display:flex;justify-content:space-between;gap:20px;align-items:center;
+  font:500 9px/1.55 var(--mono);letter-spacing:.15em;color:#ded6aa;
+}
+.school-project-close{
+  font:500 10px var(--mono);
+  color:#f7e8bc;
+  background:transparent;
+  padding:10px 0 10px 12px;
+  border:0;
+  border-bottom:1px solid #d6c992;
+  cursor:pointer;
+  white-space:nowrap;
+}
+.school-project-close:hover{color:#fff}
+.school-project-heading{margin:clamp(15px,3vh,25px) 0 0}
+.school-project-index{font:500 9px var(--mono);letter-spacing:.12em;color:#e1d3a4}
+.school-project-heading h2{
+  font:400 clamp(54px,7vw,92px)/1.03 var(--serif);
+  letter-spacing:-.058em;margin:12px 0 19px;
+  color:#f9f6ea;
+}
+.school-project-heading h2 em{color:#e0d3a5;font-weight:400}
+.school-project-school{color:#e5ecd9;font:400 13px/1.7 var(--sans)}
+.school-project-school span{color:#ecd394;padding:0 6px}
+.school-project-rule{display:flex;gap:15px;align-items:center;justify-content:center;margin:23px 0;
+  color:#e4d1a2;font-size:16px}
+.school-project-rule span{width:70px;max-width:15%;height:1px;background:rgba(224,208,150,.53)}
+.school-project-story{display:grid;grid-template-columns:1fr 1fr;gap:27px}
+.school-project-story h3{font:400 23px/1.3 var(--serif);color:#f5edda;margin:0 0 13px}
+.school-project-story p{font:400 13px/1.83 var(--sans);color:#dbe6d4;margin:0}
+.school-project-story p strong{color:#f6e6b9}
+.school-project-context{display:flex;gap:16px;margin:24px auto 0;padding:17px;
+  background:rgba(11,31,22,.55);border:1px solid rgba(224,226,175,.24)}
+.school-project-context-mark{font-size:22px;color:#e6ce96}
+.school-project-context p{margin:0;font:400 12px/1.78 var(--sans);color:#dbe6cf}
+.school-project-context strong{color:#fff1c9}
+.school-project-links{display:flex;justify-content:flex-start;gap:15px;flex-wrap:wrap;margin:26px 0 0}
+.school-project-links a{
+  padding:10px 1px 8px;
+  color:#f6e8bd;
+  border-bottom:1px solid rgba(239,218,167,.55);
+  font:500 10px/1.4 var(--mono);letter-spacing:.08em
+}
+.school-project-links a:hover{color:#fff;border-bottom-color:#fff}
+@media(max-width:780px){
+  .slide-about .about-qtrac-content{width:calc(100% - 46px);top:48%}
+  .slide-about .about-qtrac-content .about-title{font-size:clamp(53px,8.3vw,74px)}
+  .slide-about .about-qtrac-focus{padding:15px 20px}
+  .slide-about .about-qtrac-focus h3{font-size:clamp(23px,3vw,30px)}
+  .slide-about .about-qtrac-focus p{font-size:13px;line-height:1.68}
+  .slide-about .about-qtrac-content .about-education-row{min-height:87px;padding:12px}
+  .slide-about .about-qtrac-content .about-education-value{font-size:17px}
+}
+@media(max-width:520px){
+  .slide-about .about-qtrac-content{width:calc(100% - 34px);top:47.5%}
+  .slide-about .about-qtrac-content .about-title{
+    font-size:clamp(42px,10vw,57px);margin:10px auto 13px
+  }
+  .slide-about .about-qtrac-focus{padding:12px 15px;margin-bottom:11px}
+  .slide-about .about-qtrac-label{font-size:7.5px;letter-spacing:.07em}
+  .slide-about .about-qtrac-focus h3{font-size:22px;margin:7px auto}
+  .slide-about .about-qtrac-focus p{font-size:11.8px;line-height:1.55}
+  .slide-about .about-qtrac-content .about-education{grid-template-columns:1fr;gap:7px}
+  .slide-about .about-qtrac-content .about-education-row{
+    min-height:54px;padding:9px 11px;flex-direction:row;justify-content:space-between;align-items:center
+  }
+  .slide-about .about-qtrac-content .about-education-label{font-size:8px}
+  .slide-about .about-qtrac-content .about-education-value{
+    font-size:15px;line-height:1.2;text-align:right
+  }
+  .slide-about .about-qtrac-content .about-education-value small{font-size:9px}
+  .slide-about .about-school-hint{display:block;margin-top:3px;font-size:7px}
+  .slide-about .about-research-link{font-size:8px;margin-top:10px;padding:7px 2px}
+  .slide-about .about-qtrac-footer{font-size:10px;margin-top:8px}
+  .school-project-story{grid-template-columns:1fr;gap:22px}
+  .school-project-heading h2{font-size:clamp(51px,13vw,67px)}
+}
+@media(max-height:690px){
+  .slide-about .about-qtrac-content{top:48%;max-height:calc(100dvh - 126px);overflow-y:auto;scrollbar-width:thin}
+  .slide-about .about-qtrac-content .about-title{font-size:clamp(40px,8.2vh,62px);margin:8px auto 10px}
+  .slide-about .about-qtrac-focus{padding:10px 15px;margin-bottom:10px}
+  .slide-about .about-qtrac-focus h3{font-size:clamp(19px,3.9vh,27px);margin:6px auto}
+  .slide-about .about-qtrac-focus p{font-size:11.5px;line-height:1.48}
+  .slide-about .about-qtrac-content .about-education-row{min-height:51px;padding:8px 12px}
+  .slide-about .about-research-link{margin-top:8px}
+  .slide-about .about-qtrac-footer{margin-top:7px}
+}
+@media(prefers-reduced-motion:reduce){
+  .slide-about .about-school-open,.slide-about .about-research-link{transition:none}
+}
