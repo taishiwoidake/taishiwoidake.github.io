@@ -83,6 +83,16 @@
   let lastFrame=0;
   let liveScene=-1;
   let entryTime=0;
+  const pointerWind={x:-100000,y:-100000,active:false};
+  world.addEventListener("pointermove",event=>{
+    if(event.pointerType==="touch")return;
+    const rect=world.getBoundingClientRect();
+    pointerWind.x=event.clientX-rect.left;
+    pointerWind.y=event.clientY-rect.top;
+    pointerWind.active=true;
+  },{passive:true});
+  world.addEventListener("pointerleave",()=>{pointerWind.active=false;},{passive:true});
+
 
   for(const slide of slides){
     const field=slide.querySelector(".flower-field");
@@ -353,20 +363,69 @@
           theta-=Math.PI*.8*inverse;
           size=.20+.8*e;
       }
-      // All flowers continue their own slow movements after arriving:
-      // varying bob, sway, pendulum, circular drift and breath.
+      // Each flower has an individual idle choreography, even after arriving.
+      // Swirls, slow orbits, drifts, pendulums, flutters and gentle breathing.
       const seconds=elapsed/1000;
       const life=ease(p);
       const t=seconds*driftSpeed+phase;
-      px+=Math.sin(t)*amp*life;
-      py+=Math.cos(t*.76+phase)*amp*.55*life;
-      if(type===0||type===3) {
-        px+=Math.cos(t*.51+phase)*amp*.36*life;
-        py+=Math.sin(t*.51)*amp*.39*life;
+      switch(type){
+        case 0: // Small elliptical orbit
+          px+=Math.cos(t*.81)*amp*1.5*life;
+          py+=Math.sin(t*.81)*amp*1.05*life;
+          theta+=Math.sin(t*.73)*sway*1.35*life;
+          break;
+        case 1: // Long diagonal sway
+          px+=Math.sin(t*.51)*amp*1.65*life;
+          py+=Math.cos(t*.43)*amp*.78*life;
+          theta+=Math.sin(t*.41)*sway*1.5*life;
+          break;
+        case 2: // Petal-like hovering and falling
+          px+=Math.sin(t*.97)*amp*.54*life;
+          py+=Math.sin(t*1.17)*amp*1.48*life;
+          theta+=Math.cos(t*.85)*sway*.9*life;
+          break;
+        case 3: // Rotating, almost weightless suspension
+          px+=Math.cos(t*.61)*amp*1.03*life;
+          py+=Math.sin(t*.76)*amp*1.1*life;
+          theta+=Math.sin(t*.58)*sway*2.3*life;
+          break;
+        case 4: // Flower looking upwards
+          px+=Math.sin(t*.77)*amp*.6*life;
+          py+=Math.cos(t*.62)*amp*1.65*life;
+          theta+=Math.sin(t*.60+phase)*sway*1.1*life;
+          break;
+        case 5: // A lively lateral dance
+          px+=Math.sin(t*.95)*amp*1.95*life;
+          py+=Math.cos(t*1.15)*amp*.50*life;
+          theta+=Math.sin(t*.91)*sway*1.95*life;
+          break;
+        case 6: // Gently opening and closing, like breathing
+          px+=Math.sin(t*.48)*amp*.65*life;
+          py+=Math.cos(t*.67)*amp*.85*life;
+          theta+=Math.sin(t*.54)*sway*.65*life;
+          break;
+        case 7: // Figure-eight movement
+          px+=Math.sin(t*.75)*amp*1.28*life;
+          py+=Math.sin(t*1.50)*amp*.74*life;
+          theta+=Math.sin(t*.61)*sway*1.2*life;
+          break;
+        default: // Asymmetrical, floating arc
+          px+=Math.sin(t*.73)*amp*1.17*life;
+          py+=Math.cos(t*.52+phase)*amp*1.30*life;
+          theta+=Math.sin(t*.69)*sway*1.05*life;
       }
-      if(type===2||type===7)py+=Math.sin(t*1.41)*amp*.35*life;
-      theta+=Math.sin(t*.82)*sway*life;
-      const breathe=1+Math.sin(t*.86+phase)*.035*life;
+      if(pointerWind.active&&life>.01){
+        const dx=px-pointerWind.x,dy=py-pointerWind.y;
+        const distanceSquared=dx*dx+dy*dy;
+        const radius=230;
+        if(distanceSquared<radius*radius){
+          const effect=Math.pow(1-distanceSquared/(radius*radius),2);
+          px+=dx/radius*28*effect*life;
+          py+=dy/radius*28*effect*life;
+          theta+=(dx/radius)*.17*effect;
+        }
+      }
+      const breathe=1+Math.sin(t*.86+phase)*(type===6?.08:.025)*life;
       const finalSize=Math.max(0,size)*breathe*depth;
       if(finalSize<.01)continue;
       ctx.save();
