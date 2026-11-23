@@ -93,33 +93,81 @@
     contexts.set(slide, {canvases,drawnVersion:-1,width:0,height:0});
   }
 
-  function hasRealTransparency(img) {
-    // Pixel sampling prevents opaque rectangular photographs, baked-in
-    // checkerboards and opaque PNG files from entering the garden.
-    try{
-      const canvas=document.createElement("canvas");
-      canvas.width=56;canvas.height=56;
-      const context=canvas.getContext("2d",{willReadFrequently:true});
-      if(!context)return false;
-      context.clearRect(0,0,56,56);
-      context.drawImage(img,0,0,56,56);
-      const pixels=context.getImageData(0,0,56,56).data;
-      let transparent=0,edgeTransparent=0,edgeCount=0,cornerTransparent=0;
-      for(let y=0;y<56;y++)for(let x=0;x<56;x++){
-        const alpha=pixels[(y*56+x)*4+3];
-        if(alpha<240)transparent++;
-        const edge=x<5||y<5||x>50||y>50;
-        if(edge){edgeCount++;if(alpha<240)edgeTransparent++;}
+  function verifyAndTrimCutout(img) {
+    // Deliberately conservative: if transparency or organic silhouette cannot
+    // be established, never display the file. An opaque rectangular photograph
+    // is worse than omitting a flower.
+    try {
+      const srcW=img.naturalWidth, srcH=img.naturalHeight;
+      if(!srcW||!srcH)return null;
+      const n=112;
+      const test=document.createElement("canvas");
+      test.width=n;test.height=n;
+      const tctx=test.getContext("2d",{willReadFrequently:true});
+      if(!tctx)return null;
+      tctx.drawImage(img,0,0,n,n);
+      const px=tctx.getImageData(0,0,n,n).data;
+      const alpha=(x,y)=>px[(y*n+x)*4+3];
+      let clear=0,solid=0,opaqueWhite=0;
+      let minX=n,minY=n,maxX=-1,maxY=-1;
+      const cornerClear=[0,0,0,0],cornerTotal=[0,0,0,0];
+      for(let y=0;y<n;y++)for(let x=0;x<n;x++) {
+        const k=(y*n+x)*4,a=px[k+3];
+        if(a<18)clear++;
+        if(a>232) {
+          solid++;
+          minX=Math.min(minX,x);maxX=Math.max(maxX,x);
+          minY=Math.min(minY,y);maxY=Math.max(maxY,y);
+          if(px[k]>225&&px[k+1]>225&&px[k+2]>225)opaqueWhite++;
+        }
+        const quadrant=(x<12?0:x>=n-12?1:-1)+(y>=n-12?2:0);
+        if((x<12||x>=n-12)&&(y<12||y>=n-12)){
+          const q=(x>=n-12?1:0)+(y>=n-12?2:0);
+          cornerTotal[q]++;
+          if(a<25)cornerClear[q]++;
+        }
       }
-      const corners=[[1,1],[1,54],[54,1],[54,54]];
-      for(const [x,y] of corners)if(pixels[(y*56+x)*4+3]<245)cornerTransparent++;
-      canvas.width=0;canvas.height=0;
-      return transparent/(56*56)>.15 &&
-        edgeTransparent/Math.max(edgeCount,1)>.60 &&
-        cornerTransparent>=3;
-    }catch(error){
-      // If pixel transparency cannot be verified (e.g. CORS), do not use it.
-      return false;
+      // A cutout must have genuine alpha, not a white rectangle with
+      // a narrow transparent frame or a fake checkerboard.
+      if(clear/n/n < .27||solid/n/n < .025||solid/n/n > .66)return null;
+      if(cornerClear.some((k,i)=>k/Math.max(1,cornerTotal[i]) < .80))return null;
+      if(minX<0||maxX<minX||maxY<minY)return null;
+      const bw=maxX-minX+1,bh=maxY-minY+1;
+      const bboxArea=bw*bh;
+      let bboxOpaque=0;
+      for(let y=minY;y<=maxY;y++)for(let x=minX;x<=maxX;x++)
+        if(alpha(x,y)>232)bboxOpaque++;
+      if(bboxOpaque/bboxArea > .66)return null;
+
+      // A photo pasted on a transparent canvas has a straight rectangular
+      // perimeter. Reject that perimeter even when the outer PNG has alpha.
+      let perimeterOpaque=0,perimeterCount=0;
+      const bx=Math.max(1,Math.ceil(bw*.05)),by=Math.max(1,Math.ceil(bh*.05));
+      for(let y=minY;y<=maxY;y+=2)for(const x of [minX+bx,maxX-bx]) {
+        perimeterCount++;if(alpha(x,y)>225)perimeterOpaque++;
+      }
+      for(let x=minX;x<=maxX;x+=2)for(const y of [minY+by,maxY-by]) {
+        perimeterCount++;if(alpha(x,y)>225)perimeterOpaque++;
+      }
+      if(perimeterOpaque/Math.max(1,perimeterCount)>.70)return null;
+
+      // Cropping large transparent margins improves density and avoids drawing
+      // mostly empty thumbnails on every slide.
+      const full=document.createElement("canvas");
+      const padding=5;
+      const sx=Math.max(0,Math.floor(minX/n*srcW)-padding);
+      const sy=Math.max(0,Math.floor(minY/n*srcH)-padding);
+      const ex=Math.min(srcW,Math.ceil((maxX+1)/n*srcW)+padding);
+      const ey=Math.min(srcH,Math.ceil((maxY+1)/n*srcH)+padding);
+      full.width=Math.max(1,ex-sx);
+      full.height=Math.max(1,ey-sy);
+      const fctx=full.getContext("2d",{alpha:true});
+      if(!fctx)return null;
+      fctx.drawImage(img,sx,sy,full.width,full.height,0,0,full.width,full.height);
+      return full;
+    } catch(error) {
+      // Includes CORS-tainted or unverifiable images.
+      return null;
     }
   }
 
@@ -137,10 +185,9 @@
       img.crossOrigin="anonymous";
       img.decoding="async";
       img.onload=()=>{
-        if(!img.naturalWidth||!img.naturalHeight||!hasRealTransparency(img))
-          done(null);
-        else
-          done({img,entry});
+        const cutout=verifyAndTrimCutout(img);
+        if(!cutout)done(null);
+        else done({img:cutout,entry});
       };
       img.onerror=()=>done(null);
       img.src=photoUrl(entry);
@@ -184,8 +231,8 @@
         const resource=accepted[index];
         const img=resource.img;
         const maxSide=92+rand()*168+(i%13===0?62:0);
-        const scale=Math.min(maxSide/img.naturalWidth,maxSide/img.naturalHeight);
-        const dw=img.naturalWidth*scale, dh=img.naturalHeight*scale;
+        const scale=Math.min(maxSide/img.width,maxSide/img.height);
+        const dw=img.width*scale, dh=img.height*scale;
         let x=rand()*w,y=rand()*h;
         if(edge===0)x=w*(.12+rand()*.8);
         if(edge===1)x=w*(.1+rand()*.8);
@@ -247,6 +294,8 @@
     await Promise.all(Array.from({length:5},()=>worker()));
     schedulePaint();
     document.documentElement.dataset.verifiedFlowers=String(accepted.length);
+    const verified=document.getElementById("cutout-verified-count");
+    if(verified)verified.textContent=String(accepted.length);
   }
   void loadVerifiedPhotos();
   
@@ -264,7 +313,7 @@
   const heading=document.createElement("h2");
   heading.textContent="Real flowers. Real photographs.";
   const intro=document.createElement("p");
-  intro.textContent="Images come from Wikimedia Commons. Only source files passing a transparency-pixel check are displayed. This source library includes candidate images; not all necessarily appear. The photo links provide authors, licenses and source history.";
+  intro.textContent="Wikimedia Commons source images are screened for real transparent pixels and irregular cutout silhouettes. Opaque rectangles and files that cannot be checked are excluded. Source links contain photographers, licensing terms and histories.";
   const sourceList=document.createElement("ol");
   for(const entry of PHOTO_LIBRARY){
     const item=document.createElement("li");
