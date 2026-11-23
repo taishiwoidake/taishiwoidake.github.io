@@ -707,8 +707,18 @@
     if(counter)counter.innerHTML=pad(current+1)+' <span>/</span> '+pad(slides.length)+' <small>'+slides[current].dataset.label+'</small>';
     if(progress)progress.style.transform="scaleX("+((current+1)/slides.length)+")";
     // Both arrows always work. The chapters form an endless circular garden.
-    if(previous){previous.disabled=false;previous.title="Previous chapter (wraps around)";}
-    if(next){next.disabled=false;next.title="Next chapter (wraps around)";}
+    if(previous){
+      previous.disabled=false;
+      const label=current===0?"Previous: final chapter":"Previous chapter";
+      previous.title=label;
+      previous.setAttribute("aria-label",label);
+    }
+    if(next){
+      next.disabled=false;
+      const label=current===slides.length-1?"Next: back to the beginning":"Next chapter";
+      next.title=label;
+      next.setAttribute("aria-label",label);
+    }
     nav.forEach(a=>{
       if(a.hash==="#"+slides[current].id)a.setAttribute("aria-current","page");
       else a.removeAttribute("aria-current");
@@ -749,7 +759,8 @@
   },{passive:true});
   let lastWheel=0;
   window.addEventListener("wheel",event=>{
-    if(dialog.open||event.ctrlKey||event.metaKey||transitionLocked)return;
+    if(dialog.open||event.ctrlKey||event.metaKey)return;
+    if(transitionLocked){event.preventDefault();return;}
     const x=event.deltaX,y=event.deltaY;
     if(Math.max(Math.abs(x),Math.abs(y))<5)return;
     event.preventDefault();
