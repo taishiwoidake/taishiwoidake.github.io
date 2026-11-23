@@ -65,3 +65,17 @@ These are Git recovery branches and documentation, **not immutable branch-protec
 
 Website: https://taishiwoidake.github.io/
 Repository: https://github.com/taishiwoidake/taishiwoidake.github.io
+
+## Extension — Accessible research atlas (23 November 2026)
+
+A further **additive** upgrade preserves the original owner-approved photo-flower design while expanding the readable research portfolio.
+
+- Added 12 five-scene subject pages, including a plain-language guide, research-branch directory, personal research profile, QTRAC memory/order/delayed-question branches, Ximeste–Maluna critical-curve branch, a separate stochastic-circuit branch, thermal records, directional interference, quantum software and human mobility.
+- The original four detailed research pages now link to their specialised subtopics; `research.html` offers "START HERE" and "ALL RESEARCH BRANCHES".
+- The original flower rendering and original flower photos are **unchanged**, as are the original global styles and the horizontal scene transition code.
+- `research-branch-builder.js` runs **only in new branches**, before the original flower script, and reconstructs its exact five-scene class and flower-field contract.
+- `research-reading.js` improves vertical reading inside text panels without replacing the original circular horizontal slideshow.
+- All 18 site pages are in `sitemap.xml`. Navigation and science-status policy are documented in `RESEARCH_STRUCTURE.md`.
+- Safe rollback branch: `backup-before-accessible-expanded-research-2026-11-23`. The original approved baseline remains independently preserved.
+- **Never** delete or simplify the flower-animation system in the course of research-copy revisions.
+
