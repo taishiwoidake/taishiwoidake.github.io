@@ -53,7 +53,7 @@
   function photoUrl(entry) {
     const file = encodeURIComponent(entry[0]).replace(/%2F/g,"/");
     const h = entry[1];
-    const size = entry[0] === "YosriDec04MawarKampung1_Extracted.png" ? 250 : 330;
+    const size = 260;
     return "https://thumb.wikimedia.org/wikipedia/commons/thumb/"+h[0]+"/"+h+"/"+file+"/"+size+"px-"+file;
   }
   function commonsUrl(entry){
@@ -70,68 +70,186 @@
   }
   const random=seeded(720412);
   const round=v=>Math.round(v*100)/100;
-  const PHOTO_COUNT_PER_SLIDE=150; // About five times the previous ~30 per scene.
-  const layout = [
-    // Each composition: left wall, right wall, canopy above, and flowers rising from below.
-    {priority:[1,9,16,24,20,8,10,27,14,26,17,7]},
-    {priority:[2,15,12,25,9,11,1,28,18,4,6,26]},
-    {priority:[7,16,19,14,6,18,8,0,13,1,21,15]},
-    {priority:[10,2,8,3,5,9,1,24,29,12,17,23]},
-    {priority:[9,27,1,28,8,18,16,25,10,2,15,21]}
-  ];
+  // Four lightweight Canvas layers per scene replace 750 individual DOM images.
+  // Every image must pass an actual pixel-alpha inspection before it can be drawn.
+  const FLOWERS_PER_SCENE=150;
+  const BAND_NAMES=["left","right","top","bottom"];
+  const contexts=new Map();
+  const accepted=[];
+  let renderTimer=0;
+  let renderVersion=0;
 
-  for (let s=0;s<slides.length;s++) {
-    const field=slides[s].querySelector(".flower-field");
-    if(!field) continue;
-    const fragment=document.createDocumentFragment();
-    for(let i=0;i<PHOTO_COUNT_PER_SLIDE;i++) {
-      const edge=i%4; // left, right, upper canopy, lower border
-      const chosen=(i<layout[s].priority.length) ? layout[s].priority[i] :
-          Math.floor(random()*PHOTO_LIBRARY.length);
-      const photo=PHOTO_LIBRARY[chosen];
-      const el=document.createElement("div");
-      el.className="flower photo "+(i%9===0?"front":i%5===0?"back":"mid");
-      el.dataset.species=photo[2];
-      // Density: 75% desktop visible on phones, not so much as to block controls.
-      if(i%3===0)el.dataset.mobile="hide";
-      let x=0,y=0;
-      if(edge===0){x=-10+random()*29; y=-12+random()*111;}
-      if(edge===1){x=82+random()*30; y=-13+random()*111;}
-      if(edge===2){x=4+random()*92; y=-27+random()*26;}
-      if(edge===3){x=4+random()*92; y=76+random()*34;}
-      const foreground=i%7===0;
-      let width=(foreground?158:85)+(foreground?random()*120:random()*104);
-      if(i%13===0)width=205+random()*140;
-      if(photo[0].includes("Typhonium"))width*=.62;
-      if(photo[0].includes("Schneegl"))width*=.83;
-      const scale=.77+random()*.51;
-      const angle=(random()-.5)*78+(edge===0?18:edge===1?-18:0);
-      const direction=[[-100,random()*38-19],[100,random()*38-19],[random()*36-18,-100],[random()*36-18,100]][edge];
-      const image=document.createElement("img");
-      image.src=photoUrl(photo);
-      image.alt="";
-      image.decoding="async";
-      image.loading=s===0&&i<38?"eager":"lazy";
-      image.setAttribute("referrerpolicy","no-referrer");
-      image.width=330;
-      image.height=330;
-      el.appendChild(image);
-      el.style.setProperty("--x",round(x)+"%");
-      el.style.setProperty("--y",round(y)+"%");
-      el.style.setProperty("--w",round(width)+"px");
-      el.style.setProperty("--scale",round(scale));
-      el.style.setProperty("--rotation",round(angle)+"deg");
-      el.style.setProperty("--opacity",round(.84+random()*.16));
-      el.style.setProperty("--from-x",round(direction[0])+"vw");
-      el.style.setProperty("--from-y",round(direction[1])+"vh");
-      el.style.setProperty("--delay",Math.round(random()*750)+"ms");
-      el.style.setProperty("--layer",foreground?"5":i%5===0?"2":"3");
-      if(i%12===0)el.classList.add("huge");
-      fragment.appendChild(el);
+  for(const slide of slides){
+    const field=slide.querySelector(".flower-field");
+    if(!field)continue;
+    const canvases=[];
+    for(const name of BAND_NAMES){
+      const canvas=document.createElement("canvas");
+      canvas.className="photo-canvas edge-"+name;
+      canvas.setAttribute("aria-hidden","true");
+      field.appendChild(canvas);
+      canvases.push(canvas);
     }
-    field.appendChild(fragment);
+    contexts.set(slide, {canvases,drawnVersion:-1,width:0,height:0});
   }
 
+  function hasRealTransparency(img) {
+    // Pixel sampling prevents opaque rectangular photographs, baked-in
+    // checkerboards and opaque PNG files from entering the garden.
+    try{
+      const canvas=document.createElement("canvas");
+      canvas.width=56;canvas.height=56;
+      const context=canvas.getContext("2d",{willReadFrequently:true});
+      if(!context)return false;
+      context.clearRect(0,0,56,56);
+      context.drawImage(img,0,0,56,56);
+      const pixels=context.getImageData(0,0,56,56).data;
+      let transparent=0,edgeTransparent=0,edgeCount=0,cornerTransparent=0;
+      for(let y=0;y<56;y++)for(let x=0;x<56;x++){
+        const alpha=pixels[(y*56+x)*4+3];
+        if(alpha<240)transparent++;
+        const edge=x<5||y<5||x>50||y>50;
+        if(edge){edgeCount++;if(alpha<240)edgeTransparent++;}
+      }
+      const corners=[[1,1],[1,54],[54,1],[54,54]];
+      for(const [x,y] of corners)if(pixels[(y*56+x)*4+3]<245)cornerTransparent++;
+      canvas.width=0;canvas.height=0;
+      return transparent/(56*56)>.15 &&
+        edgeTransparent/Math.max(edgeCount,1)>.60 &&
+        cornerTransparent>=3;
+    }catch(error){
+      // If pixel transparency cannot be verified (e.g. CORS), do not use it.
+      return false;
+    }
+  }
+
+  function getPicture(entry) {
+    return new Promise(resolve=>{
+      const img=new Image();
+      let finished=false;
+      const done=value=>{
+        if(finished)return;finished=true;
+        clearTimeout(timeout);
+        img.onload=null;img.onerror=null;
+        resolve(value);
+      };
+      const timeout=setTimeout(()=>done(null),12000);
+      img.crossOrigin="anonymous";
+      img.decoding="async";
+      img.onload=()=>{
+        if(!img.naturalWidth||!img.naturalHeight||!hasRealTransparency(img))
+          done(null);
+        else
+          done({img,entry});
+      };
+      img.onerror=()=>done(null);
+      img.src=photoUrl(entry);
+    });
+  }
+
+  function setBacking(canvas,w,h){
+    const dpr=Math.min(window.devicePixelRatio||1,1.35);
+    const pixelW=Math.max(1,Math.round(w*dpr));
+    const pixelH=Math.max(1,Math.round(h*dpr));
+    if(canvas.width!==pixelW||canvas.height!==pixelH){
+      canvas.width=pixelW;canvas.height=pixelH;
+    }
+    const ctx=canvas.getContext("2d",{alpha:true});
+    if(!ctx)return null;
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    ctx.clearRect(0,0,w,h);
+    return ctx;
+  }
+
+  function paintScene(sceneIndex, force=false) {
+    const slide=slides[sceneIndex];
+    const entry=contexts.get(slide);
+    if(!entry||!accepted.length)return;
+    const vw=world.clientWidth, vh=world.clientHeight;
+    if(!vw||!vh)return;
+    const signature=vw+"x"+vh+"-"+renderVersion;
+    if(!force&&entry.drawnVersion===signature)return;
+
+    for(let edge=0;edge<4;edge++){
+      const canvas=entry.canvases[edge];
+      const w=edge<2?Math.ceil(vw*.36):vw;
+      const h=edge<2?vh:Math.ceil(vh*.34);
+      const ctx=setBacking(canvas,w,h);
+      if(!ctx)continue;
+      // Stable layout seeded by the scene and edge for consistent composition.
+      const rand=seeded(194173+sceneIndex*857+edge*73);
+      const count=FLOWERS_PER_SCENE/4;
+      for(let i=0;i<count;i++){
+        const index=Math.floor(rand()*accepted.length);
+        const resource=accepted[index];
+        const img=resource.img;
+        const maxSide=92+rand()*168+(i%13===0?62:0);
+        const scale=Math.min(maxSide/img.naturalWidth,maxSide/img.naturalHeight);
+        const dw=img.naturalWidth*scale, dh=img.naturalHeight*scale;
+        let x=rand()*w,y=rand()*h;
+        if(edge===0)x=w*(.12+rand()*.8);
+        if(edge===1)x=w*(.1+rand()*.8);
+        if(edge===2)y=h*(.05+rand()*.86);
+        if(edge===3)y=h*(.1+rand()*.85);
+        ctx.save();
+        ctx.translate(x,y);
+        ctx.rotate((rand()-.5)*.93);
+        ctx.globalAlpha=.86+rand()*.14;
+        ctx.drawImage(img,-dw/2,-dh/2,dw,dh);
+        ctx.restore();
+      }
+    }
+    entry.drawnVersion=signature;
+  }
+
+  function releaseFarScenes(){
+    for(let i=0;i<slides.length;i++){
+      if(Math.abs(i-current)<=1)continue;
+      const entry=contexts.get(slides[i]);
+      if(!entry||entry.drawnVersion===-1)continue;
+      for(const canvas of entry.canvases){
+        canvas.width=0;canvas.height=0;
+      }
+      entry.drawnVersion=-1;
+    }
+  }
+
+  function renderNearScenes(){
+    if(!accepted.length)return;
+    paintScene(current);
+    if(current+1<slides.length)paintScene(current+1);
+    if(current>0)paintScene(current-1);
+    releaseFarScenes();
+  }
+
+  function schedulePaint(){
+    if(renderTimer)return;
+    renderTimer=setTimeout(()=>{
+      renderTimer=0;
+      renderVersion++;
+      renderNearScenes();
+    },230);
+  }
+
+  async function loadVerifiedPhotos(){
+    const candidates=PHOTO_LIBRARY.filter(entry=>entry[0]!=="Blue_Flower_Transparent_Background.png");
+    let nextIndex=0;
+    async function worker(){
+      while(nextIndex<candidates.length){
+        const entry=candidates[nextIndex++];
+        const picture=await getPicture(entry);
+        if(picture){
+          accepted.push(picture);
+          if(accepted.length===1||accepted.length%4===0)schedulePaint();
+        }
+      }
+    }
+    await Promise.all(Array.from({length:5},()=>worker()));
+    schedulePaint();
+    document.documentElement.dataset.verifiedFlowers=String(accepted.length);
+  }
+  void loadVerifiedPhotos();
+  
   // A compact, accessible credit sheet identifies the original photographers and
   // licenses via the corresponding Commons file descriptions.
   const creditLink=document.createElement("button");
@@ -146,7 +264,7 @@
   const heading=document.createElement("h2");
   heading.textContent="Real flowers. Real photographs.";
   const intro=document.createElement("p");
-  intro.textContent="The flowers are photographic cutouts published on Wikimedia Commons, not AI-generated flower drawings. Each image links to its photographer, licensing terms and source history. The photographs are used in layered compositions with position, size and rotation changes.";
+  intro.textContent="Images come from Wikimedia Commons. Only source files passing a transparency-pixel check are displayed. This source library includes candidate images; not all necessarily appear. The photo links provide authors, licenses and source history.";
   const sourceList=document.createElement("ol");
   for(const entry of PHOTO_LIBRARY){
     const item=document.createElement("li");
@@ -191,6 +309,7 @@
       else a.removeAttribute("aria-current");
     });
     if(hint)hint.classList.toggle("hidden",current>0);
+    renderNearScenes();
   }
   function go(index){
     const i=Math.max(0,Math.min(slides.length-1,index));
@@ -235,7 +354,11 @@
     if(event.key==="Home"){event.preventDefault();go(0);}
     if(event.key==="End"){event.preventDefault();go(slides.length-1);}
   });
-  window.addEventListener("resize",()=>world.scrollTo({left:current*world.clientWidth,behavior:"instant"}),{passive:true});
+  window.addEventListener("resize",()=>{
+    world.scrollTo({left:current*world.clientWidth,behavior:"instant"});
+    renderVersion++;
+    renderNearScenes();
+  },{passive:true});
   requestAnimationFrame(()=>{
     activate(0);
     document.body.classList.add("motion");
