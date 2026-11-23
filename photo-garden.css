@@ -65,3 +65,127 @@
  .photo-credit-trigger{bottom:77px}
  .slide-inner::before{inset:-18% -10%;filter:blur(12px)}
 }
+
+
+/* Floral scene change: a sweeping botanical curtain with real flowers
+   animated over it. Existing flowers, typography and content stay untouched. */
+.botanical-portal{
+  position:fixed;
+  inset:0;
+  z-index:160;
+  visibility:hidden;
+  pointer-events:none;
+  overflow:hidden;
+  contain:layout paint style;
+  isolation:isolate;
+}
+.botanical-portal.is-playing{visibility:visible}
+.portal-wipe{
+  position:absolute;
+  inset:-2%;
+  z-index:0;
+  background:
+    radial-gradient(ellipse 45% 85% at 18% 45%,rgba(243,215,159,.30),transparent 80%),
+    radial-gradient(ellipse 35% 75% at 83% 65%,rgba(234,148,164,.26),transparent 83%),
+    radial-gradient(ellipse 78% 75% at 44% 52%,rgba(120,166,116,.74),transparent 85%),
+    linear-gradient(125deg,#1b503a 4%,#477a59 35%,#a1b785 60%,#325f49 100%);
+  clip-path:inset(0 100% 0 0);
+  will-change:clip-path;
+}
+.portal-wipe:after{
+  content:"";
+  position:absolute;
+  inset:0;
+  opacity:.20;
+  background:repeating-linear-gradient(132deg,transparent 0px,transparent 24px,rgba(249,248,215,.28) 24.5px,transparent 25px,transparent 84px);
+}
+.botanical-portal.is-playing[data-direction="forward"] .portal-wipe{
+  animation:flowerCurtainForward 1.28s cubic-bezier(.51,.03,.19,.99) both;
+}
+.botanical-portal.is-playing[data-direction="backward"] .portal-wipe{
+  animation:flowerCurtainBackward 1.28s cubic-bezier(.51,.03,.19,.99) both;
+}
+@keyframes flowerCurtainForward{
+  0%{clip-path:inset(0 100% 0 0)}
+  39%,62%{clip-path:inset(0 0 0 0)}
+  100%{clip-path:inset(0 0 0 100%)}
+}
+@keyframes flowerCurtainBackward{
+  0%{clip-path:inset(0 0 0 100%)}
+  39%,62%{clip-path:inset(0 0 0 0)}
+  100%{clip-path:inset(0 100% 0 0)}
+}
+.portal-aura{
+  position:absolute;
+  inset:-20%;
+  z-index:1;
+  opacity:0;
+  background:
+    radial-gradient(ellipse 26% 38% at 44% 48%,rgba(255,239,170,.45),transparent 100%),
+    radial-gradient(ellipse 26% 46% at 55% 55%,rgba(249,184,191,.31),transparent 100%);
+  mix-blend-mode:screen;
+}
+.botanical-portal.is-playing .portal-aura{
+  animation:flowerAura 1.28s ease-in-out both;
+}
+@keyframes flowerAura{
+  0%,100%{opacity:0;transform:translateX(calc(var(--scene-direction,1)*-9vw)) scale(.78)}
+  48%{opacity:.88;transform:translateX(0) scale(1.2)}
+  70%{opacity:.52;transform:translateX(calc(var(--scene-direction,1)*6vw)) scale(1.26)}
+}
+.portal-ring{
+  position:absolute;
+  z-index:2;
+  left:50%;
+  top:50%;
+  width:min(95vw,1080px);
+  aspect-ratio:1.52;
+  border:1px solid rgba(254,238,188,.36);
+  border-radius:50%;
+  opacity:0;
+  transform:translate(-50%,-50%) scale(.5) rotate(-12deg);
+  box-shadow:0 0 24px rgba(244,215,162,.09),inset 0 0 22px rgba(244,215,162,.07);
+}
+.portal-ring.ring-two{
+  width:min(65vw,790px);
+  aspect-ratio:1.18;
+  border-color:rgba(255,238,211,.28);
+}
+.botanical-portal.is-playing .portal-ring{animation:flowerHalo 1.28s cubic-bezier(.17,.76,.30,.99) both}
+.botanical-portal.is-playing .portal-ring.ring-two{animation-delay:90ms}
+@keyframes flowerHalo{
+  0%{opacity:0;transform:translate(-50%,-50%) scale(.46) rotate(-20deg)}
+  28%{opacity:.55}
+  67%{opacity:.45}
+  100%{opacity:0;transform:translate(-50%,-50%) scale(1.53) rotate(15deg)}
+}
+.portal-flowers{
+  position:absolute;
+  inset:0;
+  z-index:3;
+  width:100%;
+  height:100%;
+  display:block;
+  pointer-events:none;
+  image-rendering:auto;
+}
+.site-root.is-scene-changing .horizontal-world{
+  animation:flowerSceneDepth 1.28s cubic-bezier(.25,.65,.37,1) both;
+  transform-origin:center center;
+}
+@keyframes flowerSceneDepth{
+  0%{transform:translateX(0) scale(1)}
+  44%{transform:translateX(calc(var(--scene-direction,1)*-2vw)) scale(1.047)}
+  65%{transform:translateX(calc(var(--scene-direction,1)*1.2vw)) scale(1.05)}
+  100%{transform:translateX(0) scale(1)}
+}
+@media(max-width:650px){
+  .portal-ring{width:120vw}
+  .portal-ring.ring-two{width:90vw}
+}
+@media(prefers-reduced-motion:reduce){
+  .botanical-portal,.botanical-portal *{animation:none!important;transition:none!important}
+  .site-root.is-scene-changing .horizontal-world{animation:none!important;transform:none!important}
+  .portal-wipe{will-change:auto}
+  .portal-ring{display:none}
+}
