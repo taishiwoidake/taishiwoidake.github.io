@@ -84,27 +84,31 @@
       <section class="slide slide-garden slide-about" id="garden" data-label="ABOUT ME" aria-labelledby="title-garden">
         <div class="paper-texture" aria-hidden="true"></div>
         <div class="flower-field" id="flowers-garden" aria-hidden="true"></div>
-        <div class="slide-inner about-content">
-          <div class="overline rise"><span class="overline-dot"></span> 02 / THE PERSON BEHIND THE QUESTIONS</div>
-          <h2 class="display-title about-title rise delay-a" id="title-garden">Curiosity<br><em>takes shape.</em></h2>
-          <p class="about-lead rise delay-b">My path began with hands-on engineering. Building and studying physical mechanisms led me to deeper questions about information, memory, and computation.</p>
-          <div class="about-education rise delay-c" aria-label="Education and background">
+        <div class="slide-inner about-content about-qtrac-content">
+          <div class="overline rise"><span class="overline-dot"></span> 02 / ABOUT ME · WHAT I RESEARCH</div>
+          <h2 class="display-title about-title rise delay-a" id="title-garden">The questions<br><em>I pursue.</em></h2>
+          <div class="about-qtrac-focus rise delay-b">
+            <div class="about-qtrac-label">MY CENTRAL RESEARCH PROGRAMME <span aria-hidden="true">✳</span> QTRAC</div>
+            <h3>Quantum Temporal Reconstruction</h3>
+            <p>How much of the past can a future observer still verify? I study how quantum memory, inaccessible environments, the order of observations, and time constraints shape what information remains testable.</p>
+          </div>
+          <div class="about-education rise delay-c" aria-label="Education and earlier research">
             <div class="about-education-row">
               <span class="about-education-label">UNIVERSITY</span>
               <span class="about-education-value">Monash University</span>
             </div>
-            <div class="about-education-row">
-              <span class="about-education-label">HIGH SCHOOL</span>
-              <span class="about-education-value">Institute of Science Tokyo High School <small>Mechanical Systems</small></span>
-            </div>
+            <button class="about-education-row about-school-open" id="school-project-open" type="button" aria-haspopup="dialog" aria-controls="school-project-dialog">
+              <span class="about-education-label">HIGH SCHOOL <span class="about-school-hint">· VIEW PROJECT ↗</span></span>
+              <span class="about-education-value">Institute of Science Tokyo High School<small>Mechanical Systems · Artificial Muscle Project</small></span>
+            </button>
           </div>
-          <p class="about-project rise delay-c">At high school, I worked on an <strong>artificial-muscle project</strong> and developed hands-on skills in CAD, machining, welding, and manufacturing. Today, that same curiosity shapes my interest in quantum information and mathematical computer science.</p>
-          <div class="about-signature rise delay-c">FROM MAKING THINGS TO UNDERSTANDING THEM <span aria-hidden="true">✳</span></div>
+          <a href="research.html" class="about-research-link rise delay-c">EXPLORE MY QTRAC RESEARCH <span aria-hidden="true">↗</span></a>
+          <p class="about-qtrac-footer rise delay-c">From practical engineering to the mathematics of quantum information.</p>
         </div>
-        <div class="scene-caption" aria-hidden="true">ENGINEERING <span>✳</span> CURIOSITY <span>✳</span> RESEARCH</div>
+        <div class="scene-caption" aria-hidden="true">QTRAC <span>✳</span> MEMORY <span>✳</span> TIME</div>
       </section>
 
-            <section class="slide slide-wonders" id="wonders" data-label="RARE BLOOMS" aria-labelledby="title-wonders">
+      <section class="slide slide-wonders" id="wonders" data-label="RARE BLOOMS" aria-labelledby="title-wonders">
         <div class="paper-texture" aria-hidden="true"></div>
         <div class="flower-field" id="flowers-wonders" aria-hidden="true"></div>
         <div class="slide-inner wonders-content">
@@ -158,5 +162,36 @@
     </div>
     <div class="scroll-hint" id="scroll-hint" aria-hidden="true">SCROLL OR SWIPE TO WANDER <span>→</span></div>
   </div>
+  <dialog id="school-project-dialog" class="school-project-dialog" aria-labelledby="school-project-title" aria-describedby="school-project-summary">
+    <div class="school-project-content">
+      <div class="school-project-toolbar">
+        <span>EARLIER RESEARCH / MECHANICAL SYSTEMS</span>
+        <button class="school-project-close" type="button" aria-label="Close high school project">CLOSE ×</button>
+      </div>
+      <div class="school-project-heading">
+        <span class="school-project-index">01 / FROM DESIGN TO FABRICATION</span>
+        <h2 id="school-project-title">Artificial<br><em>Muscles.</em></h2>
+        <p class="school-project-school">Institute of Science Tokyo High School <span aria-hidden="true">✳</span> Mechanical Systems</p>
+      </div>
+      <div class="school-project-rule" aria-hidden="true"><span></span> ✳ <span></span></div>
+      <div class="school-project-story">
+        <div><h3>High-school research</h3>
+          <p id="school-project-summary">My high-school research involved the <strong>construction of artificial muscles</strong> as a hands-on mechanical-systems project. It was an opportunity to move from an engineering idea to making a physical device.</p>
+        </div>
+        <div><h3>Design &amp; fabrication</h3>
+          <p>Alongside the project, I gained practical experience in CAD, welding, casting, conventional and CNC lathes, and drill-press work. These are mechanical design and fabrication skills, distinct from my current theoretical work.</p>
+        </div>
+      </div>
+      <div class="school-project-context">
+        <span class="school-project-context-mark" aria-hidden="true">✧</span>
+        <p><strong>My research today:</strong> Quantum Temporal Reconstruction (QTRAC), centred on temporal verification, information, and quantum memory. The artificial-muscle project belongs to my earlier engineering experience.</p>
+      </div>
+      <div class="school-project-links">
+        <a href="https://www.isct.ac.jp/en/001/about/organizations/institute-of-science-tokyo-high-school" target="_blank" rel="noopener noreferrer">ABOUT THE SCHOOL ↗</a>
+        <a href="research.html">EXPLORE QTRAC ↗</a>
+      </div>
+    </div>
+  </dialog>
+  <script src="about-school.js?v=qtrac-about-v1" defer></script>
 </body>
 </html>
