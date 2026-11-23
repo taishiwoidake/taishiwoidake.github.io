@@ -72,28 +72,26 @@
   const round=v=>Math.round(v*100)/100;
   // Four lightweight Canvas layers per scene replace 750 individual DOM images.
   // Every image must pass an actual pixel-alpha inspection before it can be drawn.
-  // Eight directionally animated photographic layers.
-  // Flower density remains unchanged: 150 cutouts per scene, cached as 8 canvases.
+  // Every flower receives its own independent trajectory, spin, delay and sway.
+  // One canvas per panel replaces hundreds of individually animated HTML nodes.
   const FLOWERS_PER_SCENE=150;
-  const DIRECTIONS=["northwest","north","northeast","east","southeast","south","southwest","west"];
   const contexts=new Map();
   const accepted=[];
-  let renderTimer=0;
-  let renderVersion=0;
+  let imageVersion=0;
+  let paintTimer=0;
+  let frameId=0;
+  let lastFrame=0;
+  let liveScene=-1;
+  let entryTime=0;
 
   for(const slide of slides){
     const field=slide.querySelector(".flower-field");
     if(!field)continue;
-    const canvases=[];
-    for(let k=0;k<DIRECTIONS.length;k++){
-      const canvas=document.createElement("canvas");
-      canvas.className="photo-canvas from-"+DIRECTIONS[k];
-      canvas.style.setProperty("--stagger",(k%4*95+(k>3?100:0))+"ms");
-      canvas.setAttribute("aria-hidden","true");
-      field.appendChild(canvas);
-      canvases.push(canvas);
-    }
-    contexts.set(slide,{canvases,drawnVersion:-1});
+    const canvas=document.createElement("canvas");
+    canvas.className="individual-flower-canvas";
+    canvas.setAttribute("aria-hidden","true");
+    field.appendChild(canvas);
+    contexts.set(slide,{canvas,signature:"",layout:[],drawn:false});
   }
 
   function verifyAndTrimCutout(img) {
@@ -197,93 +195,242 @@
     });
   }
 
-  function setBacking(canvas,w,h){
-    const dpr=Math.min(window.devicePixelRatio||1,1.35);
-    const pixelW=Math.max(1,Math.round(w*dpr));
-    const pixelH=Math.max(1,Math.round(h*dpr));
-    if(canvas.width!==pixelW||canvas.height!==pixelH){
-      canvas.width=pixelW;canvas.height=pixelH;
+  function clamp01(t){return Math.max(0,Math.min(1,t));}
+  function ease(t){t=clamp01(t);return 1-Math.pow(1-t,3);}
+  function spring(t){
+    t=clamp01(t);
+    const c=1.70158;
+    return 1+(c+1)*Math.pow(t-1,3)+c*Math.pow(t-1,2);
+  }
+  function canvasContext(entry,w,h) {
+    // Keep 2D compositing bounded on 4K displays and high-DPI phones.
+    const maxPixels=innerWidth<650?1250000:2400000;
+    const pixelRatio=Math.min(window.devicePixelRatio||1,1.32,Math.sqrt(maxPixels/(w*h)));
+    const pw=Math.max(1,Math.round(w*pixelRatio)),ph=Math.max(1,Math.round(h*pixelRatio));
+    if(entry.canvas.width!==pw||entry.canvas.height!==ph) {
+      entry.canvas.width=pw;entry.canvas.height=ph;
     }
-    const ctx=canvas.getContext("2d",{alpha:true});
+    const ctx=entry.canvas.getContext("2d",{alpha:true,desynchronized:true});
     if(!ctx)return null;
-    ctx.setTransform(dpr,0,0,dpr,0,0);
+    ctx.setTransform(pixelRatio,0,0,pixelRatio,0,0);
     ctx.clearRect(0,0,w,h);
     return ctx;
   }
 
-  function paintScene(sceneIndex, force=false) {
+  function createIndividualFlowers(sceneIndex,w,h){
+    const rand=seeded(904711+sceneIndex*1931);
+    const flowers=[];
+    for(let i=0;i<FLOWERS_PER_SCENE;i++){
+      const side=i%8;
+      const x0=rand(),y0=rand();
+      let x,y;
+      // Each edge and corner has independent flowers; keep a modest clearing
+      // behind the central headings without thinning the outer floral wall.
+      if(side===0){x=w*(-.07+x0*.27);y=h*(-.10+y0*1.17);}
+      else if(side===1){x=w*(.79+x0*.29);y=h*(-.10+y0*1.17);}
+      else if(side===2){x=w*(.02+x0*.96);y=h*(-.10+y0*.35);}
+      else if(side===3){x=w*(.02+x0*.96);y=h*(.76+y0*.34);}
+      else if(side===4){x=w*(-.04+x0*.37);y=h*(-.10+y0*.40);}
+      else if(side===5){x=w*(.67+x0*.37);y=h*(-.10+y0*.40);}
+      else if(side===6){x=w*(-.04+x0*.37);y=h*(.70+y0*.42);}
+      else {x=w*(.67+x0*.37);y=h*(.70+y0*.42);}
+      // A few flowers extend toward the text, creating layered depth.
+      if(i%17===0){x+=(w/2-x)*.21;y+=(h/2-y)*.15;}
+
+      const img=accepted[Math.floor(rand()*accepted.length)].img;
+      const small=w<650;
+      const maxSide=(small?63:82)+rand()*(small?96:139)+(i%11===0?(small?48:81):0);
+      const scale=Math.min(maxSide/img.width,maxSide/img.height);
+      const width=img.width*scale,height=img.height*scale;
+      const startSide=(side+Math.floor(rand()*3)+7)%8;
+      const dirs=[
+        [-1,rand()*.45-.22],[1,rand()*.45-.22],
+        [rand()*.45-.22,-1],[rand()*.45-.22,1],
+        [-1,-.95],[1,-.95],[-1,.95],[1,.95]
+      ];
+      const vec=dirs[startSide];
+      const fromX=x+vec[0]*(w*.48+width*.85+rand()*w*.22);
+      const fromY=y+vec[1]*(h*.46+height*.85+rand()*h*.22);
+      const type=(i+Math.floor(rand()*9))%9;
+      const driftSpeed=.42+rand()*.82;
+      flowers.push({
+        img,x,y,width,height,fromX,fromY,type,
+        angle:(rand()-.5)*2.5,
+        spin:(rand()>.5?1:-1)*(.6+rand()*5.6),
+        curve:(rand()>.5?1:-1)*(38+rand()*142),
+        sway:((rand()>.5?1:-1)*(.055+rand()*.19)),
+        amp:4+rand()*(small?9:19),
+        driftSpeed,phase:rand()*Math.PI*2,
+        delay:rand()*1150+((i%8)*60),
+        duration:1450+rand()*1550,
+        depth:i%10===0?1.12:.78+rand()*.33
+      });
+    }
+    // Render distant, smaller flowers first, larger foreground flowers last.
+    flowers.sort((p,q)=>p.depth-q.depth);
+    return flowers;
+  }
+
+  function paintScene(sceneIndex, now, entering=false, force=false){
     const slide=slides[sceneIndex];
     const entry=contexts.get(slide);
     if(!entry||!accepted.length)return;
-    const vw=world.clientWidth, vh=world.clientHeight;
-    if(!vw||!vh)return;
-    const signature=vw+"x"+vh+"-"+renderVersion;
-    if(!force&&entry.drawnVersion===signature)return;
-
-    const small=vw<650;
-    for(let direction=0;direction<DIRECTIONS.length;direction++){
-      const canvas=entry.canvases[direction];
-      // The canvas pixel dimensions follow the CSS-positioned edge patches.
-      const w=canvas.clientWidth,h=canvas.clientHeight;
-      if(w<2||h<2)continue;
-      const ctx=setBacking(canvas,w,h);
-      if(!ctx)continue;
-      const rand=seeded(194173+sceneIndex*857+direction*129);
-      const count=Math.floor(FLOWERS_PER_SCENE/DIRECTIONS.length)
-        +(direction<FLOWERS_PER_SCENE%DIRECTIONS.length?1:0);
-      for(let i=0;i<count;i++){
-        const resource=accepted[Math.floor(rand()*accepted.length)];
-        const img=resource.img;
-        const maxSide=(small?55:88)+rand()*(small?100:148)+(i%9===0?36:0);
-        const scale=Math.min(maxSide/img.width,maxSide/img.height);
-        const dw=img.width*scale,dh=img.height*scale;
-        // Edge patches overlap to produce one continuous, layered wild garden.
-        // Scatter outward with fewer flowers toward the text in the centre.
-        let x=w*rand(),y=h*rand();
-        if(direction===0||direction===6)x=w*(.24+rand()*.63);
-        if(direction===2||direction===4)x=w*(.12+rand()*.63);
-        if(direction===1)y=h*(.10+rand()*.67);
-        if(direction===5)y=h*(.18+rand()*.70);
-        if(direction===3||direction===7)y=h*(.05+rand()*.90);
-        const angle=(rand()-.5)*2.8+(direction%2?.21:-.21);
-        ctx.save();
-        ctx.translate(x,y);
-        ctx.rotate(angle);
-        ctx.globalAlpha=.90+rand()*.10;
-        ctx.drawImage(img,-dw*.5,-dh*.5,dw,dh);
-        ctx.restore();
-      }
+    const w=world.clientWidth,h=world.clientHeight;
+    if(w<1||h<1)return;
+    const signature=w+"x"+h+"/"+imageVersion;
+    if(entry.signature!==signature){
+      entry.layout=createIndividualFlowers(sceneIndex,w,h);
+      entry.signature=signature;
+      entry.drawn=false;
     }
-    entry.drawnVersion=signature;
+    if(!entering&&!force&&entry.drawn)return;
+    const ctx=canvasContext(entry,w,h);
+    if(!ctx)return;
+    const elapsed=entering?Math.max(0,now-entryTime):16000;
+    for(const flower of entry.layout){
+      const {
+        img,x,y,width,height,fromX,fromY,type,angle,spin,curve,
+        sway,amp,driftSpeed,phase,delay,duration,depth
+      }=flower;
+      const p=clamp01((elapsed-delay)/duration);
+      if(p===0)continue;
+      const e=type===6?spring(p):ease(p);
+      const inverse=1-e;
+      let px=fromX*inverse+x*e;
+      let py=fromY*inverse+y*e;
+      let theta=angle+spin*inverse;
+      let size=e;
+      const bend=Math.sin(p*Math.PI)*(1-p*.22)*curve;
+      // Each species moves independently, never as part of a rigid patch.
+      switch(type){
+        case 0: // Spiral inward; the flower unfurls while circling.
+          px+=Math.cos(p*Math.PI*3+phase)*bend;
+          py+=Math.sin(p*Math.PI*3+phase)*bend;
+          theta+=Math.PI*2*inverse;
+          size=.18+.82*e;
+          break;
+        case 1: // Long graceful sweep on a curved trajectory.
+          px+=bend*.95;
+          py-=Math.sin(p*Math.PI)*curve*.60;
+          theta+=.65*inverse;
+          size=.36+.64*e;
+          break;
+        case 2: // A drifting fall with lateral wobble.
+          px+=Math.sin(p*Math.PI*4+phase)*bend*.52;
+          py-=Math.sin(p*Math.PI)*23;
+          size=.55+.45*e;
+          break;
+        case 3: // Sideways corkscrew.
+          px+=Math.cos(p*Math.PI*5+phase)*bend*.52;
+          py+=Math.sin(p*Math.PI*5+phase)*bend*.57;
+          theta+=Math.PI*1.3*inverse;
+          size=.3+.7*e;
+          break;
+        case 4: // Swoop up from below.
+          py+=Math.sin(p*Math.PI)*curve*.72;
+          px+=Math.sin(p*Math.PI*2)*curve*.22;
+          size=.45+.55*e;
+          break;
+        case 5: // Zig-zag flight, settling into a gentle hover.
+          px+=Math.sin(p*Math.PI*6)*bend*.72;
+          theta+=Math.sin(p*Math.PI*4)*inverse*.6;
+          size=.5+.5*e;
+          break;
+        case 6: // Spring out and blossom with a restrained overshoot.
+          px=x+(fromX-x)*Math.max(0,1-p*1.35);
+          py=y+(fromY-y)*Math.max(0,1-p*1.35);
+          size=.05+Math.max(.0,e)*.95;
+          theta+=Math.PI*.7*inverse;
+          break;
+        case 7: // Fall gently around an S-shaped bend.
+          px+=Math.sin(p*Math.PI*2+phase)*bend*.65;
+          py-=Math.sin(p*Math.PI)*curve*.33;
+          size=.35+.65*e;
+          break;
+        default: // Wide, arcing entrance.
+          px-=bend*.58;
+          py+=Math.sin(p*Math.PI)*curve*.44;
+          theta-=Math.PI*.8*inverse;
+          size=.20+.8*e;
+      }
+      // All flowers continue their own slow movements after arriving:
+      // varying bob, sway, pendulum, circular drift and breath.
+      const seconds=elapsed/1000;
+      const life=ease(p);
+      const t=seconds*driftSpeed+phase;
+      px+=Math.sin(t)*amp*life;
+      py+=Math.cos(t*.76+phase)*amp*.55*life;
+      if(type===0||type===3) {
+        px+=Math.cos(t*.51+phase)*amp*.36*life;
+        py+=Math.sin(t*.51)*amp*.39*life;
+      }
+      if(type===2||type===7)py+=Math.sin(t*1.41)*amp*.35*life;
+      theta+=Math.sin(t*.82)*sway*life;
+      const breathe=1+Math.sin(t*.86+phase)*.035*life;
+      const finalSize=Math.max(0,size)*breathe*depth;
+      if(finalSize<.01)continue;
+      ctx.save();
+      ctx.globalAlpha=Math.min(1,p*1.7);
+      ctx.translate(px,py);
+      ctx.rotate(theta);
+      ctx.scale(finalSize,finalSize);
+      ctx.drawImage(img,-width/2,-height/2,width,height);
+      ctx.restore();
+    }
+    entry.drawn=!entering;
   }
 
   function releaseFarScenes(){
     for(let i=0;i<slides.length;i++){
       if(Math.abs(i-current)<=1)continue;
       const entry=contexts.get(slides[i]);
-      if(!entry||entry.drawnVersion===-1)continue;
-      for(const canvas of entry.canvases){
-        canvas.width=0;canvas.height=0;
-      }
-      entry.drawnVersion=-1;
+      if(!entry)continue;
+      if(entry.canvas.width!==0){entry.canvas.width=0;entry.canvas.height=0;}
+      entry.drawn=false;
     }
   }
 
   function renderNearScenes(){
     if(!accepted.length)return;
-    paintScene(current);
-    if(current+1<slides.length)paintScene(current+1);
-    if(current>0)paintScene(current-1);
-    releaseFarScenes();
+    if(liveScene!==current){
+      liveScene=current;
+      entryTime=performance.now();
+      lastFrame=0;
+      if(frameId){cancelAnimationFrame(frameId);frameId=0;}
+      for(let k=current-1;k<=current+1;k++){
+        if(k>=0&&k<slides.length&&k!==current)paintScene(k,0,false,true);
+      }
+      releaseFarScenes();
+    }
+    if(reduced){
+      paintScene(current,16000,false,true);
+      return;
+    }
+    if(!frameId&&!document.hidden)frameId=requestAnimationFrame(tick);
+  }
+
+  function tick(now){
+    frameId=0;
+    if(document.hidden||!accepted.length)return;
+    const minInterval=world.clientWidth<650?44:33;
+    if(now-lastFrame>=minInterval){
+      lastFrame=now;
+      paintScene(current,now,true,true);
+    }
+    frameId=requestAnimationFrame(tick);
   }
 
   function schedulePaint(){
-    if(renderTimer)return;
-    renderTimer=setTimeout(()=>{
-      renderTimer=0;
-      renderVersion++;
+    if(paintTimer)return;
+    paintTimer=setTimeout(()=>{
+      paintTimer=0;
+      imageVersion++;
+      for(const entry of contexts.values())entry.drawn=false;
       renderNearScenes();
-    },230);
+      for(let k=current-1;k<=current+1;k++){
+        if(k>=0&&k<slides.length&&k!==current)paintScene(k,0,false,true);
+      }
+    },260);
   }
 
   async function loadVerifiedPhotos(){
@@ -295,7 +442,7 @@
         const picture=await getPicture(entry);
         if(picture){
           accepted.push(picture);
-          if(accepted.length===1||accepted.length%4===0)schedulePaint();
+          if(accepted.length===1||accepted.length%3===0)schedulePaint();
         }
       }
     }
@@ -306,7 +453,17 @@
     if(verified)verified.textContent=String(accepted.length)+" cutout image files accepted out of "+candidates.length+" candidates. Only approved silhouettes appear in the garden.";
   }
   void loadVerifiedPhotos();
-  
+
+  document.addEventListener("visibilitychange",()=>{
+    if(document.hidden){
+      if(frameId)cancelAnimationFrame(frameId);
+      frameId=0;
+    }else{
+      lastFrame=0;
+      renderNearScenes();
+    }
+  },{passive:true});
+
   // A compact, accessible credit sheet identifies the original photographers and
   // licenses via the corresponding Commons file descriptions.
   const creditLink=document.createElement("button");
@@ -416,8 +573,10 @@
   });
   window.addEventListener("resize",()=>{
     world.scrollTo({left:current*world.clientWidth,behavior:"instant"});
-    renderVersion++;
+    imageVersion++;
+    for(const entry of contexts.values())entry.drawn=false;
     renderNearScenes();
+    for(let k=current-1;k<=current+1;k++)if(k>=0&&k<slides.length&&k!==current)paintScene(k,0,false,true);
   },{passive:true});
   requestAnimationFrame(()=>{
     activate(0);
