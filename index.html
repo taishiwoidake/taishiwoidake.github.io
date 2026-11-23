@@ -3,46 +3,172 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#ffffff">
-  <meta name="description" content="Ryunosuke Hirata — 平田隆之介">
-  <title>Ryunosuke Hirata</title>
-  <style>
-    :root { color-scheme: light; }
-    * { box-sizing: border-box; }
-    html, body { margin: 0; min-height: 100%; }
-    body {
-      min-height: 100svh;
-      display: grid;
-      place-items: center;
-      padding: 2rem;
-      background: #fff;
-      color: #111;
-      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-      -webkit-font-smoothing: antialiased;
-      text-rendering: optimizeLegibility;
-    }
-    main { text-align: center; }
-    h1 {
-      margin: 0;
-      font-size: clamp(2.4rem, 6.2vw, 5.5rem);
-      font-weight: 500;
-      letter-spacing: -0.045em;
-      line-height: 1.12;
-    }
-    p {
-      margin: 1.25rem 0 0;
-      font-family: "Yu Gothic", "Hiragino Kaku Gothic ProN", "Noto Sans CJK JP", sans-serif;
-      font-size: clamp(1rem, 2vw, 1.25rem);
-      font-weight: 400;
-      letter-spacing: 0.24em;
-      line-height: 1.6;
-    }
-  </style>
+  <meta name="theme-color" content="#030714">
+  <meta name="color-scheme" content="dark">
+  <meta name="description" content="Ryunosuke Hirata (平田隆之介) — a personal universe of quantum information, mathematics, flowers, and exploration.">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Ryunosuke Hirata · A Personal Universe">
+  <meta property="og:description" content="A small universe of research, ideas, flowers, and curiosity.">
+  <meta property="og:url" content="https://taishiwoidake.github.io/">
+  <title>Ryunosuke Hirata · A Personal Universe</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23040918'/%3E%3Ccircle cx='45' cy='17' r='6' fill='%23a9e8c7'/%3E%3Ctext x='11' y='45' font-family='Arial' font-size='28' fill='white'%3ERH%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="styles.css">
+  <script src="script.js" defer></script>
 </head>
-<body>
+<body data-scene="home">
+  <div class="ambient" aria-hidden="true"></div>
+  <canvas id="starfield" aria-hidden="true"></canvas>
+  <div class="grain" aria-hidden="true"></div>
+  <div class="progress" aria-hidden="true"><span id="progress-bar"></span></div>
+
+  <header class="site-header">
+    <a href="#home" class="brand" aria-label="Ryunosuke Hirata — home">RH<span>✳</span></a>
+    <nav class="nav" aria-label="Main navigation">
+      <a href="#home" aria-current="true">HOME</a>
+      <a href="#garden">GARDEN</a>
+      <a href="#research">RESEARCH</a>
+      <a href="#work">WORK</a>
+      <a href="#contact">CONTACT</a>
+    </nav>
+    <span class="header-extra">A PERSONAL UNIVERSE / 2026</span>
+  </header>
+
+  <div class="scene-number" id="scene-number" aria-hidden="true">01 / 05 &nbsp; — &nbsp; THE COSMOS</div>
   <main>
-    <h1>Ryunosuke Hirata</h1>
-    <p lang="ja">平田隆之介</p>
+    <section class="panel hero" id="home" data-scene="home" aria-label="Introduction">
+      <div class="hero-art" aria-hidden="true">
+        <div class="halo"></div>
+        <div class="orbit three"></div><div class="orbit"></div><div class="orbit two"></div>
+        <div class="planet"></div>
+        <i class="stardust a"></i><i class="stardust b"></i><i class="stardust c"></i><i class="stardust d"></i>
+      </div>
+      <div class="hero-inner">
+        <div class="hero-content">
+          <div class="eyebrow reveal">Welcome to my universe</div>
+          <h1 class="reveal delay">Ryunosuke <span class="last">Hirata.</span></h1>
+          <div class="jp-name reveal delay2" lang="ja">平田隆之介</div>
+          <p class="hero-desc reveal delay2">Exploring the spaces between <strong>information, computation, time,</strong> and the natural world.</p>
+        </div>
+      </div>
+      <a class="scroll-cue" href="#garden">SCROLL TO EXPLORE <span class="arrow" aria-hidden="true">↓</span></a>
+    </section>
+
+    <section class="panel section-garden" id="garden" data-scene="garden" aria-labelledby="garden-heading">
+      <div class="container garden-inner">
+        <div class="garden-text">
+          <div class="eyebrow reveal">02 / A living universe</div>
+          <h2 id="garden-heading" class="reveal delay">Even in the dark,<br><em>things bloom.</em></h2>
+          <p class="body-copy reveal delay2">The universe is full of patterns. Some live in equations; others unfold in petals, leaves, and light. I love flowers and the quiet beauty of green, growing things.</p>
+          <div class="garden-quote reveal delay2">There is room for wonder here.</div>
+        </div>
+        <div class="garden-visual" aria-hidden="true" id="garden-visual">
+          <svg class="garden-svg" viewBox="0 0 700 700" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="stem" x1="180" y1="100" x2="570" y2="650" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#cbffe1"/><stop offset=".54" stop-color="#4daf87"/><stop offset="1" stop-color="#174e44"/>
+              </linearGradient>
+              <linearGradient id="leaf" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#c7ffd7"/><stop offset=".44" stop-color="#83cf9e"/><stop offset="1" stop-color="#185c56"/></linearGradient>
+              <linearGradient id="petal" x1="280" y1="100" x2="430" y2="340" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#eefde9" stop-opacity=".97"/><stop offset=".35" stop-color="#b7e9c9" stop-opacity=".88"/><stop offset=".73" stop-color="#86c2c3" stop-opacity=".83"/><stop offset="1" stop-color="#b8b5ed" stop-opacity=".66"/>
+              </linearGradient>
+              <radialGradient id="heart"><stop stop-color="#fffbe1"/><stop offset=".42" stop-color="#e9d79e"/><stop offset="1" stop-color="#90bba1"/></radialGradient>
+              <filter id="glow"><feGaussianBlur stdDeviation="6"/></filter>
+              <path id="petal-path" d="M350 336 C312 283 299 188 349 115 C406 182 387 282 350 336Z" fill="url(#petal)" stroke="#c7ffe0" stroke-opacity=".34" stroke-width="1"/>
+              <path id="little-leaf" d="M0 0 C13 -47 52 -66 94 -56 C79 -16 43 7 0 0Z" fill="url(#leaf)" stroke="#c9ffe1" stroke-opacity=".43" stroke-width="1"/>
+            </defs>
+            <g opacity=".31" stroke="#d0f5ef" stroke-width="1">
+              <circle cx="351" cy="342" r="280" stroke-dasharray="2 10"/><circle cx="351" cy="342" r="236" stroke-dasharray="1 15"/><circle cx="351" cy="342" r="320" stroke-opacity=".36"/>
+            </g>
+            <g stroke="url(#stem)" stroke-width="4" stroke-linecap="round">
+              <path d="M344 672 C383 578 336 458 351 340"/>
+              <path d="M345 586 C284 555 262 518 231 490"/>
+              <path d="M362 536 C446 503 488 442 515 408"/>
+              <path d="M339 634 C275 630 223 603 183 549" stroke-width="2"/>
+            </g>
+            <g opacity=".96">
+              <use href="#little-leaf" transform="translate(340 577) rotate(187) scale(1.05)"/>
+              <use href="#little-leaf" transform="translate(360 536) rotate(5) scale(1.07)"/>
+              <use href="#little-leaf" transform="translate(303 548) rotate(179) scale(.75)"/>
+              <use href="#little-leaf" transform="translate(421 489) rotate(-17) scale(.79)"/>
+              <use href="#little-leaf" transform="translate(269 517) rotate(150) scale(.61)"/>
+              <use href="#little-leaf" transform="translate(484 448) rotate(13) scale(.62)"/>
+              <use href="#little-leaf" transform="translate(271 610) rotate(203) scale(.53)"/>
+            </g>
+            <g class="bloom-center">
+              <use href="#petal-path"/>
+              <use href="#petal-path" transform="rotate(45 350 341)"/>
+              <use href="#petal-path" transform="rotate(90 350 341)"/>
+              <use href="#petal-path" transform="rotate(135 350 341)"/>
+              <use href="#petal-path" transform="rotate(180 350 341)"/>
+              <use href="#petal-path" transform="rotate(225 350 341)"/>
+              <use href="#petal-path" transform="rotate(270 350 341)"/>
+              <use href="#petal-path" transform="rotate(315 350 341)"/>
+            </g>
+            <circle cx="350" cy="341" r="38" fill="#d5e9c9" opacity=".34" filter="url(#glow)"/>
+            <circle cx="350" cy="341" r="25" fill="url(#heart)" stroke="#fff7ce" stroke-opacity=".6"/>
+            <circle cx="344" cy="334" r="4" fill="#fffbea"/><circle cx="359" cy="345" r="3" fill="#fffbea"/><circle cx="348" cy="352" r="2.5" fill="#fffbea"/>
+            <g transform="translate(110 405) scale(.31)" opacity=".87">
+              <g class="bloom-satellite">
+                <use href="#petal-path"/><use href="#petal-path" transform="rotate(60 350 341)"/>
+                <use href="#petal-path" transform="rotate(120 350 341)"/><use href="#petal-path" transform="rotate(180 350 341)"/>
+                <use href="#petal-path" transform="rotate(240 350 341)"/><use href="#petal-path" transform="rotate(300 350 341)"/>
+              </g><circle cx="350" cy="341" r="26" fill="url(#heart)"/>
+            </g>
+            <g transform="translate(440 276) scale(.24)" opacity=".82">
+              <use href="#petal-path"/><use href="#petal-path" transform="rotate(60 350 341)"/>
+              <use href="#petal-path" transform="rotate(120 350 341)"/><use href="#petal-path" transform="rotate(180 350 341)"/>
+              <use href="#petal-path" transform="rotate(240 350 341)"/><use href="#petal-path" transform="rotate(300 350 341)"/>
+              <circle cx="350" cy="341" r="28" fill="url(#heart)"/>
+            </g>
+            <g fill="#d1fbe5">
+              <circle cx="89" cy="191" r="2"/><circle cx="565" cy="189" r="2.5"/><circle cx="599" cy="548" r="2"/><circle cx="170" cy="365" r="1.5"/><circle cx="535" cy="95" r="1.7"/><circle cx="82" cy="571" r="2"/>
+            </g>
+          </svg>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel section-research" id="research" data-scene="research" aria-labelledby="research-heading">
+      <div class="container">
+        <div class="eyebrow reveal">03 / Questions & curiosity</div>
+        <h2 id="research-heading" class="reveal delay">Questions worth <em>chasing.</em></h2>
+        <p class="body-copy reveal delay2">I am a student at Monash University, interested in the mathematical structure of information, memory, and computation. These are some of the directions I explore.</p>
+        <div class="research-grid">
+          <article class="research-card reveal"><span class="card-index">01 / QUANTUM</span><div><h3>Quantum Temporal Reconstruction</h3><p>Exploring how information about past events changes what can be verified later.</p></div></article>
+          <article class="research-card reveal delay"><span class="card-index">02 / MATHEMATICS</span><div><h3>Structure & Complexity</h3><p>Finite-state systems, the costs of computation, and precise mathematical arguments.</p></div></article>
+          <article class="research-card reveal delay2"><span class="card-index">03 / COMPUTATION</span><div><h3>Reproducibility</h3><p>Turning theoretical ideas into results that can be checked, tested, and reproduced.</p></div></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel section-work" id="work" data-scene="work" aria-labelledby="work-heading">
+      <div class="container work-layout">
+        <div>
+          <div class="eyebrow reveal">04 / Selected work</div>
+          <h2 id="work-heading" class="reveal delay">Ideas, made <em>visible.</em></h2>
+          <p class="body-copy reveal delay2">A growing collection of technical notes and research artifacts. I value careful claims, transparent assumptions, and reproducible work.</p>
+        </div>
+        <a href="https://doi.org/10.5281/zenodo.23095061" class="paper-link reveal delay" target="_blank" rel="noopener noreferrer" aria-label="Open Nested Regular Covers and Stopping Trees on Zenodo">
+          <span class="paper-type">Technical preprint · Zenodo</span>
+          <h3>Nested Regular Covers and Stopping Trees</h3>
+          <p>A public technical preprint with a linked reproducibility package.</p>
+          <span class="link-arrow">VIEW PREPRINT &nbsp; ↗</span>
+        </a>
+      </div>
+    </section>
+
+    <section class="panel section-contact" id="contact" data-scene="contact" aria-labelledby="contact-heading">
+      <div class="container">
+        <div class="eyebrow reveal">05 / Stay curious</div>
+        <h2 id="contact-heading" class="reveal delay">The universe is <em>still unfolding.</em></h2>
+        <p class="contact-sub reveal delay2">More questions. More ideas. And always, room for something to grow.</p>
+        <div class="socials reveal delay2">
+          <a href="https://github.com/taishiwoidake" target="_blank" rel="noopener noreferrer">GITHUB ↗</a>
+          <a href="https://orcid.org/0009-0009-3648-6042" target="_blank" rel="noopener noreferrer">ORCID ↗</a>
+        </div>
+      </div>
+      <footer class="site-footer"><span>© <span id="year">2026</span> RYUNOSUKE HIRATA</span><span>MADE OF STARS & SEEDS</span></footer>
+    </section>
   </main>
 </body>
 </html>
