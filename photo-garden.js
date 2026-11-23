@@ -582,35 +582,97 @@
   let portalFlowers=[];
   let portalRatio=1;
 
+
+  // Real flower photographs are retained in the background scenes.
+  // During chapter changes, translucent petal sprites ride different currents
+  // and a small number of authentic cutout blooms drift through the foreground.
+  const PETAL_PALETTES=[
+    ["#fff1f2","#f3b4c2","#c96988"],
+    ["#fff8e9","#f8d7ac","#d99082"],
+    ["#f7e4f5","#cfa4d5","#916da9"],
+    ["#ffedf0","#e997ac","#bb617e"],
+    ["#fff4d7","#efd39a","#be9464"],
+    ["#f0f5e9","#d1deb4","#84a67f"],
+    ["#ffede0","#eabb9e","#cd9076"],
+    ["#ede9ff","#beb7dc","#8177ad"],
+    ["#fbe6e2","#f0c4c2","#bf8b97"],
+    ["#fafaf4","#e7e8de","#aebda2"],
+    ["#fce9eb","#d7a5b0","#9a688c"],
+    ["#fbeec9","#f0cdbb","#d39795"]
+  ];
+  const petalSprites=PETAL_PALETTES.map((palette,index)=>{
+    const sprite=document.createElement("canvas");
+    sprite.width=112;sprite.height=126;
+    const p=sprite.getContext("2d",{alpha:true});
+    if(!p)return sprite;
+    p.translate(56,65);
+    const grad=p.createLinearGradient(-27,-51,16,47);
+    grad.addColorStop(0,palette[0]);
+    grad.addColorStop(.36,palette[1]);
+    grad.addColorStop(.80,palette[1]);
+    grad.addColorStop(1,palette[2]);
+    p.beginPath();
+    p.moveTo(0,49);
+    p.bezierCurveTo(-15,19,-49,-13,-29,-42);
+    p.bezierCurveTo(-18,-60,-4,-55,0,-51);
+    p.bezierCurveTo(16,-64,36,-48,38,-26);
+    p.bezierCurveTo(39,2,22,31,0,49);
+    p.closePath();p.fillStyle=grad;p.fill();
+    // A subtle translucent rim and fine real-petal-like venation.
+    p.strokeStyle="rgba(255,255,248,.46)";
+    p.lineWidth=1.45;p.stroke();
+    p.beginPath();p.moveTo(0,42);
+    p.bezierCurveTo(-2,15,8,-21,0,-48);
+    p.strokeStyle="rgba(255,254,245,.23)";
+    p.lineWidth=1;p.stroke();
+    for(let i=-2;i<=2;i++){
+      p.beginPath();p.moveTo(0,35+i*3);
+      p.quadraticCurveTo(10+i*5,0,24+i*2,-25);
+      p.strokeStyle="rgba(255,246,246,.11)";
+      p.lineWidth=.7;p.stroke();
+    }
+    if(index%3===0){
+      p.beginPath();p.ellipse(-15,-25,10,25,-.4,0,Math.PI*2);
+      p.fillStyle="rgba(255,255,255,.09)";p.fill();
+    }
+    return sprite;
+  });
+
   function portalComposition(direction,index){
-    if(!accepted.length)return [];
-    const random=seeded(871921+index*3553+Math.floor(performance.now()/1400));
-    const count=window.innerWidth<650?20:33;
+    const rand=seeded(871921+index*3553+Math.floor(performance.now()/1300));
+    const mobile=window.innerWidth<650;
+    const count=mobile?110:220;
     const w=world.clientWidth,h=world.clientHeight;
     const composition=[];
     for(let k=0;k<count;k++){
-      const image=accepted[Math.floor(random()*accepted.length)].img;
-      const side=k%5;
-      let x,y;
-      if(side===0){x=direction===1?-w*.22:w*1.22;y=random()*h;}
-      else if(side===1){x=random()*w;y=h*1.27;}
-      else if(side===2){x=random()*w;y=-h*.27;}
-      else if(side===3){x=direction===1?w*1.18:-w*.18;y=random()*h;}
-      else{x=direction===1?-w*.25:w*1.25;y=random()*h;}
-      const maxSide=(window.innerWidth<650?100:140)+random()*(window.innerWidth<650?110:190);
-      const size=Math.min(maxSide/image.width,maxSide/image.height);
+      const isFlower=accepted.length>0 && k%11===0;
+      const resource=isFlower?accepted[Math.floor(rand()*accepted.length)].img
+                             :petalSprites[Math.floor(rand()*petalSprites.length)];
+      const maxSize=isFlower?(mobile?69:90)+rand()*(mobile?68:94):
+                      (mobile?24:32)+rand()*(mobile?30:49);
+      const factor=Math.min(maxSize/resource.width,maxSize/resource.height);
+      const layer=rand();
+      // Wind streams begin in different parts of the frame. Petals do not
+      // travel as one group: every petal has an individual curved path.
+      const x=(direction===1?-.38:.20)*w+rand()*w*1.16;
+      const y=(-.26+rand()*1.51)*h;
       composition.push({
-        image,x,y,dx:direction*(w*.8+random()*w*.65),
-        dy:(random()-.5)*h*.72,
-        sway:35+random()*135,
-        angle:(random()-.5)*2.4,
-        spin:(random()>.5?1:-1)*(.8+random()*8),
-        phase:random()*6.283,
-        delay:random()*.24,
-        width:image.width*size,height:image.height*size,
-        zoom:.65+random()*1.35,
+        image:resource,kind:isFlower?"flower":"petal",
+        x,y,
+        dx:direction*(w*(.67+rand()*.72)),
+        dy:h*((rand()-.5)*.57)+((k%5===0)?-h*.15:0),
+        ampX:(mobile?20:32)+rand()*(mobile?48:118),
+        ampY:14+rand()*(mobile?39:89),
+        angle:(rand()-.5)*Math.PI*2,
+        spin:(rand()>.5?1:-1)*(2.3+rand()*12.7),
+        phase:rand()*Math.PI*2,
+        delay:rand()*.28,
+        width:resource.width*factor,height:resource.height*factor,
+        zoom:(isFlower?.65:.75)+rand()*(isFlower?.66:1.12),
+        layer
       });
     }
+    composition.sort((a,b)=>a.layer-b.layer);
     return composition;
   }
 
@@ -623,8 +685,8 @@
     if(!w||!h)return;
     const ctx=portalCanvas.getContext("2d",{alpha:true});
     if(!ctx)return;
-    const pixelBudget=window.innerWidth<650?900000:1600000;
-    const ratio=Math.min(window.devicePixelRatio||1,1.25,Math.sqrt(pixelBudget/(w*h)));
+    const pixelBudget=window.innerWidth<650?850000:1500000;
+    const ratio=Math.min(window.devicePixelRatio||1,1.2,Math.sqrt(pixelBudget/(w*h)));
     const pw=Math.max(1,Math.round(w*ratio)),ph=Math.max(1,Math.round(h*ratio));
     if(portalCanvas.width!==pw||portalCanvas.height!==ph){
       portalCanvas.width=pw;portalCanvas.height=ph;
@@ -632,24 +694,33 @@
     }
     ctx.setTransform(portalRatio,0,0,portalRatio,0,0);
     ctx.clearRect(0,0,w,h);
-    const petalVisibility=Math.sin(Math.PI*t);
-    for(const flower of portalFlowers){
-      const p=Math.max(0,Math.min(1,(t-flower.delay)/(.88-flower.delay)));
+    for(const petal of portalFlowers){
+      const p=Math.max(0,Math.min(1,(t-petal.delay)/(.98-petal.delay)));
       if(p===0)continue;
-      const smoothed=p*p*(3-2*p);
+      const smooth=p*p*(3-2*p);
       const bend=Math.sin(p*Math.PI);
-      const x=flower.x+flower.dx*smoothed+Math.sin(p*Math.PI*3+flower.phase)*flower.sway*bend;
-      const y=flower.y+flower.dy*smoothed+Math.cos(p*Math.PI*2+flower.phase)*flower.sway*.58*bend;
-      const rotation=flower.angle+flower.spin*smoothed;
-      const opacity=Math.min(1,p*7,(1-p)*5,petalVisibility*2);
+      // Different speeds, alternating spirals and independent wind gusts.
+      const x=petal.x+petal.dx*smooth+
+        Math.sin(p*Math.PI*(3+petal.layer*3)+petal.phase)*petal.ampX*bend;
+      const y=petal.y+petal.dy*smooth+
+        Math.cos(p*Math.PI*(2+petal.layer*2)+petal.phase)*petal.ampY*bend;
+      const angle=petal.angle+petal.spin*smooth+
+        Math.sin(p*Math.PI*3+petal.phase)*.34;
+      const appearing=Math.min(1,p*9);
+      const fading=Math.min(1,(1-p)*7);
+      const opacity=Math.max(0,Math.min(appearing,fading));
       if(opacity<=0)continue;
+      const depth=.65+petal.layer*.9;
+      const flutter=petal.kind==="petal"
+        ?Math.max(.15,Math.abs(Math.cos(p*Math.PI*10+petal.phase)))
+        :1;
+      const size=petal.zoom*depth*(.75+.20*Math.sin(p*Math.PI));
       ctx.save();
-      ctx.globalAlpha=opacity;
+      ctx.globalAlpha=opacity*(petal.kind==="petal"?.92:.90);
       ctx.translate(x,y);
-      ctx.rotate(rotation);
-      const size=(.65+Math.sin(p*Math.PI)*.50)*flower.zoom;
-      ctx.scale(size,size);
-      ctx.drawImage(flower.image,-flower.width/2,-flower.height/2,flower.width,flower.height);
+      ctx.rotate(angle);
+      ctx.scale(size*flutter,size);
+      ctx.drawImage(petal.image,-petal.width/2,-petal.height/2,petal.width,petal.height);
       ctx.restore();
     }
     if(t<1&&!document.hidden)portalFrame=requestAnimationFrame(next=>renderPortal(next,start));
