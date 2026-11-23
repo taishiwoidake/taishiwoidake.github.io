@@ -295,7 +295,7 @@
     schedulePaint();
     document.documentElement.dataset.verifiedFlowers=String(accepted.length);
     const verified=document.getElementById("cutout-verified-count");
-    if(verified)verified.textContent=String(accepted.length);
+    if(verified)verified.textContent=String(accepted.length)+" cutout image files accepted out of "+candidates.length+" candidates. Only approved silhouettes appear in the garden.";
   }
   void loadVerifiedPhotos();
   
@@ -314,6 +314,9 @@
   heading.textContent="Real flowers. Real photographs.";
   const intro=document.createElement("p");
   intro.textContent="Wikimedia Commons source images are screened for real transparent pixels and irregular cutout silhouettes. Opaque rectangles and files that cannot be checked are excluded. Source links contain photographers, licensing terms and histories.";
+  const status=document.createElement("p");
+  status.id="cutout-verified-count";
+  status.textContent="Checking transparent photo cutouts…";
   const sourceList=document.createElement("ol");
   for(const entry of PHOTO_LIBRARY){
     const item=document.createElement("li");
@@ -333,7 +336,7 @@
   close.type="button";
   close.textContent="CLOSE ×";
   close.addEventListener("click",()=>dialog.close());
-  wrap.append(heading,intro,sourceList,note,close);
+  wrap.append(heading,intro,status,sourceList,note,close);
   dialog.appendChild(wrap);
   document.body.append(dialog);
   root.appendChild(creditLink);
