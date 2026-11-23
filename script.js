@@ -112,7 +112,7 @@
       depth: Math.random() * .8 + .2,
       phase: Math.random() * Math.PI * 2
     }));
-    draw(0);
+    if (reducedMotion) draw(0);
   }
 
   function draw(t) {
