@@ -27,6 +27,9 @@
   <link rel="stylesheet" href="home-hero.css?v=20261123-home-01">
   <link rel="stylesheet" href="about-and-home-visibility.css?v=about-name-fix-20261123-v1">
   <link rel="stylesheet" href="about-qtrac.css?v=qtrac-about-v1">
+  <link rel="preload" as="image" href="https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Matabei-zakura_%2833934707101%29.jpg/1280px-Matabei-zakura_%2833934707101%29.jpg" fetchpriority="high">
+  <link rel="stylesheet" href="sakura-opening.css?v=20261125-1">
+  <script src="sakura-opening.js?v=20261125-1" defer></script>
   <script src="photo-garden.js?v=petal-blizzard-v1" defer></script>
   <link rel="stylesheet" href="floral-navigation.css?v=hyakka-showcase-20261125">
   <script src="floral-navigation.js?v=hyakka-showcase-20261125" defer></script>
@@ -35,6 +38,32 @@
   <meta property="og:site_name" content="百花繚乱 | Hyakka Ryoran">
 </head>
 <body>
+  <!-- 百花繚乱 / independent first-visit opening. Original garden follows unchanged. -->
+  <section id="sakura-opening" role="dialog" aria-modal="true" aria-label="Hyakka Ryoran opening" hidden>
+    <div class="so-layer" aria-hidden="true">
+      <img class="so-photo so-landscape" src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Matabei-zakura_%2833934707101%29.jpg/1280px-Matabei-zakura_%2833934707101%29.jpg" alt="" fetchpriority="high" decoding="async">
+      <img class="so-photo so-macro" src="https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e4/Prunus_serrulata_-_flowers_close-up.jpg/1280px-Prunus_serrulata_-_flowers_close-up.jpg" alt="" decoding="async">
+    </div>
+    <div class="so-layer so-shade" aria-hidden="true"></div>
+    <div class="so-layer so-bloom" aria-hidden="true">
+      <img class="so-bough so-bough-a" src="https://thumb.wikimedia.org/wikipedia/commons/thumb/5/54/Blossoms_of_Prunus_serrulata.jpg/1280px-Blossoms_of_Prunus_serrulata.jpg" alt="" decoding="async">
+      <img class="so-bough so-bough-b" src="https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e4/Prunus_serrulata_-_flowers_close-up.jpg/1280px-Prunus_serrulata_-_flowers_close-up.jpg" alt="" decoding="async">
+      <img class="so-bough so-bough-c" src="https://thumb.wikimedia.org/wikipedia/commons/thumb/5/54/Blossoms_of_Prunus_serrulata.jpg/1280px-Blossoms_of_Prunus_serrulata.jpg" alt="" decoding="async">
+      <div class="so-aura"></div>
+    </div>
+    <canvas aria-hidden="true"></canvas>
+    <div class="so-title">
+      <img class="so-crest" src="/hyakka-ryoran.svg?v=1" alt="" width="208" height="208">
+      <p class="so-japanese" lang="ja">百花繚乱</p>
+      <p class="so-roman">HYAKKA RYORAN</p>
+      <p class="so-name">Ryunosuke Hirata</p>
+      <p class="so-name-ja" lang="ja">平田 隆之介</p>
+    </div>
+    <button class="so-skip" type="button">SKIP INTRO &nbsp; →</button>
+    <span class="so-caption" aria-hidden="true">01 / APPROACH</span>
+    <span class="so-progress" aria-hidden="true"></span>
+    <div class="so-credit">Photography (cropped, graded and animated): <a href="https://commons.wikimedia.org/wiki/File:Matabei-zakura_(33934707101).jpg" target="_blank" rel="noopener">coniferconifer</a> · <a href="https://creativecommons.org/licenses/by/2.0/" target="_blank" rel="noopener">CC BY 2.0</a> / <a href="https://commons.wikimedia.org/wiki/File:Prunus_serrulata_-_flowers_close-up.jpg" target="_blank" rel="noopener">Dodek</a> · <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">CC BY-SA 4.0</a> / <a href="https://commons.wikimedia.org/wiki/File:Blossoms_of_Prunus_serrulata.jpg" target="_blank" rel="noopener">Sciencia58</a> · CC0. Adapted photo layers and petal textures retain their source licenses.</div>
+  </section>
   <div class="site-root">
     <header class="site-header">
       <a class="wordmark" href="#welcome" aria-label="Ryunosuke Hirata: home"><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M20 5 C14 12 15 17 20 21 C25 17 26 12 20 5Z M35 20 C28 14 23 15 19 20 C23 25 28 26 35 20Z M20 35 C26 28 25 23 20 19 C15 23 14 28 20 35Z M5 20 C12 26 17 25 21 20 C17 15 12 14 5 20Z" fill="currentColor"/><circle cx="20" cy="20" r="3" fill="#edbd6b"/></svg><span>RH / IN BLOOM</span></a>
