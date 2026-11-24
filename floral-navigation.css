@@ -225,3 +225,11 @@
 @media(max-width:650px){#hyakka-sakura-dialog .hs-japanese{font-size:clamp(37px,11vw,75px)}#hyakka-sakura-dialog .hs-crest{width:clamp(80px,16vh,135px)}#hyakka-sakura-dialog .hs-name{font-size:clamp(25px,7vw,42px)}#hyakka-sakura-dialog .hs-roman{font-size:clamp(9px,2.5vw,15px);letter-spacing:.19em}#hyakka-sakura-dialog .hs-controls button{padding:10px 9px;font-size:9px}}
 @media(max-height:540px){#hyakka-sakura-dialog .hs-crest{width:70px;margin-bottom:8px}#hyakka-sakura-dialog .hs-japanese{font-size:clamp(37px,12vh,69px)}#hyakka-sakura-dialog .hs-roman{margin:6px 0 11px}#hyakka-sakura-dialog .hs-name{font-size:27px}#hyakka-sakura-dialog .hs-name-ja{margin-top:4px}}
 @media(prefers-reduced-motion:reduce){.rh-hyakka-invite .rh-brand-heading-row{transition:none}#hyakka-sakura-dialog .hs-controls button[data-replay]{display:none}}
+
+/* Make the complete crest/title region a single large, keyboard-accessible hit target. */
+.rh-hyakka-entry{position:relative}
+.rh-hyakka-entry .rh-hyakka-invite{position:static}
+.rh-hyakka-entry .rh-hyakka-invite::after{content:"";position:absolute;inset:0;cursor:pointer}
+.rh-hyakka-entry:hover .rh-brand-heading-row,.rh-hyakka-entry:focus-within .rh-brand-heading-row{filter:brightness(1.15)}
+.rh-hyakka-entry:focus-within{outline:1px solid #f5d99c;outline-offset:3px}
+.rh-hyakka-entry .rh-hyakka-invite-caption{color:#f4dfae;margin:-5px auto 12px;text-align:center}
