@@ -52,7 +52,9 @@
   glyph.setAttribute("aria-hidden","true");
   glyph.innerHTML='<svg viewBox="0 0 28 28" fill="none" aria-hidden="true"><path d="M5 7.5h17M5 14h13M5 20.5h17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M22 10.5v7M18.5 14h7" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><circle cx="22" cy="14" r="1.5" fill="#f1db9d"/></svg>';
   const text=el("span","rh-waypoint-text");
-  const pageText=el("span","rh-waypoint-page",current.short);
+  const parents={"quantum-memory.html":"QTRAC","observation-order.html":"QTRAC","future-questions.html":"QTRAC","critical-curve.html":"Ximeste–Maluna","probabilistic-circuits.html":"Mathematics","thermal-records.html":"Physical Records","directional-interference.html":"Physical Records"};
+  const locationLabel=parents[page]?parents[page]+" / "+current.short:current.short;
+  const pageText=el("span","rh-waypoint-page",locationLabel);
   const chapterText=el("span","rh-waypoint-chapter");
   text.append(el("span","rh-waypoint-kicker","YOU ARE HERE / MENU"),pageText,chapterText);
   waypoint.append(glyph,text);
@@ -70,7 +72,7 @@
   const menu=dialogShell("rh-location-menu","rh-nav-dialog","RH / RESEARCH IN BLOOM");
   const menuHeading=el("h2","rh-dialog-heading","Explore the research.");menuHeading.id=menu.dlg.id+"-title";
   const menuCurrent=el("div","rh-current-block");
-  const menuCurrentName=el("strong","",current.name);
+  const menuCurrentName=el("strong","",parents[page]?parents[page]+" / "+current.name:current.name);
   const menuCurrentChapter=el("p");
   menuCurrent.append(el("small","","YOU ARE HERE"),menuCurrentName,menuCurrentChapter);
   const chapterGroup=el("section","rh-menu-group");
