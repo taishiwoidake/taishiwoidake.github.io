@@ -70,37 +70,111 @@
     return {dlg,shell,close};
   }
   const menu=dialogShell("rh-location-menu","rh-nav-dialog","RH / RESEARCH IN BLOOM");
-  const menuHeading=el("h2","rh-dialog-heading","Explore the research.");menuHeading.id=menu.dlg.id+"-title";
+  const menuHeading=el("h2","rh-dialog-heading","Research directory");menuHeading.id=menu.dlg.id+"-title";
   const menuCurrent=el("div","rh-current-block");
-  const menuCurrentName=el("strong","",parents[page]?parents[page]+" / "+current.name:current.name);
+  const menuCurrentName=el("strong","",parents[page]?parents[page]+" / "+current.short:current.name);
   const menuCurrentChapter=el("p");
-  menuCurrent.append(el("small","","YOU ARE HERE"),menuCurrentName,menuCurrentChapter);
-  const chapterGroup=el("section","rh-menu-group");
-  const chapterList=el("div","rh-menu-list");
-  chapterGroup.append(el("h3","","CHAPTERS ON THIS PAGE"),chapterList);
+  const currentLabel=el("small","","YOU ARE HERE");
+  menuCurrent.append(currentLabel,menuCurrentName,menuCurrentChapter);
+  const masthead=el("div","rh-terrace-masthead");
+  masthead.append(menu.shell.firstElementChild,menuHeading,menuCurrent);
+  const tree=el("nav","rh-terrace-tree");
+  tree.setAttribute("aria-label","Research directory and chapter hierarchy");
+  const guide=el("p","rh-terrace-guide","Choose a research area, then a topic or chapter.");
+  const chapterList=el("ul","rh-terrace-chapters");
+  const chapterTitle=el("div","rh-terrace-chapter-label","CHAPTERS");
+  const chapters=el("div","rh-terrace-chapter-block");
+  chapters.append(chapterTitle,chapterList);
+  const labelCase=s=>s.split(/(\s+|[-/])/).map(w=>/^(QTRAC|RH|ORCID|DOI|CAD|GIBBS|GITHUB)$/i.test(w)?(w.toUpperCase()==="GIBBS"?"Gibbs":w.toUpperCase()==="GITHUB"?"GitHub":w.toUpperCase()):w===w.toUpperCase()&&/[A-Z]/.test(w)?w.charAt(0)+w.slice(1).toLowerCase():w).join("");
   const chapterItems=scenes.map((s,i)=>{
-    const b=btn("",pad(i+1)+" / "+titleFor(s));const mark=el("span","rh-active-mark");b.append(mark);
+    const item=el("li","rh-terrace-chapter");
+    const b=btn("rh-terrace-chapter-button");
+    const number=el("span","rh-terrace-chapter-number",pad(i+1));
+    const name=el("span","rh-terrace-chapter-name",labelCase(titleFor(s)));
+    const mark=el("span","rh-active-mark");b.append(number,name,mark);
     b.addEventListener("click",()=>{
       menu.dlg.close();
-      // Delegate to the existing garden's chapter anchors: its circular petal
-      // transition stays in charge, including the original active scene state.
       const a=Array.from(root.querySelectorAll(".top-nav a")).find(n=>n.hash==="#"+s.id);
       if(a){a.click();}
       else{world.scrollTo({left:i*world.clientWidth,behavior:"smooth"});}
     });
-    chapterList.append(b);return {b,mark};
+    item.append(b);chapterList.append(item);return {b,mark};
   });
-  menu.shell.append(menuHeading,menuCurrent,chapterGroup,el("div","rh-dialog-rule","✳"));
-  for(const [label,paths] of groups){
-    const group=el("section","rh-menu-group");const list=el("div","rh-menu-list");
-    group.append(el("h3","",label),list);
-    for(const p of paths){
-      const a=link(p,"",catalog[p].name);const m=el("span","rh-active-mark",p===page?"CURRENT":"↗");a.append(m);
-      if(p===page){a.setAttribute("aria-current","page");a.addEventListener("click",e=>{e.preventDefault();menu.dlg.close();});}
-      list.append(a);
+  // The directory hierarchy is explicit. Related projects are not automatically
+  // treated as children merely because their preview includes a cross-link.
+  const terraces=[
+    {num:"00",title:"Orientation",items:[
+      {path:"index.html",label:"Home"},
+      {path:"research.html",label:"Research overview"},
+      {path:"start-here.html",label:"Start here"},
+      {path:"research-branches.html",label:"Research atlas"},
+      {path:"researcher.html",label:"About the researcher"}
+    ]},
+    {num:"01",title:"Quantum information",items:[
+      {path:"qtrac.html",label:"QTRAC",sub:"Quantum Temporal Reconstruction",children:[
+        {path:"quantum-memory.html",label:"Finite quantum memory"},
+        {path:"observation-order.html",label:"Observation order"},
+        {path:"future-questions.html",label:"Unknown future questions"}
+      ]}
+    ]},
+    {num:"02",title:"Mathematical research",items:[
+      {path:"ximeste-maluna.html",label:"Ximeste–Maluna",children:[
+        {path:"critical-curve.html",label:"Critical-curve conjecture"}
+      ]},
+      {path:"probabilistic-circuits.html",label:"Probabilistic circuits",sub:"Separate synthesis programme"}
+    ]},
+    {num:"03",title:"Physical information",items:[
+      {path:"physical-records.html",label:"Physical Records & Reversal",children:[
+        {path:"thermal-records.html",label:"Thermal records"},
+        {path:"directional-interference.html",label:"Directional interference"}
+      ]}
+    ]},
+    {num:"04",title:"Research outputs & other fields",items:[
+      {path:"publications.html",label:"Results & Publications"},
+      {path:"quantum-software.html",label:"Quantum software verification"},
+      {path:"human-mobility.html",label:"Human mobility"}
+    ]}
+  ];
+  const containsPage=item=>item.path===page||(item.children||[]).some(containsPage);
+  let activeRow=null;
+  function terraceItem(item){
+    const li=el("li","rh-terrace-node");
+    const selected=item.path===page;
+    const onPath=containsPage(item);
+    if(onPath)li.classList.add("rh-terrace-on-path");
+    const a=link(item.path,"rh-terrace-page");
+    const copy=el("span","rh-terrace-page-copy");
+    copy.append(el("span","rh-terrace-page-name",item.label));
+    if(item.sub)copy.append(el("small","rh-terrace-page-sub",item.sub));
+    const mark=el("span","rh-terrace-page-mark",selected?"HERE":"↗");
+    a.append(copy,mark);
+    if(selected){
+      a.setAttribute("aria-current","page");
+      a.addEventListener("click",e=>{e.preventDefault();menu.dlg.close();});
+      activeRow=a;
     }
-    menu.shell.append(group);
+    li.append(a);
+    if(selected)li.append(chapters);
+    if(item.children?.length){
+      const children=el("ul","rh-terrace-children");
+      for(const child of item.children)children.append(terraceItem(child));
+      li.append(children);
+    }
+    return li;
   }
+  for(const area of terraces){
+    const group=el("details","rh-terrace-group");
+    group.open=true;
+    const onPath=area.items.some(containsPage);
+    if(onPath)group.classList.add("rh-terrace-current-group");
+    const summary=el("summary","rh-terrace-group-title");
+    summary.append(el("span","rh-terrace-index",area.num),el("span","rh-terrace-group-name",area.title),el("span","rh-terrace-chevron","⌄"));
+    const list=el("ul","rh-terrace-programmes");
+    for(const item of area.items)list.append(terraceItem(item));
+    group.append(summary,list);tree.append(group);
+  }
+  if(!activeRow)tree.append(chapters);
+  menu.shell.append(masthead,guide,tree);
   let lastScene=-1;
   function sync(){
     const active=scenes.findIndex(s=>s.classList.contains("active"));
@@ -109,7 +183,7 @@
     lastScene=i;
     const caption=pad(i+1)+" / "+pad(scenes.length)+" · "+titleFor(scenes[i]);
     chapterText.textContent=caption;
-    menuCurrentChapter.textContent=caption;
+    menuCurrentChapter.textContent=pad(i+1)+" / "+pad(scenes.length)+" · "+labelCase(titleFor(scenes[i]));
     waypoint.setAttribute("aria-label","Open research menu. Current page: "+current.name+". Chapter: "+caption);
     waypoint.title=current.name+" — "+caption;
     chapterItems.forEach(({b,mark},k)=>{
@@ -120,7 +194,20 @@
   const observer=new MutationObserver(sync);
   scenes.forEach(s=>observer.observe(s,{attributes:true,attributeFilter:["class"]}));
   sync();
-  waypoint.addEventListener("click",()=>{sync();if(!menu.dlg.open)menu.dlg.showModal();waypoint.setAttribute("aria-expanded","true");});
+  waypoint.addEventListener("click",()=>{
+    sync();
+    if(!menu.dlg.open){
+      if(activeRow)activeRow.closest(".rh-terrace-group").open=true;
+      menu.dlg.showModal();
+      menu.close.focus({preventScroll:true});
+      // Keep the current path in view without moving the flower garden.
+      requestAnimationFrame(()=>{
+        const selected=chapterItems[lastScene]?.b||activeRow;
+        if(menu.dlg.open&&selected)selected.scrollIntoView({block:"nearest",inline:"nearest",behavior:"instant"});
+      });
+    }
+    waypoint.setAttribute("aria-expanded","true");
+  });
   menu.dlg.addEventListener("close",()=>{waypoint.setAttribute("aria-expanded","false");waypoint.focus({preventScroll:true});});
   const preview=dialogShell("rh-research-preview","rh-research-dialog","RESEARCH / EXPANDED VIEW");
   const back=btn("rh-preview-back","← BACK TO PREVIOUS RESEARCH");back.hidden=true;
