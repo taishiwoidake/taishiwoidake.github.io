@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title">
+<title id="title">百花繚乱 — Hyakka Ryoran floral crest</title>
+<rect x="1" y="1" width="62" height="62" rx="14" fill="#203c2e"/>
+<circle cx="32" cy="32" r="28" fill="none" stroke="#c4a56a" stroke-width="1.6"/>
+<circle cx="32" cy="32" r="24.7" fill="none" stroke="#f3dfac" stroke-opacity=".52" stroke-width=".7"/>
+<g fill="#e9ce92" stroke="#fff0c5" stroke-width=".65">
+<path transform="rotate(0 32 32)" d="M32 8.5C25.4 13.2 24.2 20 32 28C39.8 20 38.6 13.2 32 8.5Z"/>
+<path transform="rotate(45 32 32)" d="M32 8.5C25.4 13.2 24.2 20 32 28C39.8 20 38.6 13.2 32 8.5Z"/>
+<path transform="rotate(90 32 32)" d="M32 8.5C25.4 13.2 24.2 20 32 28C39.8 20 38.6 13.2 32 8.5Z"/>
+<path transform="rotate(135 32 32)" d="M32 8.5C25.4 13.2 24.2 20 32 28C39.8 20 38.6 13.2 32 8.5Z"/>
+<path transform="rotate(180 32 32)" d="M32 8.5C25.4 13.2 24.2 20 32 28C39.8 20 38.6 13.2 32 8.5Z"/>
+<path transform="rotate(225 32 32)" d="M32 8.5C25.4 13.2 24.2 20 32 28C39.8 20 38.6 13.2 32 8.5Z"/>
+<path transform="rotate(270 32 32)" d="M32 8.5C25.4 13.2 24.2 20 32 28C39.8 20 38.6 13.2 32 8.5Z"/>
+<path transform="rotate(315 32 32)" d="M32 8.5C25.4 13.2 24.2 20 32 28C39.8 20 38.6 13.2 32 8.5Z"/>
+</g>
+<g fill="none" stroke="#a17b40" stroke-width="1.05" stroke-linecap="round">
+<path transform="rotate(0 32 32)" d="M32 13.2V24"/>
+<path transform="rotate(45 32 32)" d="M32 13.2V24"/>
+<path transform="rotate(90 32 32)" d="M32 13.2V24"/>
+<path transform="rotate(135 32 32)" d="M32 13.2V24"/>
+<path transform="rotate(180 32 32)" d="M32 13.2V24"/>
+<path transform="rotate(225 32 32)" d="M32 13.2V24"/>
+<path transform="rotate(270 32 32)" d="M32 13.2V24"/>
+<path transform="rotate(315 32 32)" d="M32 13.2V24"/>
+</g>
+<g fill="#f7e9c1">
+<circle transform="rotate(22.5 32 32)" cx="32" cy="10.5" r="1.2"/>
+<circle transform="rotate(67.5 32 32)" cx="32" cy="10.5" r="1.2"/>
+<circle transform="rotate(112.5 32 32)" cx="32" cy="10.5" r="1.2"/>
+<circle transform="rotate(157.5 32 32)" cx="32" cy="10.5" r="1.2"/>
+<circle transform="rotate(202.5 32 32)" cx="32" cy="10.5" r="1.2"/>
+<circle transform="rotate(247.5 32 32)" cx="32" cy="10.5" r="1.2"/>
+<circle transform="rotate(292.5 32 32)" cx="32" cy="10.5" r="1.2"/>
+<circle transform="rotate(337.5 32 32)" cx="32" cy="10.5" r="1.2"/>
+</g>
+<circle cx="32" cy="32" r="6.5" fill="#213b2c" stroke="#f9e7ae" stroke-width="1.4"/>
+<path d="M32 27.5 33.4 30.6 36.5 32 33.4 33.4 32 36.5 30.6 33.4 27.5 32 30.6 30.6Z" fill="#f9e7ae"/>
+</svg>
