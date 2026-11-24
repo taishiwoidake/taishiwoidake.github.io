@@ -239,3 +239,17 @@
 #hyakka-sakura-dialog .hs-crest{filter:drop-shadow(0 0 18px #eec78455)}
 #hyakka-sakura-dialog .hs-close{position:absolute;right:max(22px,env(safe-area-inset-right));top:max(20px,env(safe-area-inset-top));z-index:8;width:44px;height:44px;display:grid;place-items:center;line-height:1;border:1px solid #e5c88c66;background:#102a20a6;color:#f6e6be;border-radius:50%;font:300 29px/1 Georgia,serif;cursor:pointer;transition:background .2s,border-color .2s}
 #hyakka-sakura-dialog .hs-close:hover,#hyakka-sakura-dialog .hs-close:focus-visible{background:#274e38;border-color:#f5dba1;outline:1px solid #f5dba1;outline-offset:3px}
+
+/* Warm walnut and aged cherrywood; scoped to the private Hyakka Ryoran view. */
+#hyakka-sakura-dialog{
+ background-color:#352218;
+ background-image:radial-gradient(ellipse at 32% 17%,#b0844f25,transparent 53%),radial-gradient(ellipse at 50% 45%,#7b5034 0%,#5a3925 43%,#382319 78%,#20140e 100%);
+}
+#hyakka-sakura-dialog::backdrop{background:#291a12}
+#hyakka-sakura-dialog .hs-aura{
+ background-image:radial-gradient(ellipse at 50% 44%,#28190f7a 0%,#3b251733 42%,transparent 72%),repeating-linear-gradient(94deg,#ead2ab03 0px,#ead2ab03 1px,transparent 2px,transparent 7px,#120a0605 8px,transparent 10px,transparent 18px);
+}
+#hyakka-sakura-dialog .hs-title{filter:drop-shadow(0 3px 16px #201109)}
+#hyakka-sakura-dialog .hs-crest{filter:drop-shadow(0 0 22px #eac17c46)}
+#hyakka-sakura-dialog .hs-close{background:#382219b8;border-color:#e5c88c80}
+#hyakka-sakura-dialog .hs-close:hover,#hyakka-sakura-dialog .hs-close:focus-visible{background:#71492d;border-color:#f5dba1}

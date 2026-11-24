@@ -85,7 +85,7 @@
     if(brandOpen.disabled)return;
     brandOpen.disabled=true;
     try{
-      const {openSakura}=await import("./hyakka-sakura.js?v=20261125-3");
+      const {openSakura}=await import("./hyakka-sakura.js?v=20261125-4");
       if(menu.dlg.open){menu.dlg.close();openSakura();}
 
     }catch(e){console.error(e);}

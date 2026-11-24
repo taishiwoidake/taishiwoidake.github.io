@@ -31,7 +31,7 @@ function loadSprites(){
 }
 function makeDialog(){
  const d=document.createElement("dialog");d.id="hyakka-sakura-dialog";d.setAttribute("aria-labelledby","hs-heading");
- d.innerHTML='<div class="hs-aura" aria-hidden="true"></div><canvas class="hs-back" aria-hidden="true"></canvas><div class="hs-title"><img class="hs-crest" src="/hyakka-ryoran.svg?v=1" width="176" height="176" alt=""><h2 class="hs-japanese" id="hs-heading" lang="ja">百花繚乱</h2><p class="hs-roman">HYAKKA RYORAN</p><p class="hs-name">Ryunosuke Hirata</p><p class="hs-name-ja" lang="ja">平田 隆之介</p></div><canvas class="hs-front" aria-hidden="true"></canvas><button class="hs-close" type="button" aria-label="Return to site" title="Return to site">×</button>';
+ d.innerHTML='<div class="hs-aura" aria-hidden="true"></div><canvas class="hs-back" aria-hidden="true"></canvas><div class="hs-title"><img class="hs-crest" src="/hyakka-ryoran-wood.svg?v=1" width="176" height="176" alt=""><h2 class="hs-japanese" id="hs-heading" lang="ja">百花繚乱</h2><p class="hs-roman">HYAKKA RYORAN</p><p class="hs-name">Ryunosuke Hirata</p><p class="hs-name-ja" lang="ja">平田 隆之介</p></div><canvas class="hs-front" aria-hidden="true"></canvas><button class="hs-close" type="button" aria-label="Return to site" title="Return to site">×</button>';
  document.body.append(d);d.querySelector(".hs-close").addEventListener("click",()=>d.close());
  d.addEventListener("close",()=>{generation++;cancelAnimationFrame(raf);if(resize)window.removeEventListener("resize",resize);resize=null;document.querySelector(".rh-waypoint")?.focus({preventScroll:true})});
  return d;
@@ -49,21 +49,21 @@ async function play(){
  const mobile=w<650;
  // 3 depth planes: distant light petals, mid-ground sakura, and a few large
  // foreground petals with a softer focus. Wind speeds vary over time.
- const count=mobile?215:415;
+ const count=mobile?380:760;
  const petals=Array.from({length:count},(_,i)=>{
-   const z=rnd(),near=z>.89,far=z<.40;
+   const z=rnd(),near=z>.93,far=z<.35;
    return {z,near,far,x:rnd(),y:rnd(),angle:rnd()*tau,phase:rnd()*tau,spin:(rnd()-.5)*(near?1.5:2.2),roll:1.1+rnd()*2.6,
      size:near?42+rnd()*65:far?5+rnd()*12:13+rnd()*27,
-     velocity:near?100+rnd()*80:far?18+rnd()*34:40+rnd()*65,
-     drift:12+rnd()*55,sprite:i%sprites.length,opacity:far?.28+rnd()*.35:.63+rnd()*.32};
+     velocity:near?90+rnd()*75:far?20+rnd()*37:35+rnd()*65,
+     drift:12+rnd()*55,sprite:i%sprites.length,opacity:far?.33+rnd()*.35:.67+rnd()*.30};
  });
- const burst=Array.from({length:mobile?85:155},(_,i)=>({p:petals[i%petals.length],a:i*2.39996323+(rnd()-.5)*.68,delay:rnd()*1.15,speed:.24+rnd()*.8,spread:rnd()*.12}));
+ const burst=Array.from({length:mobile?150:280},(_,i)=>({p:petals[i%petals.length],a:i*2.39996323+(rnd()-.5)*.68,delay:rnd()*1.15,speed:.24+rnd()*.8,spread:rnd()*.12}));
+ const softened=sprites.map(im=>{const c=document.createElement("canvas");c.width=im.width+12;c.height=im.height+12;const ctx=c.getContext("2d");ctx.filter="blur(2px)";ctx.drawImage(im,6,6);return c;});
  const gold=Array.from({length:mobile?36:90},()=>({x:rnd(),y:rnd(),r:.35+rnd()*1.15,phase:rnd()*tau,z:rnd()}));
  function paint(ctx,p,x,y,size,rot,flip,alpha){
    if(alpha<.012||x< -size*2||x>w+size*2||y< -size*2||y>h+size*2)return;
-   const img=sprites[p.sprite],hh=size*img.height/img.width;
+   const img=p.near&&size>55?softened[p.sprite]:sprites[p.sprite],hh=size*img.height/img.width;
    ctx.save();ctx.translate(x,y);ctx.rotate(rot);ctx.scale(Math.max(.16,Math.abs(flip)),1);ctx.globalAlpha=clamp(alpha);
-   if(p.near&&size>55)ctx.filter="blur("+Math.min(2.6,size/40)+"px)";
    ctx.drawImage(img,-size/2,-hh/2,size,hh);ctx.restore();
  }
  const wrap=(v,range)=>((v%range)+range)%range;
@@ -76,7 +76,7 @@ async function play(){
      const x=wrap(p.x*(w+2*pad)+travel*.91+Math.sin(t*.55+p.phase)*p.drift+Math.sin(t*.19+p.phase)*45,w+2*pad)-pad;
      const y=wrap(p.y*(h+2*pad)+travel*.57+Math.cos(t*.7+p.phase)*p.drift*.65,h+2*pad)-pad;
      const center=Math.exp(-(((x/w-.5)*2.8)**2+((y/h-.48)*2.7)**2)*3.2);
-     const a=p.opacity*(1-(p.near?.95:.72)*center)*(still?1:smooth(t,.02,1.65));
+     const a=p.opacity*(1-(p.near?.97:.80)*center)*(still?1:smooth(t,.02,1.65));
      // Foreground particles cross the plane of the lettering, but thin out in its center.
      paint(p.near?fg:bg,p,x,y,p.size*scale*(.89+.13*Math.sin(t*.85+p.phase)),p.angle+t*p.spin+Math.sin(t*.58+p.phase)*.32,Math.cos(t*p.roll+p.phase),a);
    }
