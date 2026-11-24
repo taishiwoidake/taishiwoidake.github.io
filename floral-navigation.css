@@ -193,3 +193,35 @@
  .rh-nav-dialog .rh-brand-heading-row .rh-brand-roman{font-size:9px;letter-spacing:.15em}
 }
 @media(max-width:350px){.rh-nav-dialog .rh-brand-heading-row .rh-brand-heading{font-size:26px;letter-spacing:.09em}.rh-hyakka-signature{gap:8px}.rh-hyakka-signature-ja{font-size:23px}.rh-hyakka-signature-en{font-size:8px}}
+
+/* 百花繚乱 — optional full-screen floral artwork, opened only on request. */
+.rh-hyakka-invite{display:block;width:100%;border:0;padding:0;background:transparent;color:inherit;cursor:pointer;text-align:center}
+.rh-hyakka-invite .rh-brand-heading-row{transition:filter .25s,transform .25s}
+.rh-hyakka-invite:hover .rh-brand-heading-row,.rh-hyakka-invite:focus-visible .rh-brand-heading-row{filter:brightness(1.18);transform:translateY(-2px)}
+.rh-hyakka-invite:focus-visible{outline:1px solid #f5d99c;outline-offset:3px}
+.rh-hyakka-invite-caption{display:block;margin:-5px auto 12px;color:#f0d8a1;font:500 9px/1.5 var(--mono);letter-spacing:.14em}
+#hyakka-sakura-dialog{position:fixed;inset:0;width:100vw;height:100dvh;max-width:none;max-height:none;margin:0;padding:0;border:0;overflow:hidden;isolation:isolate;box-sizing:border-box;color:#f9e9c9;background:radial-gradient(ellipse at 50% 42%,#284c32 0%,#153927 39%,#091f18 93%);touch-action:none}
+#hyakka-sakura-dialog:not([open]){display:none}
+#hyakka-sakura-dialog[open]{display:grid;place-items:center}
+#hyakka-sakura-dialog::backdrop{background:#091f18}
+#hyakka-sakura-dialog .hs-art,#hyakka-sakura-dialog canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+#hyakka-sakura-dialog .hs-art{object-fit:cover;object-position:center;opacity:0;will-change:transform,opacity}
+#hyakka-sakura-dialog .hs-frame{z-index:1}
+#hyakka-sakura-dialog .hs-burst{z-index:2}
+#hyakka-sakura-dialog .hs-aura{position:absolute;inset:0;z-index:3;pointer-events:none;background:radial-gradient(ellipse at 50% 48%,#0d2a2088 0%,#122d2344 38%,transparent 70%)}
+#hyakka-sakura-dialog canvas{z-index:4}
+#hyakka-sakura-dialog .hs-title{z-index:5;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;max-width:96vw;filter:drop-shadow(0 3px 14px #071b13cc);pointer-events:none}
+#hyakka-sakura-dialog .hs-crest{width:clamp(85px,18vh,176px);height:auto;margin-bottom:clamp(12px,2.2vh,24px);filter:drop-shadow(0 0 25px #f0c87555)}
+#hyakka-sakura-dialog .hs-japanese{font-family:"Noto Serif JP","Yu Mincho","Hiragino Mincho ProN","Noto Serif CJK JP",serif;font-size:clamp(40px,min(9.1vw,13.5vh),130px);font-weight:700;line-height:1.2;letter-spacing:.12em;padding-left:.12em;white-space:nowrap;margin:0;color:#f1d28c;background:linear-gradient(168deg,#fff4cd 10%,#e8b85d 51%,#ffedc0 74%,#b98638 100%);background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+#hyakka-sakura-dialog .hs-roman{display:flex;align-items:center;justify-content:center;gap:clamp(10px,2vw,30px);font:400 clamp(10px,1.6vw,21px)/1.5 Georgia,serif;letter-spacing:.26em;white-space:nowrap;margin:12px 0 clamp(15px,3vh,32px);color:#f3d79a}
+#hyakka-sakura-dialog .hs-roman::before,#hyakka-sakura-dialog .hs-roman::after{content:"";height:1px;width:clamp(14px,4vw,72px);background:linear-gradient(90deg,transparent,#e8c687)}
+#hyakka-sakura-dialog .hs-roman::after{transform:rotate(180deg)}
+#hyakka-sakura-dialog .hs-name{font:italic 400 clamp(26px,min(4.5vw,6vh),60px)/1.2 Georgia,serif;color:#fff1d2;margin:0}
+#hyakka-sakura-dialog .hs-name-ja{font:400 clamp(13px,2.5vh,23px)/1.5 "Noto Serif JP","Yu Mincho",serif;letter-spacing:.22em;margin:9px 0 0;color:#f4d59d}
+#hyakka-sakura-dialog .hs-controls{position:absolute;z-index:8;top:max(16px,env(safe-area-inset-top));right:max(16px,env(safe-area-inset-right));display:flex;gap:8px}
+#hyakka-sakura-dialog .hs-controls button{color:#fff4d9;background:#0b2b20d9;border:1px solid #e9d3a090;padding:12px 15px;cursor:pointer;font:500 10px/1.4 system-ui,sans-serif;letter-spacing:.08em}
+#hyakka-sakura-dialog .hs-controls button:hover,#hyakka-sakura-dialog .hs-controls button:focus-visible{outline:2px solid #fbe3aa;background:#294e36}
+#hyakka-sakura-dialog .hs-credit{position:absolute;right:16px;bottom:13px;z-index:6;font:400 9px/1.5 system-ui,sans-serif;color:#e8d9ac;background:#10291c99;padding:4px 8px}
+@media(max-width:650px){#hyakka-sakura-dialog .hs-japanese{font-size:clamp(37px,11vw,75px)}#hyakka-sakura-dialog .hs-crest{width:clamp(80px,16vh,135px)}#hyakka-sakura-dialog .hs-name{font-size:clamp(25px,7vw,42px)}#hyakka-sakura-dialog .hs-roman{font-size:clamp(9px,2.5vw,15px);letter-spacing:.19em}#hyakka-sakura-dialog .hs-controls button{padding:10px 9px;font-size:9px}}
+@media(max-height:540px){#hyakka-sakura-dialog .hs-crest{width:70px;margin-bottom:8px}#hyakka-sakura-dialog .hs-japanese{font-size:clamp(37px,12vh,69px)}#hyakka-sakura-dialog .hs-roman{margin:6px 0 11px}#hyakka-sakura-dialog .hs-name{font-size:27px}#hyakka-sakura-dialog .hs-name-ja{margin-top:4px}}
+@media(prefers-reduced-motion:reduce){.rh-hyakka-invite .rh-brand-heading-row{transition:none}#hyakka-sakura-dialog .hs-controls button[data-replay]{display:none}}
