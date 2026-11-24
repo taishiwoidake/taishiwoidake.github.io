@@ -50,13 +50,13 @@
   waypoint.setAttribute("aria-expanded","false");
   const glyph=el("span","rh-waypoint-icon");
   glyph.setAttribute("aria-hidden","true");
-  glyph.innerHTML='<svg viewBox="0 0 28 28" fill="none" aria-hidden="true"><path d="M5 7.5h17M5 14h13M5 20.5h17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M22 10.5v7M18.5 14h7" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><circle cx="22" cy="14" r="1.5" fill="#f1db9d"/></svg>';
+  const crest=el("img","rh-waypoint-crest");crest.src="hyakka-ryoran.svg?v=1";crest.alt="";crest.width=34;crest.height=34;glyph.append(crest);
   const text=el("span","rh-waypoint-text");
   const parents={"quantum-memory.html":"QTRAC","observation-order.html":"QTRAC","future-questions.html":"QTRAC","critical-curve.html":"Ximeste–Maluna","probabilistic-circuits.html":"Mathematics","thermal-records.html":"Physical Records","directional-interference.html":"Physical Records"};
   const locationLabel=parents[page]?parents[page]+" / "+current.short:current.short;
   const pageText=el("span","rh-waypoint-page",locationLabel);
   const chapterText=el("span","rh-waypoint-chapter");
-  text.append(el("span","rh-waypoint-kicker","YOU ARE HERE / MENU"),pageText,chapterText);
+  text.append(el("span","rh-waypoint-kicker","百花繚乱 / MENU"),pageText,chapterText);
   waypoint.append(glyph,text);
   root.append(waypoint);
   function dialogShell(id,cls,kicker){
@@ -69,15 +69,20 @@
     dlg.addEventListener("click",e=>{if(e.target===dlg)dlg.close();});
     return {dlg,shell,close};
   }
-  const menu=dialogShell("rh-location-menu","rh-nav-dialog","RH / RESEARCH IN BLOOM");
-  const menuHeading=el("h2","rh-dialog-heading","Research directory");menuHeading.id=menu.dlg.id+"-title";
+  const menu=dialogShell("rh-location-menu","rh-nav-dialog","HYAKKA RYORAN / RESEARCH DIRECTORY");
+  const menuHeading=el("h2","rh-dialog-heading rh-brand-heading","百花繚乱");menuHeading.lang="ja";menuHeading.id=menu.dlg.id+"-title";
+  const brandHeading=el("div","rh-brand-heading-row");
+  const brandIcon=el("img","rh-brand-crest");brandIcon.src="hyakka-ryoran.svg?v=1";brandIcon.alt="";brandIcon.width=55;brandIcon.height=55;
+  const brandCopy=el("div","rh-brand-heading-copy");
+  brandCopy.append(menuHeading,el("p","rh-brand-roman","Hyakka Ryoran · Research in Bloom"));
+  brandHeading.append(brandIcon,brandCopy);
   const menuCurrent=el("div","rh-current-block");
   const menuCurrentName=el("strong","",parents[page]?parents[page]+" / "+current.short:current.name);
   const menuCurrentChapter=el("p");
   const currentLabel=el("small","","YOU ARE HERE");
   menuCurrent.append(currentLabel,menuCurrentName,menuCurrentChapter);
   const masthead=el("div","rh-terrace-masthead");
-  masthead.append(menu.shell.firstElementChild,menuHeading,menuCurrent);
+  masthead.append(menu.shell.firstElementChild,brandHeading,menuCurrent);
   const tree=el("nav","rh-terrace-tree");
   tree.setAttribute("aria-label","Research directory and chapter hierarchy");
   const guide=el("p","rh-terrace-guide","Choose a research area, then a topic or chapter.");
