@@ -200,14 +200,14 @@
 .rh-hyakka-invite:hover .rh-brand-heading-row,.rh-hyakka-invite:focus-visible .rh-brand-heading-row{filter:brightness(1.18);transform:translateY(-2px)}
 .rh-hyakka-invite:focus-visible{outline:1px solid #f5d99c;outline-offset:3px}
 .rh-hyakka-invite-caption{display:block;margin:-5px auto 12px;color:#f0d8a1;font:500 9px/1.5 var(--mono);letter-spacing:.14em}
-#hyakka-sakura-dialog{position:fixed;inset:0;width:100vw;height:100dvh;max-width:none;max-height:none;margin:0;padding:0;border:0;overflow:hidden;isolation:isolate;box-sizing:border-box;color:#f9e9c9;background:radial-gradient(ellipse at 50% 42%,#284c32 0%,#153927 39%,#091f18 93%);touch-action:none}
+#hyakka-sakura-dialog{position:fixed;inset:0;width:100vw;height:100dvh;max-width:none;max-height:none;margin:0;padding:0;border:0;overflow:hidden;isolation:isolate;box-sizing:border-box;color:#f9e9c9;background:#694329 radial-gradient(ellipse at 32% 17%,#b0844f25,transparent 53%),radial-gradient(ellipse at 50% 45%,#875937 0%,#694329 43%,#472b1c 78%,#29190f 100%);touch-action:none}
 #hyakka-sakura-dialog:not([open]){display:none}
 #hyakka-sakura-dialog[open]{display:grid;place-items:center}
-#hyakka-sakura-dialog::backdrop{background:#091f18}
+#hyakka-sakura-dialog::backdrop{background:#291a12}
 #hyakka-sakura-dialog canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
-#hyakka-sakura-dialog .hs-aura{position:absolute;inset:0;z-index:3;pointer-events:none;background:radial-gradient(ellipse at 50% 48%,#0d2a2088 0%,#122d2344 38%,transparent 70%)}
+#hyakka-sakura-dialog .hs-aura{position:absolute;inset:0;z-index:3;pointer-events:none;background:radial-gradient(ellipse at 50% 48%,#301c1088 0%,#462a1944 38%,transparent 70%)}
 #hyakka-sakura-dialog canvas{z-index:4}
-#hyakka-sakura-dialog .hs-title{z-index:5;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;max-width:96vw;filter:drop-shadow(0 3px 14px #071b13cc);pointer-events:none}
+#hyakka-sakura-dialog .hs-title{z-index:5;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;max-width:96vw;filter:drop-shadow(0 3px 14px #29180fcc);pointer-events:none}
 #hyakka-sakura-dialog .hs-crest{width:clamp(85px,18vh,176px);height:auto;margin-bottom:clamp(12px,2.2vh,24px);filter:drop-shadow(0 0 25px #f0c87555)}
 #hyakka-sakura-dialog .hs-japanese{font-family:"Noto Serif JP","Yu Mincho","Hiragino Mincho ProN","Noto Serif CJK JP",serif;font-size:clamp(40px,min(9.1vw,13.5vh),130px);font-weight:700;line-height:1.2;letter-spacing:.12em;padding-left:.12em;white-space:nowrap;margin:0;color:#f1d28c;background:linear-gradient(168deg,#fff4cd 10%,#e8b85d 51%,#ffedc0 74%,#b98638 100%);background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 #hyakka-sakura-dialog .hs-roman{display:flex;align-items:center;justify-content:center;gap:clamp(10px,2vw,30px);font:400 clamp(10px,1.6vw,21px)/1.5 Georgia,serif;letter-spacing:.26em;white-space:nowrap;margin:12px 0 clamp(15px,3vh,32px);color:#f3d79a}
@@ -231,14 +231,14 @@
 /* No fixed blossom border, no replay, no artwork caption. */
 .rh-hyakka-entry .rh-hyakka-invite{position:absolute;inset:0;height:100%;width:100%;z-index:1}
 .rh-hyakka-entry .rh-hyakka-invite::after{content:none}
-#hyakka-sakura-dialog{background:radial-gradient(ellipse at 36% 24%,#254c34 0%,#123b2b 35%,#071f18 72%,#041611 100%)}
-#hyakka-sakura-dialog .hs-aura{z-index:1;background:radial-gradient(ellipse at 50% 44%,#071d1666 0%,transparent 65%);pointer-events:none}
+
+#hyakka-sakura-dialog .hs-aura{z-index:1;background:radial-gradient(ellipse at 50% 44%,#28190f66 0%,transparent 65%);pointer-events:none}
 #hyakka-sakura-dialog .hs-back{z-index:2}
 #hyakka-sakura-dialog .hs-front{z-index:6}
-#hyakka-sakura-dialog .hs-title{z-index:5;filter:drop-shadow(0 2px 18px #04170f)}
+#hyakka-sakura-dialog .hs-title{z-index:5;filter:drop-shadow(0 2px 18px #201109)}
 #hyakka-sakura-dialog .hs-crest{filter:drop-shadow(0 0 18px #eec78455)}
-#hyakka-sakura-dialog .hs-close{position:absolute;right:max(22px,env(safe-area-inset-right));top:max(20px,env(safe-area-inset-top));z-index:8;width:44px;height:44px;display:grid;place-items:center;line-height:1;border:1px solid #e5c88c66;background:#102a20a6;color:#f6e6be;border-radius:50%;font:300 29px/1 Georgia,serif;cursor:pointer;transition:background .2s,border-color .2s}
-#hyakka-sakura-dialog .hs-close:hover,#hyakka-sakura-dialog .hs-close:focus-visible{background:#274e38;border-color:#f5dba1;outline:1px solid #f5dba1;outline-offset:3px}
+#hyakka-sakura-dialog .hs-close{position:absolute;right:max(22px,env(safe-area-inset-right));top:max(20px,env(safe-area-inset-top));z-index:8;width:44px;height:44px;display:grid;place-items:center;line-height:1;border:1px solid #e5c88c66;background:#382219b8;color:#f6e6be;border-radius:50%;font:300 29px/1 Georgia,serif;cursor:pointer;transition:background .2s,border-color .2s}
+#hyakka-sakura-dialog .hs-close:hover,#hyakka-sakura-dialog .hs-close:focus-visible{background:#71492d;border-color:#f5dba1;outline:1px solid #f5dba1;outline-offset:3px}
 
 /* Warm walnut and aged cherrywood; scoped to the private Hyakka Ryoran view. */
 #hyakka-sakura-dialog{
@@ -253,3 +253,7 @@
 #hyakka-sakura-dialog .hs-crest{filter:drop-shadow(0 0 22px #eac17c46)}
 #hyakka-sakura-dialog .hs-close{background:#382219b8;border-color:#e5c88c80}
 #hyakka-sakura-dialog .hs-close:hover,#hyakka-sakura-dialog .hs-close:focus-visible{background:#71492d;border-color:#f5dba1}
+
+/* Isolate the cherrywood artwork from the research site's green theme. */
+#hyakka-sakura-dialog[open]{background-color:#694329!important;background-image:radial-gradient(ellipse at 32% 17%,#b0844f25,transparent 53%),radial-gradient(ellipse at 50% 45%,#875937 0%,#694329 43%,#472b1c 78%,#29190f 100%)!important}
+#hyakka-sakura-dialog .hs-back,#hyakka-sakura-dialog .hs-front{background:transparent!important}
