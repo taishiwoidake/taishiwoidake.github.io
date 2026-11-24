@@ -74,7 +74,7 @@
   const brandHeading=el("div","rh-brand-heading-row");
   const brandIcon=el("img","rh-brand-crest");brandIcon.src="hyakka-ryoran.svg?v=1";brandIcon.alt="";brandIcon.width=55;brandIcon.height=55;
   const brandCopy=el("div","rh-brand-heading-copy");
-  brandCopy.append(menuHeading,el("p","rh-brand-roman","Hyakka Ryoran · Research in Bloom"));
+  brandCopy.append(menuHeading,el("p","rh-brand-roman","HYAKKA RYORAN"),el("p","rh-brand-tagline","Research in Bloom"));
   brandHeading.append(brandIcon,brandCopy);
   const menuCurrent=el("div","rh-current-block");
   const menuCurrentName=el("strong","",parents[page]?parents[page]+" / "+current.short:current.name);
@@ -85,7 +85,7 @@
   masthead.append(menu.shell.firstElementChild,brandHeading,menuCurrent);
   const tree=el("nav","rh-terrace-tree");
   tree.setAttribute("aria-label","Research directory and chapter hierarchy");
-  const guide=el("p","rh-terrace-guide","Choose a research area, then a topic or chapter.");
+  const guide=el("p","rh-terrace-guide","Explore by field, topic or chapter.");
   const chapterList=el("ul","rh-terrace-chapters");
   const chapterTitle=el("div","rh-terrace-chapter-label","CHAPTERS");
   const chapters=el("div","rh-terrace-chapter-block");
