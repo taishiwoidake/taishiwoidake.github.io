@@ -113,3 +113,16 @@
 @media(max-width:560px){.rh-nav-dialog{width:min(440px,calc(100vw - 10px))}.rh-nav-dialog .rh-terrace-masthead{padding:15px 16px 12px}.rh-nav-dialog .rh-terrace-guide{padding-left:16px;padding-right:16px}.rh-nav-dialog .rh-terrace-tree{padding-left:16px;padding-right:15px}.rh-nav-dialog .rh-terrace-group-name{font-size:18px}.rh-nav-dialog .rh-terrace-page-name{font-size:14px}.rh-nav-dialog .rh-terrace-children{margin-left:13px!important;padding-left:10px!important}.rh-nav-dialog .rh-terrace-chapter-block{margin-left:13px;padding-left:10px}.rh-nav-dialog .rh-terrace-children>.rh-terrace-node::before,.rh-nav-dialog .rh-terrace-chapter::before{left:-11px;width:8px}}
 @media(max-height:650px){.rh-nav-dialog .rh-terrace-masthead{padding-top:12px;padding-bottom:10px}.rh-nav-dialog .rh-terrace-masthead .rh-dialog-heading{font-size:27px;margin:7px 0 10px}.rh-nav-dialog .rh-current-block{padding:8px 12px}.rh-nav-dialog .rh-current-block strong{font-size:18px}.rh-nav-dialog .rh-terrace-guide{padding-top:7px;padding-bottom:5px}}
 @media(prefers-reduced-motion:reduce){.rh-nav-dialog .rh-terrace-chevron,.rh-nav-dialog .rh-terrace-page{transition:none}}
+
+/* 百花繚乱 / Hyakka Ryoran — site identity, additive to existing navigation. */
+.rh-waypoint .rh-waypoint-icon{border:0;background:none}
+.rh-waypoint .rh-waypoint-crest{display:block;width:100%;height:100%;object-fit:contain}
+.rh-waypoint .rh-waypoint-kicker{font-family:"Yu Mincho","Hiragino Mincho ProN",serif;font-size:10px;letter-spacing:.05em}
+.rh-nav-dialog .rh-brand-heading-row{display:flex;align-items:center;gap:14px;margin:15px 0 17px}
+.rh-nav-dialog .rh-brand-crest{display:block;width:55px;height:55px;flex:0 0 55px;filter:drop-shadow(0 2px 7px #081e1590)}
+.rh-nav-dialog .rh-brand-heading-copy{flex:1;min-width:0}
+.rh-nav-dialog .rh-brand-heading-row .rh-brand-heading{font-family:"Yu Mincho","Hiragino Mincho ProN","Noto Serif CJK JP",serif;font-size:clamp(28px,4vw,36px);line-height:1.15;font-weight:500;letter-spacing:.1em;color:#fff1cc;margin:0 0 5px;word-break:keep-all}
+.rh-nav-dialog .rh-brand-roman{font:400 11px/1.45 var(--sans);color:#d6d9bb;margin:0;letter-spacing:.035em}
+@media(max-width:560px){.rh-nav-dialog .rh-brand-heading-row{gap:11px;margin:12px 0 14px}.rh-nav-dialog .rh-brand-crest{width:47px;height:47px;flex-basis:47px}.rh-nav-dialog .rh-brand-heading-row .rh-brand-heading{font-size:29px}.rh-nav-dialog .rh-brand-roman{font-size:10px}}
+@media(max-height:650px){.rh-nav-dialog .rh-brand-heading-row{margin:8px 0 10px}.rh-nav-dialog .rh-brand-crest{width:43px;height:43px;flex-basis:43px}.rh-nav-dialog .rh-brand-heading-row .rh-brand-heading{font-size:27px}}
+@media(prefers-reduced-motion:no-preference){.rh-waypoint .rh-waypoint-crest{transition:transform .35s ease}.rh-waypoint:hover .rh-waypoint-crest,.rh-waypoint:focus-visible .rh-waypoint-crest{transform:rotate(8deg)}}
