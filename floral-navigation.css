@@ -60,3 +60,56 @@
 @media(max-width:560px){.rh-waypoint{left:8px;top:66px;max-width:calc(100vw - 16px);padding:4px 7px;gap:6px}.rh-waypoint-icon{width:25px;height:25px;flex-basis:25px}.rh-waypoint-text{gap:2px}.rh-waypoint-kicker{display:none}.rh-waypoint-page{font-size:11px}.rh-waypoint-chapter{font-size:7px}.rh-dialog-shell{padding:20px}.rh-dialog-heading{font-size:36px}.rh-preview-two{grid-template-columns:1fr;gap:13px}.rh-preview-two h3{font-size:21px}.rh-dialog-intro{font-size:13px}.rh-research-dialog{max-height:91dvh}}
 @media(max-height:650px) and (min-width:561px){.rh-waypoint{top:78px;max-width:148px}.rh-waypoint-page{font-size:12px}}
 @media(prefers-reduced-motion:no-preference){.rh-nav-dialog[open]{animation:rh-nav-open .25s ease-out}.rh-research-dialog[open]{animation:rh-preview-open .23s ease-out}@keyframes rh-nav-open{from{transform:translateX(-30px);opacity:0}to{transform:translateX(0);opacity:1}}@keyframes rh-preview-open{from{transform:translateY(12px) scale(.98);opacity:0}to{transform:translateY(0) scale(1);opacity:1}}}
+
+
+/* Terraced directory — applies only while the left menu is open.
+   The compact location button and expanded research popups stay unchanged. */
+.rh-nav-dialog{width:min(460px,calc(100vw - 12px));overflow:hidden}
+.rh-nav-dialog .rh-dialog-shell{height:100%;box-sizing:border-box;display:flex;flex-direction:column;min-height:0;padding:0;overflow:hidden}
+.rh-nav-dialog .rh-terrace-masthead{flex:none;padding:21px 24px 15px;border-bottom:1px solid #d8c69850;background:linear-gradient(145deg,#284633,#1b362a)}
+.rh-nav-dialog .rh-terrace-masthead .rh-dialog-heading{font-size:clamp(29px,4vw,38px);margin:12px 0 15px;letter-spacing:-.04em}
+.rh-nav-dialog .rh-current-block{margin:0;padding:12px 15px;border-left:3px solid #e2c78e;background:#102d22c7}
+.rh-nav-dialog .rh-current-block small{font-size:9px;letter-spacing:.11em}
+.rh-nav-dialog .rh-current-block strong{font-size:21px;line-height:1.24;margin:6px 0}
+.rh-nav-dialog .rh-current-block p{font-size:12px;line-height:1.45;color:#e2ead8}
+.rh-nav-dialog .rh-terrace-guide{flex:none;margin:0;padding:11px 24px 8px;font:400 12px/1.5 var(--sans);color:#c9d7c3}
+.rh-nav-dialog .rh-terrace-tree{display:block;flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:#acb28a80 transparent;padding:4px 22px 30px 24px;scroll-padding:10px}
+.rh-nav-dialog .rh-terrace-tree ul{list-style:none;padding:0;margin:0}
+.rh-nav-dialog .rh-terrace-group{margin:0 0 14px;padding:0;border:1px solid #cdd7ad2e;background:#122e2355}
+.rh-nav-dialog .rh-terrace-group-title{display:flex;align-items:center;gap:11px;padding:12px 12px;list-style:none;cursor:pointer;background:linear-gradient(110deg,#426047a8,#2a493680);color:#fff1cf;border-bottom:1px solid #c7c99e26}
+.rh-nav-dialog .rh-terrace-group-title::-webkit-details-marker{display:none}
+.rh-nav-dialog .rh-terrace-group-title::marker{content:""}
+.rh-nav-dialog .rh-terrace-index{font:500 11px/1 var(--mono);color:#e6ce96;flex:none;letter-spacing:.04em}
+.rh-nav-dialog .rh-terrace-group-name{font:400 19px/1.2 var(--serif);flex:1;min-width:0;overflow-wrap:anywhere}
+.rh-nav-dialog .rh-terrace-chevron{font:400 20px/1 var(--sans);flex:none;color:#e1c890;transform:rotate(-90deg);transition:transform .18s}
+.rh-nav-dialog .rh-terrace-group[open]>.rh-terrace-group-title .rh-terrace-chevron{transform:rotate(0)}
+.rh-nav-dialog .rh-terrace-current-group{border-color:#ddc58b81}
+.rh-nav-dialog .rh-terrace-current-group>.rh-terrace-group-title{background:linear-gradient(110deg,#63734cbf,#36533bd9)}
+.rh-nav-dialog .rh-terrace-programmes{padding:7px 9px 9px!important}
+.rh-nav-dialog .rh-terrace-node{position:relative;margin:3px 0;min-width:0}
+.rh-nav-dialog .rh-terrace-page{display:flex;align-items:center;justify-content:space-between;gap:9px;min-height:39px;box-sizing:border-box;padding:8px 10px;color:#f3efdd;background:#21413280;border:1px solid transparent;text-decoration:none;text-align:left;transition:background .16s,border-color .16s}
+.rh-nav-dialog .rh-terrace-page-copy{display:flex;flex-direction:column;gap:3px;min-width:0}
+.rh-nav-dialog .rh-terrace-page-name{font:500 14px/1.4 var(--sans);overflow-wrap:anywhere}
+.rh-nav-dialog .rh-terrace-page-sub{font:400 11px/1.4 var(--sans);color:#c4d4bc}
+.rh-nav-dialog .rh-terrace-page-mark{font:500 9px/1 var(--mono);color:#b9c9ac;flex:none}
+.rh-nav-dialog .rh-terrace-children{margin:5px 0 9px 17px!important;padding-left:12px!important;border-left:1px solid #c4bd8580}
+.rh-nav-dialog .rh-terrace-children>.rh-terrace-node::before{content:"";position:absolute;left:-13px;top:19px;width:10px;height:1px;background:#c4bd8580}
+.rh-nav-dialog .rh-terrace-children .rh-terrace-page{background:#19362980;min-height:37px;padding:8px 9px}
+.rh-nav-dialog .rh-terrace-children .rh-terrace-page-name{font-weight:400;font-size:13px;color:#e2ead7}
+.rh-nav-dialog .rh-terrace-on-path>.rh-terrace-page{border-left:2px solid #b3b67b;background:#354e37a0}
+.rh-nav-dialog .rh-terrace-page[aria-current=page]{border:1px solid #e5ca8c;border-left:3px solid #f5d99c;background:linear-gradient(110deg,#596848,#3b5238);color:#fff5d9}
+.rh-nav-dialog .rh-terrace-page[aria-current=page] .rh-terrace-page-mark{color:#ffe1a3}
+.rh-nav-dialog .rh-terrace-page:hover,.rh-nav-dialog .rh-terrace-chapter-button:hover,.rh-nav-dialog .rh-terrace-group-title:hover{background:#4d6545}
+.rh-nav-dialog .rh-terrace-chapter-block{margin:7px 0 11px 17px;padding:3px 0 5px 12px;border-left:1px solid #e6cd96aa}
+.rh-nav-dialog .rh-terrace-chapter-label{font:500 9px/1.5 var(--mono);letter-spacing:.11em;color:#d9cc9e;padding:2px 8px 6px}
+.rh-nav-dialog .rh-terrace-chapter{position:relative;margin:2px 0}
+.rh-nav-dialog .rh-terrace-chapter::before{content:"";position:absolute;left:-13px;top:17px;width:10px;height:1px;background:#e6cd9699}
+.rh-nav-dialog .rh-terrace-chapter-button{width:100%;display:flex;align-items:center;gap:9px;padding:8px 9px;min-height:34px;text-align:left;color:#dce6d1;cursor:pointer;background:#122c2275;border:1px solid transparent;box-sizing:border-box}
+.rh-nav-dialog .rh-terrace-chapter-number{font:500 10px/1 var(--mono);color:#c6bd93;flex:none}
+.rh-nav-dialog .rh-terrace-chapter-name{font:400 12px/1.45 var(--sans);flex:1;min-width:0;overflow-wrap:anywhere}
+.rh-nav-dialog .rh-terrace-chapter-button .rh-active-mark{font:500 8px/1 var(--mono);color:#ffe1a3;flex:none}
+.rh-nav-dialog .rh-terrace-chapter-button[aria-current=step]{background:#5c6843;border-color:#e9cf91;color:#fff7dc}
+.rh-nav-dialog .rh-terrace-page:focus-visible,.rh-nav-dialog .rh-terrace-group-title:focus-visible,.rh-nav-dialog .rh-terrace-chapter-button:focus-visible{outline:2px solid #f2d7a0;outline-offset:-2px}
+@media(max-width:560px){.rh-nav-dialog{width:min(440px,calc(100vw - 10px))}.rh-nav-dialog .rh-terrace-masthead{padding:15px 16px 12px}.rh-nav-dialog .rh-terrace-guide{padding-left:16px;padding-right:16px}.rh-nav-dialog .rh-terrace-tree{padding-left:16px;padding-right:15px}.rh-nav-dialog .rh-terrace-group-name{font-size:18px}.rh-nav-dialog .rh-terrace-page-name{font-size:14px}.rh-nav-dialog .rh-terrace-children{margin-left:13px!important;padding-left:10px!important}.rh-nav-dialog .rh-terrace-chapter-block{margin-left:13px;padding-left:10px}.rh-nav-dialog .rh-terrace-children>.rh-terrace-node::before,.rh-nav-dialog .rh-terrace-chapter::before{left:-11px;width:8px}}
+@media(max-height:650px){.rh-nav-dialog .rh-terrace-masthead{padding-top:12px;padding-bottom:10px}.rh-nav-dialog .rh-terrace-masthead .rh-dialog-heading{font-size:27px;margin:7px 0 10px}.rh-nav-dialog .rh-current-block{padding:8px 12px}.rh-nav-dialog .rh-current-block strong{font-size:18px}.rh-nav-dialog .rh-terrace-guide{padding-top:7px;padding-bottom:5px}}
+@media(prefers-reduced-motion:reduce){.rh-nav-dialog .rh-terrace-chevron,.rh-nav-dialog .rh-terrace-page{transition:none}}
