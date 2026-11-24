@@ -76,13 +76,29 @@
   const brandCopy=el("div","rh-brand-heading-copy");
   brandCopy.append(menuHeading,el("p","rh-brand-roman","HYAKKA RYORAN"),el("p","rh-brand-tagline","Research in Bloom"));
   brandHeading.append(brandIcon,brandCopy);
+  const brandEntry=el("div","rh-hyakka-entry");
+  const brandOpen=btn("rh-hyakka-invite rh-hyakka-invite-caption","ENTER SAKURA GARDEN ↗");
+  brandOpen.setAttribute("aria-label","Open the Hyakka Ryoran sakura artwork");
+  brandOpen.setAttribute("aria-haspopup","dialog");
+  brandEntry.append(brandHeading,brandOpen);
+  brandOpen.addEventListener("click",async()=>{
+    if(brandOpen.disabled)return;
+    brandOpen.disabled=true;brandOpen.textContent="OPENING SAKURA GARDEN…";
+    try{
+      const {openSakura}=await import("./hyakka-sakura.js?v=20261125-1");
+      if(menu.dlg.open){menu.dlg.close();openSakura();}
+      brandOpen.textContent="ENTER SAKURA GARDEN ↗";
+    }catch(e){brandOpen.textContent="RETRY SAKURA GARDEN ↗";console.error(e);}
+    finally{brandOpen.disabled=false;}
+  });
+
   const menuCurrent=el("div","rh-current-block");
   const menuCurrentName=el("strong","",parents[page]?parents[page]+" / "+current.short:current.name);
   const menuCurrentChapter=el("p");
   const currentLabel=el("small","","YOU ARE HERE");
   menuCurrent.append(currentLabel,menuCurrentName,menuCurrentChapter);
   const masthead=el("div","rh-terrace-masthead");
-  masthead.append(menu.shell.firstElementChild,brandHeading,menuCurrent);
+  masthead.append(menu.shell.firstElementChild,brandEntry,menuCurrent);
   const tree=el("nav","rh-terrace-tree");
   tree.setAttribute("aria-label","Research directory and chapter hierarchy");
   const guide=el("p","rh-terrace-guide","Explore by field, topic or chapter.");
@@ -324,7 +340,7 @@
   });
   // Native modal scroll and keyboard handling take precedence over the
   // unchanged global garden wheel/keyboard navigation while either is open.
-  function modalOpen(){return menu.dlg.open||preview.dlg.open;}
+  function modalOpen(){return menu.dlg.open||preview.dlg.open||!!document.getElementById('hyakka-sakura-dialog')?.open;}
   window.addEventListener("wheel",e=>{if(modalOpen())e.stopImmediatePropagation();},{capture:true,passive:true});
   window.addEventListener("keydown",e=>{
     if(modalOpen()&&["ArrowLeft","ArrowRight","PageDown","PageUp","Home","End"," "].includes(e.key))e.stopImmediatePropagation();
