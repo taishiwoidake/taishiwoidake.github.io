@@ -77,18 +77,18 @@
   brandCopy.append(menuHeading,el("p","rh-brand-roman","HYAKKA RYORAN"),el("p","rh-brand-tagline","Research in Bloom"));
   brandHeading.append(brandIcon,brandCopy);
   const brandEntry=el("div","rh-hyakka-entry");
-  const brandOpen=btn("rh-hyakka-invite rh-hyakka-invite-caption","ENTER SAKURA GARDEN ↗");
+  const brandOpen=btn("rh-hyakka-invite","");
   brandOpen.setAttribute("aria-label","Open the Hyakka Ryoran sakura artwork");
   brandOpen.setAttribute("aria-haspopup","dialog");
   brandEntry.append(brandHeading,brandOpen);
   brandOpen.addEventListener("click",async()=>{
     if(brandOpen.disabled)return;
-    brandOpen.disabled=true;brandOpen.textContent="OPENING SAKURA GARDEN…";
+    brandOpen.disabled=true;
     try{
-      const {openSakura}=await import("./hyakka-sakura.js?v=20261125-1");
+      const {openSakura}=await import("./hyakka-sakura.js?v=20261125-3");
       if(menu.dlg.open){menu.dlg.close();openSakura();}
-      brandOpen.textContent="ENTER SAKURA GARDEN ↗";
-    }catch(e){brandOpen.textContent="RETRY SAKURA GARDEN ↗";console.error(e);}
+
+    }catch(e){console.error(e);}
     finally{brandOpen.disabled=false;}
   });
 

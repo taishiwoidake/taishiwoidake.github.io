@@ -1,87 +1,110 @@
-/* Optional artwork experience. Never runs on ordinary page load. */
-let dialog;
-let raf=0, run=0, assets=null, resize=null;
-const media=matchMedia("(prefers-reduced-motion: reduce)");
-const regions=[[294,55,57,56],[204,240,74,55],[281,414,45,45],[405,325,43,30],[481,349,45,54],[618,16,64,76],[698,44,87,66],[138,91,57,70],[370,100,30,33],[534,28,34,44],[289,337,43,62],[636,232,39,34]].map(([x,y,w,h])=>[x/840,y/473,w/840,h/473]);
-const clamp=x=>Math.max(0,Math.min(1,x));
-const phase=(t,a,b)=>{const x=clamp((t-a)/(b-a));return x*x*(3-2*x)};
-function build(){
-  const d=document.createElement("dialog");
-  d.id="hyakka-sakura-dialog";d.setAttribute("aria-labelledby","hs-heading");
-  d.innerHTML='<img class="hs-art hs-frame" alt="" aria-hidden="true"><img class="hs-art hs-burst" alt="" aria-hidden="true"><div class="hs-aura" aria-hidden="true"></div><canvas aria-hidden="true"></canvas><div class="hs-title"><img class="hs-crest" src="/hyakka-ryoran.svg?v=1" alt="" width="176" height="176"><h2 class="hs-japanese" id="hs-heading" lang="ja">百花繚乱</h2><p class="hs-roman">HYAKKA RYORAN</p><p class="hs-name">Ryunosuke Hirata</p><p class="hs-name-ja" lang="ja">平田 隆之介</p></div><div class="hs-controls"><button type="button" data-replay>REPLAY ↻</button><button type="button" data-close>RETURN TO SITE ×</button></div><span class="hs-credit">AI-generated sakura artwork</span>';
-  document.body.append(d);
-  d.querySelector("[data-close]").addEventListener("click",()=>d.close());
-  d.querySelector("[data-replay]").addEventListener("click",()=>play());
-  d.addEventListener("close",()=>{run++;cancelAnimationFrame(raf);if(resize)window.removeEventListener("resize",resize);resize=null;document.querySelector(".rh-waypoint")?.focus({preventScroll:true})});
-  return d;
+/* Hyakka Ryoran: a quiet, living storm of individually isolated sakura petals. */
+let dialog, raf=0, generation=0, resize=null, atlasPromise;
+const reduced=matchMedia("(prefers-reduced-motion: reduce)");
+const clamp=(x,a=0,b=1)=>Math.max(a,Math.min(b,x));
+const smooth=(t,a,b)=>{const x=clamp((t-a)/(b-a));return x*x*(3-2*x)};
+const tau=Math.PI*2;
+// Measured alpha-component bounds in the saved 1672 x 941 transparent artwork.
+// These are discrete petals, with no surrounding branches or photographic rectangle.
+const boxes=[[1362,91,197,139],[1140,753,137,148],[2,142,143,100],[279,184,168,132],[411,488,137,91],[588,108,108,110],[1120,45,70,122],[960,706,74,89],[563,833,85,79],[25,639,103,57],[1564,171,94,71],[293,391,98,65],[28,344,77,60],[538,214,85,72],[629,19,53,82],[328,545,71,72],[1040,169,83,59],[230,359,88,44],[806,653,74,44],[395,311,57,59],[132,391,50,59],[1257,311,64,46],[684,613,44,60],[1132,210,55,48],[445,314,57,39],[1083,794,39,50]];
+function loadSprites(){
+  if(!atlasPromise)atlasPromise=import("./hyakka-sakura-burst.js").then(async m=>{
+    const im=new Image();im.src=m.default;await im.decode();
+    const sx=im.naturalWidth/1672,sy=im.naturalHeight/941;
+    return boxes.map(([x,y,w,h])=>{
+      const c=document.createElement("canvas");c.width=Math.max(1,Math.round(w*sx));c.height=Math.max(1,Math.round(h*sy));
+      const ctx=c.getContext("2d",{willReadFrequently:true});
+      ctx.drawImage(im,x*sx,y*sy,w*sx,h*sy,0,0,c.width,c.height);
+      // Retain only the largest connected alpha component in each crop.
+      const pix=ctx.getImageData(0,0,c.width,c.height),d=pix.data,W=c.width,H=c.height,N=W*H,labels=new Int32Array(N);
+      let id=0,best=0,largest=0;
+      for(let p=0;p<N;p++){if(labels[p]||d[p*4+3]<25)continue;id++;const queue=[p];labels[p]=id;
+        for(let k=0;k<queue.length;k++){const q=queue[k],xx=q%W,yy=(q/W)|0;for(const n of [xx>0?q-1:-1,xx<W-1?q+1:-1,yy>0?q-W:-1,yy<H-1?q+W:-1]){if(n>=0&&!labels[n]&&d[n*4+3]>=25){labels[n]=id;queue.push(n)}}}
+        if(queue.length>largest){largest=queue.length;best=id}
+      }
+      for(let p=0;p<N;p++)if(labels[p]!==best)d[p*4+3]=0;
+      ctx.putImageData(pix,0,0);
+      return c;
+    }).filter(c=>c.width>0&&c.height>0);
+  }).catch(e=>{atlasPromise=null;throw e});
+  return atlasPromise;
 }
-async function load(){
-  if(!assets){
-    assets=Promise.all([import("./hyakka-sakura-frame.js"),import("./hyakka-sakura-burst.js")]).then(async ([f,b])=>{
-      const a=dialog.querySelector(".hs-frame"),c=dialog.querySelector(".hs-burst");
-      a.src=f.default;c.src=b.default;
-      await Promise.all([a.decode(),c.decode()]);
-      return {a,c};
-    }).catch(e=>{assets=null;throw e});
-  }
-  return assets;
+function makeDialog(){
+ const d=document.createElement("dialog");d.id="hyakka-sakura-dialog";d.setAttribute("aria-labelledby","hs-heading");
+ d.innerHTML='<div class="hs-aura" aria-hidden="true"></div><canvas class="hs-back" aria-hidden="true"></canvas><div class="hs-title"><img class="hs-crest" src="/hyakka-ryoran.svg?v=1" width="176" height="176" alt=""><h2 class="hs-japanese" id="hs-heading" lang="ja">百花繚乱</h2><p class="hs-roman">HYAKKA RYORAN</p><p class="hs-name">Ryunosuke Hirata</p><p class="hs-name-ja" lang="ja">平田 隆之介</p></div><canvas class="hs-front" aria-hidden="true"></canvas><button class="hs-close" type="button" aria-label="Return to site" title="Return to site">×</button>';
+ document.body.append(d);d.querySelector(".hs-close").addEventListener("click",()=>d.close());
+ d.addEventListener("close",()=>{generation++;cancelAnimationFrame(raf);if(resize)window.removeEventListener("resize",resize);resize=null;document.querySelector(".rh-waypoint")?.focus({preventScroll:true})});
+ return d;
 }
 async function play(){
-  const token=++run;cancelAnimationFrame(raf);
-  if(resize)window.removeEventListener("resize",resize);
-  const title=dialog.querySelector(".hs-title"),canvas=dialog.querySelector("canvas"),ctx=canvas.getContext("2d");
-  const a=dialog.querySelector(".hs-frame"),b=dialog.querySelector(".hs-burst"),credit=dialog.querySelector(".hs-credit");
-  title.style.opacity="1";title.style.transform="none";
-  a.style.opacity="0";b.style.opacity="0";credit.textContent="AI-generated sakura artwork";
-  let w=1,h=1;
-  resize=()=>{w=dialog.clientWidth||innerWidth;h=dialog.clientHeight||innerHeight;const dpr=Math.min(devicePixelRatio||1,1.8);canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr);ctx?.setTransform(dpr,0,0,dpr,0,0)};
-  resize();window.addEventListener("resize",resize,{passive:true});
-  try{await load()}catch(e){if(token===run&&dialog.open)credit.textContent="Sakura artwork could not load. Return or replay.";return}
-  if(token!==run||!dialog.open)return;
-  if(media.matches){a.style.opacity=".96";return}
-  // The same transparent photographic-style AI image crops as the saved intro.
-  const count=w<650?160:320;
-  let seed=39411;
-  function random(){seed=(1664525*seed+1013904223)>>>0;return seed/4294967296}
-  const petals=Array.from({length:count},(_,i)=>({angle:i*2.39996323+(random()-.5)*.75,delay:random()*.85,speed:.48+random()*1.05,size:10+Math.pow(random(),1.65)*54,rotation:random()*6.28,spin:(random()-.5)*5,flutter:2+random()*5,phase:random()*6.28,depth:random(),sprite:i%regions.length}));
-  const drift=Array.from({length:w<650?33:66},(_,i)=>({x:random(),y:random(),size:7+random()*24,phase:random()*6.28,rotation:random()*6.28,spin:(random()-.5)*.9,sprite:i%regions.length}));
-  function sprite(p,x,y,size,rotation,flip,alpha){
-    if(!ctx||alpha<=0||!b.naturalWidth||x< -size||x>w+size||y< -size||y>h+size)return;
-    const [rx,ry,rw,rh]=regions[p.sprite],sw=rw*b.naturalWidth,sh=rh*b.naturalHeight,hh=size*sh/sw;
-    ctx.save();ctx.translate(x,y);ctx.rotate(rotation);ctx.scale(Math.max(.22,Math.abs(flip)),1);ctx.globalAlpha=clamp(alpha);ctx.drawImage(b,rx*b.naturalWidth,ry*b.naturalHeight,sw,sh,-size/2,-hh/2,size,hh);ctx.restore();
-  }
-  let start=null;
-  function tick(now){
-    if(token!==run||!dialog.open)return;
-    if(start===null)start=now;
-    const t=(now-start)/1000,len=Math.hypot(w,h);
-    a.style.opacity=String(.98*phase(t,.18,1.8));
-    a.style.transform="scale("+(1.13-.12*phase(t,0,3.5))+")";
-    b.style.opacity=String(phase(t,0,.36)*(1-phase(t,.65,2.65)));
-    b.style.transform="scale("+(.62+1.55*phase(t,0,2.9))+")";
-    const show=phase(t,.45,2.05);title.style.opacity=String(.18+.82*show);title.style.transform="translateY("+(12*(1-show))+"px) scale("+(.93+.07*show)+")";
-    if(ctx){
-      ctx.clearRect(0,0,w,h);
-      if(t<5.9)for(const p of petals){
-        const age=t-p.delay;if(age<0)continue;
-        const travel=1-Math.exp(-age*(.65+p.depth*.6)),rad=len*(.02+p.speed*travel*.73),angle=p.angle+.2*age*(p.depth-.35);
-        const x=w*.5+Math.cos(angle)*rad+Math.sin(age*2.8+p.phase)*24,y=h*.43+Math.sin(angle)*rad*.91+age*age*8+Math.cos(age*2+p.phase)*17;
-        sprite(p,x,y,p.size*(.6+age*.30+p.depth*.8),p.rotation+age*p.spin,Math.cos(age*p.flutter+p.phase),phase(age,0,.23)*(1-phase(age,3.3,4.9)));
-      }
-      if(t>1.8)for(const p of drift){
-        const x=(p.x*w+t*23+Math.sin(t*.7+p.phase)*34+w)%w,y=((p.y*h+t*(24+p.size*.9))%(h+80))-40;
-        const center=1-.74*Math.exp(-((x/w-.5)**2*22+(y/h-.48)**2*13));
-        sprite(p,x,y,p.size,p.rotation+t*p.spin,Math.cos(t*.8+p.phase),phase(t,1.8,3)*center*.8);
-      }
-    }
-    if(media.matches){a.style.opacity=".98";b.style.opacity="0";title.style.opacity="1";title.style.transform="none";ctx?.clearRect(0,0,w,h);return}
-    raf=requestAnimationFrame(tick);
-  }
-  raf=requestAnimationFrame(tick);
+ const token=++generation;cancelAnimationFrame(raf);if(resize)window.removeEventListener("resize",resize);
+ const title=dialog.querySelector(".hs-title"),back=dialog.querySelector(".hs-back"),front=dialog.querySelector(".hs-front");
+ const bg=back.getContext("2d"),fg=front.getContext("2d");let w=1,h=1;
+ resize=()=>{w=dialog.clientWidth||innerWidth;h=dialog.clientHeight||innerHeight;const dpr=Math.min(devicePixelRatio||1,1.7);for(const [c,ctx] of [[back,bg],[front,fg]]){c.width=Math.round(w*dpr);c.height=Math.round(h*dpr);ctx?.setTransform(dpr,0,0,dpr,0,0)}};
+ resize();window.addEventListener("resize",resize,{passive:true});title.style.opacity="1";
+ let sprites;try{sprites=await loadSprites()}catch(e){console.error("Sakura artwork unavailable",e);return}
+ if(token!==generation||!dialog.open||!bg||!fg||!sprites.length)return;
+ let seed=728153;
+ const rnd=()=>{seed=(Math.imul(1664525,seed)+1013904223)>>>0;return seed/4294967296};
+ const mobile=w<650;
+ // 3 depth planes: distant light petals, mid-ground sakura, and a few large
+ // foreground petals with a softer focus. Wind speeds vary over time.
+ const count=mobile?215:415;
+ const petals=Array.from({length:count},(_,i)=>{
+   const z=rnd(),near=z>.89,far=z<.40;
+   return {z,near,far,x:rnd(),y:rnd(),angle:rnd()*tau,phase:rnd()*tau,spin:(rnd()-.5)*(near?1.5:2.2),roll:1.1+rnd()*2.6,
+     size:near?42+rnd()*65:far?5+rnd()*12:13+rnd()*27,
+     velocity:near?100+rnd()*80:far?18+rnd()*34:40+rnd()*65,
+     drift:12+rnd()*55,sprite:i%sprites.length,opacity:far?.28+rnd()*.35:.63+rnd()*.32};
+ });
+ const burst=Array.from({length:mobile?85:155},(_,i)=>({p:petals[i%petals.length],a:i*2.39996323+(rnd()-.5)*.68,delay:rnd()*1.15,speed:.24+rnd()*.8,spread:rnd()*.12}));
+ const gold=Array.from({length:mobile?36:90},()=>({x:rnd(),y:rnd(),r:.35+rnd()*1.15,phase:rnd()*tau,z:rnd()}));
+ function paint(ctx,p,x,y,size,rot,flip,alpha){
+   if(alpha<.012||x< -size*2||x>w+size*2||y< -size*2||y>h+size*2)return;
+   const img=sprites[p.sprite],hh=size*img.height/img.width;
+   ctx.save();ctx.translate(x,y);ctx.rotate(rot);ctx.scale(Math.max(.16,Math.abs(flip)),1);ctx.globalAlpha=clamp(alpha);
+   if(p.near&&size>55)ctx.filter="blur("+Math.min(2.6,size/40)+"px)";
+   ctx.drawImage(img,-size/2,-hh/2,size,hh);ctx.restore();
+ }
+ const wrap=(v,range)=>((v%range)+range)%range;
+ function field(t,still=false){
+   bg.clearRect(0,0,w,h);fg.clearRect(0,0,w,h);
+   const scale=Math.max(.7,Math.min(1.3,Math.sqrt(w*h/1000000))),diag=Math.hypot(w,h);
+   const gust=1+.35*Math.sin(t*.85)+.19*Math.sin(t*1.71);
+   for(const p of petals){
+     const travel=t*p.velocity*(.8+.2*gust),pad=120;
+     const x=wrap(p.x*(w+2*pad)+travel*.91+Math.sin(t*.55+p.phase)*p.drift+Math.sin(t*.19+p.phase)*45,w+2*pad)-pad;
+     const y=wrap(p.y*(h+2*pad)+travel*.57+Math.cos(t*.7+p.phase)*p.drift*.65,h+2*pad)-pad;
+     const center=Math.exp(-(((x/w-.5)*2.8)**2+((y/h-.48)*2.7)**2)*3.2);
+     const a=p.opacity*(1-(p.near?.95:.72)*center)*(still?1:smooth(t,.02,1.65));
+     // Foreground particles cross the plane of the lettering, but thin out in its center.
+     paint(p.near?fg:bg,p,x,y,p.size*scale*(.89+.13*Math.sin(t*.85+p.phase)),p.angle+t*p.spin+Math.sin(t*.58+p.phase)*.32,Math.cos(t*p.roll+p.phase),a);
+   }
+   if(!still&&t<6.8)for(const {p,a,delay,speed,spread} of burst){
+     const age=t-delay;if(age<0)continue;
+     const r=diag*(spread+speed*(1-Math.exp(-age*.53))*.77),angle=a+age*.13;
+     const x=w*.5+Math.cos(angle)*r+Math.sin(age*1.8+p.phase)*28,y=h*.43+Math.sin(angle)*r*.74+age*age*5;
+     paint(p.near?fg:bg,p,x,y,p.size*scale*(.65+age*.24),p.angle+age*p.spin,Math.cos(age*p.roll+p.phase),p.opacity*smooth(age,0,.45)*(1-smooth(age,3.1,5.7)));
+   }
+   // Subtle, dim gold motes behind the petals, never a fixed wreath.
+   bg.fillStyle="#f2d79b";
+   for(const p of gold){const x=wrap(p.x*w+t*(8+p.z*18),w),y=wrap(p.y*h-t*(3+p.z*8),h),a=(.15+.13*Math.sin(t*1.8+p.phase))*smooth(t,0,1.4);bg.globalAlpha=a;bg.beginPath();bg.arc(x,y,p.r,0,tau);bg.fill()}
+   bg.globalAlpha=1;
+ }
+ if(reduced.matches){field(1.8,true);return}
+ let start=null;
+ function tick(now){
+   if(token!==generation||!dialog.open)return;
+   if(start===null)start=now;const t=(now-start)/1000;
+   if(reduced.matches){field(1.8,true);title.style.opacity="1";title.style.transform="none";return}
+   field(t);
+   const reveal=smooth(t,.25,2.3);title.style.opacity=String(.14+.86*reveal);title.style.transform="translateY("+((1-reveal)*9)+"px) scale("+(.975+.025*reveal)+")";
+   raf=requestAnimationFrame(tick);
+ }
+ raf=requestAnimationFrame(tick);
 }
 export function openSakura(){
-  if(!dialog)dialog=build();
-  if(!dialog.open)dialog.showModal();
-  dialog.querySelector("[data-close]").focus({preventScroll:true});
-  play();
+ if(!dialog)dialog=makeDialog();
+ if(!dialog.open)dialog.showModal();
+ dialog.querySelector(".hs-close").focus({preventScroll:true});play();
 }
