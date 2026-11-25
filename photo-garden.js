@@ -796,15 +796,15 @@
     root.classList.toggle("rh-chapter-reading",!!readPanel);
     readToggle.setAttribute("aria-pressed",String(!!readPanel));
     readToggle.textContent=readPanel?"Exit reading mode":"Read this chapter";
-    readToggle.title=readPanel?"Return to flower-slide navigation (Esc)":"Click the chapter to scroll vertically without changing slides";
+    readToggle.title=readPanel?"Click the chapter again or press Esc to return to slide navigation":"Click the chapter to scroll vertically without changing slides";
   }
   setReading(false);
   readToggle.addEventListener("click",()=>setReading(!readPanel));
   world.addEventListener("click",event=>{
-    if(readPanel||event.defaultPrevented||event.button!==0||event.ctrlKey||event.metaKey||event.altKey||event.shiftKey)return;
+    if(transitionLocked||document.querySelector("dialog[open]")||event.defaultPrevented||event.button!==0||event.ctrlKey||event.metaKey||event.altKey||event.shiftKey)return;
     if(event.target.closest?.("a,button,input,select,textarea,summary,[role=button],label"))return;
     if(!event.target.closest?.(".slide.active")||window.getSelection()?.toString())return;
-    setReading(true);
+    setReading(!readPanel);
   });
   // Capture before other garden handlers; never turn a chapter at a scroll boundary.
   window.addEventListener("wheel",event=>{

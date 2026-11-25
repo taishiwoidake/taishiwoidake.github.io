@@ -4,6 +4,8 @@
   // original photo garden or its circular slide / petal transition logic.
   if (!document.querySelector(".research-root")) return;
   window.addEventListener("wheel", event => {
+    // The explicit chapter toggle owns wheel handling when available.
+    if (document.querySelector(".rh-chapter-read-toggle")) return;
     if (event.ctrlKey || event.metaKey) return;
     const panel=event.target.closest(".dd-panel, .research-inner");
     if (!panel) return;
