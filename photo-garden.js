@@ -767,11 +767,61 @@
   }
 
   let current=0;
+
+  // Click the scene (or the explicit toggle) to keep the current chapter in view.
+  const readToggle=document.createElement("button");
+  readToggle.type="button";readToggle.className="rh-chapter-read-toggle";
+  readToggle.setAttribute("aria-pressed","false");
+  const controls=root.querySelector(".site-controls");
+  if(controls)controls.insertBefore(readToggle,controls.querySelector(".scene-arrows"));
+  let readPanel=null;
+  function setReading(on){
+    if(on){
+      if(transitionLocked||document.querySelector("dialog[open]"))return;
+      const panel=slides[current]?.querySelector(".slide-inner");
+      if(!panel)return;
+      readPanel=panel;
+      if(!panel.id)panel.id=slides[current].id+"-reading";
+      panel.setAttribute("tabindex","0");
+      panel.setAttribute("aria-label","Scroll within this chapter");
+      readToggle.setAttribute("aria-controls",panel.id);
+    }else{
+      if(readPanel){
+        readPanel.removeAttribute("tabindex");
+        readPanel.removeAttribute("aria-label");
+      }
+      readPanel=null;
+      readToggle.removeAttribute("aria-controls");
+    }
+    root.classList.toggle("rh-chapter-reading",!!readPanel);
+    readToggle.setAttribute("aria-pressed",String(!!readPanel));
+    readToggle.textContent=readPanel?"Exit reading mode":"Read this chapter";
+    readToggle.title=readPanel?"Return to flower-slide navigation (Esc)":"Click the chapter to scroll vertically without changing slides";
+  }
+  setReading(false);
+  readToggle.addEventListener("click",()=>setReading(!readPanel));
+  world.addEventListener("click",event=>{
+    if(readPanel||event.defaultPrevented||event.button!==0||event.ctrlKey||event.metaKey||event.altKey||event.shiftKey)return;
+    if(event.target.closest?.("a,button,input,select,textarea,summary,[role=button],label"))return;
+    if(!event.target.closest?.(".slide.active")||window.getSelection()?.toString())return;
+    setReading(true);
+  });
+  // Capture before other garden handlers; never turn a chapter at a scroll boundary.
+  window.addEventListener("wheel",event=>{
+    if(!readPanel||document.querySelector("dialog[open]")||event.ctrlKey||event.metaKey)return;
+    if(event.target.closest?.(".site-header,.site-controls")&&!event.target.closest?.(".rh-chapter-read-toggle"))return;
+    event.stopImmediatePropagation();
+    event.preventDefault();
+    const unit=event.deltaMode===1?16:event.deltaMode===2?readPanel.clientHeight:1;
+    readPanel.scrollTop+=event.deltaY*unit;
+  },{capture:true,passive:false});
+
   let handlingScroll=false;
   const pad=n=>String(n).padStart(2,"0");
   function activate(index){
     const chosen=Math.max(0,Math.min(slides.length-1,index));
     if(chosen===current&&document.body.classList.contains("motion"))return;
+    if(chosen!==current&&readPanel)setReading(false);
     current=chosen;
     slides.forEach((panel,k)=>panel.classList.toggle("active",k===current));
     root.classList.toggle("is-dark",current===slides.length-1);
@@ -801,6 +851,7 @@
     const target=((index%slides.length)+slides.length)%slides.length;
     if(transitionLocked&&!immediate)return;
     if(target===current)return;
+    if(readPanel)setReading(false);
     if(immediate||reduced){
       world.scrollTo({left:target*world.clientWidth,behavior:"instant"});
       activate(target);
@@ -831,6 +882,7 @@
   let lastWheel=0;
   window.addEventListener("wheel",event=>{
     if(document.querySelector("dialog[open]")||event.ctrlKey||event.metaKey)return;
+    if(readPanel)return;
     if(transitionLocked){event.preventDefault();return;}
     const x=event.deltaX,y=event.deltaY;
     if(Math.max(Math.abs(x),Math.abs(y))<5)return;
@@ -845,12 +897,12 @@
   // consistent transition pipeline (including the wrap from last to first).
   let touchStart=null;
   world.addEventListener("touchstart",event=>{
-    if(event.touches.length!==1||dialog.open)return;
+    if(readPanel||event.touches.length!==1||document.querySelector("dialog[open]")){touchStart=null;return;}
     const t=event.touches[0];
     touchStart={x:t.clientX,y:t.clientY,time:performance.now()};
   },{passive:true});
   world.addEventListener("touchend",event=>{
-    if(!touchStart||transitionLocked)return;
+    if(readPanel||!touchStart||transitionLocked){touchStart=null;return;}
     const t=event.changedTouches[0];
     const dx=t.clientX-touchStart.x,dy=t.clientY-touchStart.y;
     touchStart=null;
@@ -861,6 +913,14 @@
   world.addEventListener("touchcancel",()=>{touchStart=null;},{passive:true});
   window.addEventListener("keydown",event=>{
     if(document.querySelector("dialog[open]")||event.altKey||event.ctrlKey||event.metaKey)return;
+    if(readPanel){
+      if(event.key==="Escape"){event.preventDefault();setReading(false);readToggle.focus({preventScroll:true});return;}
+      if(event.target.closest?.("button,a,input,select,textarea,summary,[contenteditable=true]")&&event.key===" ")return;
+      const step=event.key==="ArrowDown"?40:event.key==="ArrowUp"?-40:event.key==="PageDown"||event.key===" "?readPanel.clientHeight*.85:event.key==="PageUp"?-readPanel.clientHeight*.85:0;
+      if(step){event.preventDefault();readPanel.scrollTop+=event.shiftKey&&event.key===" "?-step:step;return;}
+      if(event.key==="Home"||event.key==="End"){event.preventDefault();readPanel.scrollTop=event.key==="Home"?0:readPanel.scrollHeight;return;}
+      if(event.key==="ArrowLeft"||event.key==="ArrowRight"){event.preventDefault();return;}
+    }
     if(["ArrowRight","PageDown"].includes(event.key)){event.preventDefault();go(current+1);}
     if(["ArrowLeft","PageUp"].includes(event.key)){event.preventDefault();go(current-1);}
     if(event.key==="Home"){event.preventDefault();go(0);}

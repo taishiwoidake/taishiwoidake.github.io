@@ -486,3 +486,43 @@ img[src*="hyakka-ryoran"],.rh-waypoint-crest,.rh-brand-crest,.hs-crest{
  .site-root.rh-reading-context .site-header .rh-waypoint{width:68px;height:61px}
  .site-root.rh-reading-context .site-header .rh-waypoint .rh-waypoint-icon{width:24px;height:24px;flex-basis:24px}
 }
+
+/* Click-to-read: lock horizontal chapter gestures while reading vertically. */
+.rh-chapter-read-toggle{
+ flex:0 0 auto;min-height:36px;padding:7px 12px;display:inline-flex;align-items:center;gap:7px;
+ background:#18372beb;color:#f5e9c6;border:1px solid #d9bd7f99;border-radius:5px;
+ font:600 12px/1.2 var(--sans);cursor:pointer;white-space:nowrap;
+}
+.rh-chapter-read-toggle::before{content:"↕";font:600 17px/1 var(--sans);color:#edcf91}
+.rh-chapter-read-toggle:hover,.rh-chapter-read-toggle:focus-visible{background:#416044;border-color:#ffe1a1}
+.rh-chapter-read-toggle[aria-pressed="true"]{background:#e5cd98;color:#20382c;border-color:#fff0c4}
+.rh-chapter-read-toggle[aria-pressed="true"]::before{content:"✓";color:#20382c}
+.site-root.rh-chapter-reading .horizontal-world{overflow-x:hidden;touch-action:pan-y pinch-zoom}
+.site-root.rh-chapter-reading .horizontal-world>.slide{min-height:0}
+.site-root.rh-chapter-reading .slide.active .slide-inner,
+.site-root.rh-chapter-reading.research-root .slide.active .slide-inner.research-inner,
+.site-root.rh-chapter-reading.research-root.deep-dive-root .slide.active .slide-inner.dd-panel{
+ top:calc(var(--rh-reading-header-height,90px) + 12px);
+ transform:translateX(-50%);
+ max-height:max(64px,calc(100dvh - var(--rh-reading-header-height,90px) - 100px));
+ overflow-y:auto;overflow-x:hidden;overscroll-behavior-y:contain;touch-action:pan-y pinch-zoom;
+ pointer-events:auto;scrollbar-width:thin;scrollbar-color:#e2c88988 transparent;
+ scroll-padding:10px;padding-bottom:18px;
+}
+.site-root.rh-chapter-reading .slide.active .slide-inner:focus-visible{outline:2px solid #e6cb91;outline-offset:-2px}
+.site-root.rh-chapter-reading .scroll-hint{display:none}
+@media(max-width:780px){
+ .site-root .site-controls{gap:9px}
+ .rh-chapter-read-toggle{font-size:11px;padding:7px 9px;min-height:38px;gap:5px}
+ .site-root.rh-chapter-reading .slide.active .slide-inner,
+ .site-root.rh-chapter-reading.research-root .slide.active .slide-inner.research-inner,
+ .site-root.rh-chapter-reading.research-root.deep-dive-root .slide.active .slide-inner.dd-panel{
+  max-height:max(64px,calc(100dvh - var(--rh-reading-header-height,90px) - 84px));
+ }
+}
+@media(max-width:440px){
+ .site-root .site-controls{left:14px;right:14px;gap:7px}
+ .site-root .site-controls .scene-progress{display:none}
+ .site-root .site-controls .scene-arrows{margin-left:auto}
+ .rh-chapter-read-toggle{font-size:10px;padding:7px 8px}
+}
