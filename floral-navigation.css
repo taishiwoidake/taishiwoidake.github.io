@@ -305,61 +305,85 @@
  .rh-nav-dialog .rh-hyakka-entry,.rh-nav-dialog .rh-hyakka-entry .rh-brand-heading-row,.rh-nav-dialog .rh-hyakka-entry .rh-hyakka-invite::after{transition:none;transform:none!important}
 }
 
-/* A clear, generous menu trigger with a spinning floral crest. */
+
+/* A five-petalled cherry blossom silhouette, with notched petal tips. */
 .rh-waypoint{
- max-width:min(252px,calc(100vw - 24px));min-height:72px;
- gap:12px;padding:10px 13px 10px 10px;border:1px solid #dfc58fa6;border-radius:10px;
- background:linear-gradient(135deg,#203b2df5,#344d36f5);
- box-shadow:0 5px 20px #081f185c,0 0 0 1px #d7ba7a22;
- touch-action:manipulation;transition:background .18s,border-color .18s,box-shadow .18s,transform .18s;
+ width:264px;max-width:calc(100vw - 24px);height:194px;min-height:0;
+ padding:0;gap:3px;flex-direction:column;justify-content:center;align-items:center;
+ text-align:center;border:0;border-radius:0;background:transparent;box-shadow:none;
+ isolation:isolate;clip-path:polygon(50.00% 7.57%,51.54% 6.41%,53.22% 4.43%,54.94% 3.56%,56.56% 3.84%,58.08% 4.67%,59.51% 5.75%,60.85% 6.99%,62.07% 8.37%,63.19% 9.87%,64.19% 11.45%,65.08% 13.10%,65.86% 14.79%,66.53% 16.49%,67.11% 18.18%,67.62% 19.82%,68.09% 21.38%,68.54% 22.82%,69.09% 24.02%,70.41% 24.17%,71.94% 24.15%,73.58% 24.10%,75.32% 24.07%,77.12% 24.10%,78.97% 24.21%,80.84% 24.42%,82.70% 24.74%,84.53% 25.20%,86.31% 25.78%,88.02% 26.51%,89.63% 27.38%,91.10% 28.39%,92.37% 29.57%,93.15% 31.01%,92.84% 32.89%,91.46% 35.08%,90.81% 36.89%,92.41% 37.98%,94.83% 38.95%,96.20% 40.29%,96.43% 41.91%,96.10% 43.59%,95.50% 45.27%,94.72% 46.91%,93.77% 48.49%,92.68% 50.00%,91.47% 51.43%,90.15% 52.78%,88.77% 54.03%,87.34% 55.19%,85.90% 56.26%,84.48% 57.25%,83.11% 58.16%,81.87% 59.04%,80.89% 59.93%,81.16% 61.21%,81.64% 62.64%,82.20% 64.17%,82.76% 65.80%,83.29% 67.50%,83.76% 69.27%,84.14% 71.09%,84.40% 72.94%,84.53% 74.80%,84.51% 76.66%,84.34% 78.49%,84.00% 80.27%,83.49% 81.97%,82.75% 83.53%,81.60% 84.70%,79.70% 85.00%,77.16% 84.37%,75.22% 84.32%,74.67% 86.16%,74.49% 88.74%,73.62% 90.44%,72.13% 91.16%,70.41% 91.37%,68.61% 91.33%,66.79% 91.10%,64.98% 90.69%,63.19% 90.13%,61.44% 89.44%,59.74% 88.62%,58.10% 87.70%,56.55% 86.72%,55.07% 85.69%,53.68% 84.66%,52.38% 83.66%,51.16% 82.76%,50.00% 82.12%,48.84% 82.76%,47.62% 83.66%,46.32% 84.66%,44.93% 85.69%,43.45% 86.72%,41.90% 87.70%,40.26% 88.62%,38.56% 89.44%,36.81% 90.13%,35.02% 90.69%,33.21% 91.10%,31.39% 91.33%,29.59% 91.37%,27.87% 91.16%,26.38% 90.44%,25.51% 88.74%,25.33% 86.16%,24.78% 84.32%,22.84% 84.37%,20.30% 85.00%,18.40% 84.70%,17.25% 83.53%,16.51% 81.97%,16.00% 80.27%,15.66% 78.49%,15.49% 76.66%,15.47% 74.80%,15.60% 72.94%,15.86% 71.09%,16.24% 69.27%,16.71% 67.50%,17.24% 65.80%,17.80% 64.17%,18.36% 62.64%,18.84% 61.21%,19.11% 59.93%,18.13% 59.04%,16.89% 58.16%,15.52% 57.25%,14.10% 56.26%,12.66% 55.19%,11.23% 54.03%,9.85% 52.78%,8.53% 51.43%,7.32% 50.00%,6.23% 48.49%,5.28% 46.91%,4.50% 45.27%,3.90% 43.59%,3.57% 41.91%,3.80% 40.29%,5.17% 38.95%,7.59% 37.98%,9.19% 36.89%,8.54% 35.08%,7.16% 32.89%,6.85% 31.01%,7.63% 29.57%,8.90% 28.39%,10.37% 27.38%,11.98% 26.51%,13.69% 25.78%,15.47% 25.20%,17.30% 24.74%,19.16% 24.42%,21.03% 24.21%,22.88% 24.10%,24.68% 24.07%,26.42% 24.10%,28.06% 24.15%,29.59% 24.17%,30.91% 24.02%,31.46% 22.82%,31.91% 21.38%,32.38% 19.82%,32.89% 18.18%,33.47% 16.49%,34.14% 14.79%,34.92% 13.10%,35.81% 11.45%,36.81% 9.87%,37.93% 8.37%,39.15% 6.99%,40.49% 5.75%,41.92% 4.67%,43.44% 3.84%,45.06% 3.56%,46.78% 4.43%,48.46% 6.41%);
+ transition:filter .18s,transform .18s;touch-action:manipulation;
 }
-.rh-waypoint .rh-waypoint-icon{width:48px;height:48px;flex:0 0 48px}
-.rh-waypoint .rh-waypoint-text{gap:5px;flex:1}
+.rh-waypoint::before{
+ content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+ background:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20264%20194%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g%22%20x2%3D%22.85%22%20y2%3D%221%22%3E%3Cstop%20stop-color%3D%22%2352704b%22%2F%3E%3Cstop%20offset%3D%22.47%22%20stop-color%3D%22%23284735%22%2F%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%2319352a%22%2F%3E%3C%2FlinearGradient%3E%3CradialGradient%20id%3D%22l%22%3E%3Cstop%20stop-color%3D%22%23f4d496%22%20stop-opacity%3D%22.15%22%2F%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23f4d496%22%20stop-opacity%3D%220%22%2F%3E%3C%2FradialGradient%3E%3C%2Fdefs%3E%3Cpolygon%20points%3D%22132.00%2C14.69%20136.06%2C12.43%20140.51%2C8.59%20145.03%2C6.90%20149.32%2C7.45%20153.34%2C9.06%20157.11%2C11.15%20160.63%2C13.56%20163.87%2C16.24%20166.82%2C19.14%20169.46%2C22.21%20171.81%2C25.41%20173.86%2C28.69%20175.64%2C31.99%20177.18%2C35.27%20178.52%2C38.45%20179.74%2C41.49%20180.95%2C44.28%20182.41%2C46.59%20185.89%2C46.89%20189.91%2C46.85%20194.26%2C46.76%20198.85%2C46.71%20203.61%2C46.76%20208.48%2C46.97%20213.40%2C47.37%20218.32%2C48.00%20223.16%2C48.88%20227.86%2C50.02%20232.37%2C51.43%20236.61%2C53.12%20240.51%2C55.08%20243.87%2C57.36%20245.91%2C60.15%20245.10%2C63.80%20241.45%2C68.06%20239.74%2C71.57%20243.96%2C73.67%20250.36%2C75.56%20253.96%2C78.16%20254.57%2C81.30%20253.70%2C84.57%20252.13%2C87.83%20250.06%2C91.00%20247.56%2C94.07%20244.68%2C97.00%20241.47%2C99.78%20238.01%2C102.39%20234.35%2C104.82%20230.58%2C107.07%20226.77%2C109.14%20223.01%2C111.06%20219.42%2C112.84%20216.14%2C114.53%20213.56%2C116.25%20214.25%2C118.75%20215.54%2C121.52%20217.00%2C124.50%20218.49%2C127.65%20219.89%2C130.96%20221.13%2C134.39%20222.12%2C137.91%20222.81%2C141.50%20223.16%2C145.12%20223.12%2C148.72%20222.66%2C152.27%20221.77%2C155.73%20220.41%2C159.03%20218.46%2C162.05%20215.43%2C164.32%20210.41%2C164.89%20203.71%2C163.69%20198.58%2C163.59%20197.13%2C167.16%20196.64%2C172.16%20194.34%2C175.46%20190.43%2C176.84%20185.88%2C177.26%20181.13%2C177.18%20176.34%2C176.73%20171.55%2C175.95%20166.82%2C174.86%20162.19%2C173.50%20157.71%2C171.92%20153.40%2C170.14%20149.29%2C168.23%20145.39%2C166.24%20141.73%2C164.23%20138.28%2C162.30%20135.05%2C160.56%20132.00%2C159.31%20128.95%2C160.56%20125.72%2C162.30%20122.27%2C164.23%20118.61%2C166.24%20114.71%2C168.23%20110.60%2C170.14%20106.29%2C171.92%20101.81%2C173.50%2097.18%2C174.86%2092.45%2C175.95%2087.66%2C176.73%2082.87%2C177.18%2078.12%2C177.26%2073.57%2C176.84%2069.66%2C175.46%2067.36%2C172.16%2066.87%2C167.16%2065.42%2C163.59%2060.29%2C163.69%2053.59%2C164.89%2048.57%2C164.32%2045.54%2C162.05%2043.59%2C159.03%2042.23%2C155.73%2041.34%2C152.27%2040.88%2C148.72%2040.84%2C145.12%2041.19%2C141.50%2041.88%2C137.91%2042.87%2C134.39%2044.11%2C130.96%2045.51%2C127.65%2047.00%2C124.50%2048.46%2C121.52%2049.75%2C118.75%2050.44%2C116.25%2047.86%2C114.53%2044.58%2C112.84%2040.99%2C111.06%2037.23%2C109.14%2033.42%2C107.07%2029.65%2C104.82%2025.99%2C102.39%2022.53%2C99.78%2019.32%2C97.00%2016.44%2C94.07%2013.94%2C91.00%2011.87%2C87.83%2010.30%2C84.57%209.43%2C81.30%2010.04%2C78.16%2013.64%2C75.56%2020.04%2C73.67%2024.26%2C71.57%2022.55%2C68.06%2018.90%2C63.80%2018.09%2C60.15%2020.13%2C57.36%2023.49%2C55.08%2027.39%2C53.12%2031.63%2C51.43%2036.14%2C50.02%2040.84%2C48.88%2045.68%2C48.00%2050.60%2C47.37%2055.52%2C46.97%2060.39%2C46.76%2065.15%2C46.71%2069.74%2C46.76%2074.09%2C46.85%2078.11%2C46.89%2081.59%2C46.59%2083.05%2C44.28%2084.26%2C41.49%2085.48%2C38.45%2086.82%2C35.27%2088.36%2C31.99%2090.14%2C28.69%2092.19%2C25.41%2094.54%2C22.21%2097.18%2C19.14%20100.13%2C16.24%20103.37%2C13.56%20106.89%2C11.15%20110.66%2C9.06%20114.68%2C7.45%20118.97%2C6.90%20123.49%2C8.59%20127.94%2C12.43%22%20fill%3D%22url(%23g)%22%20stroke%3D%22%23e4c98e%22%20stroke-width%3D%223%22%2F%3E%3Cellipse%20cx%3D%22132%22%20cy%3D%2297%22%20rx%3D%2279%22%20ry%3D%2261%22%20fill%3D%22url(%23l)%22%2F%3E%3C%2Fsvg%3E") center/100% 100% no-repeat;
+}
+.rh-waypoint:hover,.rh-waypoint:focus-visible{
+ background:transparent;border:0;box-shadow:none;filter:brightness(1.25);transform:scale(1.025);
+}
+.rh-waypoint:active{transform:scale(.975)}
+.rh-waypoint .rh-waypoint-icon{
+ width:52px;height:52px;flex:0 0 52px;border:0;background:none;
+}
+.rh-waypoint .rh-waypoint-text{
+ flex:0 1 auto;width:64%;min-width:0;align-items:center;gap:3px;
+}
 .rh-waypoint .rh-waypoint-kicker{
- display:flex;align-items:center;gap:7px;font:700 13px/1.15 var(--sans);letter-spacing:.11em;color:#ffedbd;
+ display:flex;align-items:center;justify-content:center;gap:6px;
+ font:700 14px/1.15 var(--sans);letter-spacing:.085em;white-space:nowrap;color:#fff0be;
 }
 .rh-waypoint .rh-waypoint-kicker::before{
- content:"";width:17px;height:13px;flex:0 0 17px;
+ content:"";width:16px;height:12px;flex:0 0 16px;
  background:linear-gradient(currentColor,currentColor) top/100% 2px no-repeat,
  linear-gradient(currentColor,currentColor) center/100% 2px no-repeat,
  linear-gradient(currentColor,currentColor) bottom/100% 2px no-repeat;
 }
-.rh-waypoint .rh-waypoint-page{font-size:15px;line-height:1.25}
-.rh-waypoint .rh-waypoint-chapter{font-size:10px;line-height:1.2}
-.rh-waypoint:hover,.rh-waypoint:focus-visible{
- background:linear-gradient(135deg,#496247,#284935);border-color:#ffe2a6;
- box-shadow:0 5px 22px #081f1866,0 0 0 2px #e7c98d55,0 0 20px #e8c68d30;
+.rh-waypoint .rh-waypoint-page{
+ width:100%;font:500 14px/1.15 var(--serif);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
 }
-.rh-waypoint:active{transform:scale(.975)}
-.rh-waypoint .rh-waypoint-crest,.rh-nav-dialog .rh-brand-crest{transform-origin:50% 50%}
-@keyframes rh-crest-spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
-@media (prefers-reduced-motion:no-preference){
- .rh-waypoint:hover .rh-waypoint-crest,.rh-waypoint:focus-visible .rh-waypoint-crest,
- .rh-nav-dialog .rh-hyakka-entry:hover .rh-brand-crest,.rh-nav-dialog .rh-hyakka-entry:focus-within .rh-brand-crest{
-  animation:rh-crest-spin .46s linear infinite;
- }
+.rh-waypoint .rh-waypoint-chapter{
+ width:100%;font-size:9px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
 }
 @media(max-width:900px){
- .rh-waypoint{max-width:min(218px,calc(100vw - 24px));min-height:60px;gap:9px;padding:7px 10px 7px 8px}
- .rh-waypoint .rh-waypoint-icon{width:40px;height:40px;flex-basis:40px}
- .rh-waypoint .rh-waypoint-page{font-size:13px}
- .rh-waypoint .rh-waypoint-chapter{font-size:9px}
+ .rh-waypoint{width:216px;height:159px;gap:2px}
+ .rh-waypoint .rh-waypoint-icon{width:43px;height:43px;flex-basis:43px}
  .rh-waypoint .rh-waypoint-kicker{font-size:12px}
-}
-@media(max-width:560px){
- .rh-waypoint{max-width:calc(100vw - 16px);min-height:49px;gap:8px;padding:5px 9px 5px 6px}
- .rh-waypoint .rh-waypoint-icon{width:33px;height:33px;flex-basis:33px}
- .rh-waypoint .rh-waypoint-text{gap:3px}
- .rh-waypoint .rh-waypoint-kicker{font-size:11px}
  .rh-waypoint .rh-waypoint-page{font-size:12px}
  .rh-waypoint .rh-waypoint-chapter{font-size:8px}
 }
+@media(max-width:560px){
+ .rh-waypoint{width:176px;height:129px;max-width:calc(100vw - 16px);gap:1px}
+ .rh-waypoint .rh-waypoint-icon{width:34px;height:34px;flex-basis:34px}
+ .rh-waypoint .rh-waypoint-text{gap:2px;width:68%}
+ .rh-waypoint .rh-waypoint-kicker{font-size:11px;gap:4px}
+ .rh-waypoint .rh-waypoint-kicker::before{width:12px;height:10px;flex-basis:12px}
+ .rh-waypoint .rh-waypoint-page{font-size:11px}
+ .rh-waypoint .rh-waypoint-chapter{font-size:7px}
+}
 @media(max-height:650px) and (min-width:561px){
- .rh-waypoint{min-height:55px;max-width:218px;padding:6px 10px}
- .rh-waypoint .rh-waypoint-icon{width:38px;height:38px;flex-basis:38px}
- .rh-waypoint .rh-waypoint-page{font-size:13px}
+ .rh-waypoint{width:216px;height:159px}
+ .rh-waypoint .rh-waypoint-icon{width:43px;height:43px;flex-basis:43px}
+ .rh-waypoint .rh-waypoint-kicker{font-size:12px}
+ .rh-waypoint .rh-waypoint-page{font-size:12px}
+ .rh-waypoint .rh-waypoint-chapter{font-size:8px}
+}
+/* Every visible Hyakka crest, including static hero signatures and the full-screen artwork. */
+img[src*="hyakka-ryoran"],.rh-waypoint-crest,.rh-brand-crest,.hs-crest{
+ transform-origin:50% 50%;
+}
+#welcome .rh-hyakka-signature img,#research-overview .rh-hyakka-signature img,
+#hyakka-sakura-dialog .hs-crest{pointer-events:auto}
+@keyframes rh-crest-spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+@media(prefers-reduced-motion:no-preference){
+ img[src*="hyakka-ryoran"]:hover,
+ .rh-hyakka-signature:hover img,
+ .rh-waypoint:hover .rh-waypoint-crest,.rh-waypoint:focus-visible .rh-waypoint-crest,
+ .rh-nav-dialog .rh-hyakka-entry:hover .rh-brand-crest,.rh-nav-dialog .rh-hyakka-entry:focus-within .rh-brand-crest,
+ #hyakka-sakura-dialog .hs-crest:hover{
+  animation:rh-crest-spin .42s linear infinite;
+ }
 }
 @media(prefers-reduced-motion:reduce){
  .rh-waypoint{transition:none}
- .rh-waypoint:active{transform:none}
+ .rh-waypoint:hover,.rh-waypoint:active,.rh-waypoint:focus-visible{transform:none}
 }
