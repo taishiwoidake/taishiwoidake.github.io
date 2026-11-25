@@ -219,6 +219,17 @@
     if(!wordmark.hasAttribute("aria-label"))wordmark.setAttribute("aria-label",wordmark.textContent.trim()||"Return to research overview");
     wordmark.after(location);
     root.classList.add("rh-reading-context");
+    // The mobile trigger occupies a real grid cell, so it cannot cover the text.
+    // Restore the original floating button when returning to desktop widths.
+    const phoneLayout=window.matchMedia("(max-width:780px)");
+    const dockWaypoint=()=>{
+      if(phoneLayout.matches){if(waypoint.parentElement!==header)header.append(waypoint);}
+      else if(waypoint.parentElement!==root)root.append(waypoint);
+    };
+    dockWaypoint();
+    if(phoneLayout.addEventListener)phoneLayout.addEventListener("change",dockWaypoint);
+    else phoneLayout.addListener(dockWaypoint);
+
     const sizeHeader=()=>root.style.setProperty("--rh-reading-header-height",Math.ceil(header.getBoundingClientRect().height)+"px");
     sizeHeader();
     if(typeof ResizeObserver!=="undefined")new ResizeObserver(sizeHeader).observe(header);

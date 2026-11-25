@@ -444,3 +444,45 @@ img[src*="hyakka-ryoran"],.rh-waypoint-crest,.rh-brand-crest,.hs-crest{
  .site-root.rh-reading-context .site-header .top-nav a[aria-current=page]::after{margin-top:3px}
  .site-root.rh-reading-context .rh-waypoint{top:max(66px,calc(var(--rh-reading-header-height,90px) + 6px))}
 }
+
+/* Phone layout: dock the sakura trigger inside the header, never over the reading area. */
+@media(max-width:780px){
+ .site-root.rh-reading-context .site-header{
+  grid-template-columns:28px minmax(0,1fr) 76px;
+  gap:5px 8px;
+ }
+ .site-root.rh-reading-context .site-header .wordmark{grid-column:1;grid-row:1}
+ .site-root.rh-reading-context .site-header .rh-reading-location{grid-column:2;grid-row:1}
+ .site-root.rh-reading-context .site-header .top-nav{grid-column:1/-1;grid-row:2}
+ .site-root.rh-reading-context .site-header .rh-waypoint{
+  position:relative;inset:auto;grid-column:3;grid-row:1;justify-self:end;align-self:center;
+  width:76px;height:68px;min-height:0;max-width:none;margin:0;padding:0;
+  gap:1px;z-index:1;flex-direction:column;justify-content:center;
+ }
+ .site-root.rh-reading-context .site-header .rh-waypoint .rh-waypoint-icon{
+  width:27px;height:27px;flex:0 0 27px;
+ }
+ .site-root.rh-reading-context .site-header .rh-waypoint .rh-waypoint-text{
+  width:80%;gap:0;flex:0 0 auto;
+ }
+ .site-root.rh-reading-context .site-header .rh-waypoint .rh-waypoint-kicker{
+  font-size:0;gap:3px;letter-spacing:0;line-height:1;
+ }
+ .site-root.rh-reading-context .site-header .rh-waypoint .rh-waypoint-kicker::before{
+  width:10px;height:9px;flex:0 0 10px;
+ }
+ .site-root.rh-reading-context .site-header .rh-waypoint .rh-waypoint-kicker::after{
+  content:"MENU";font:700 9px/1.2 var(--sans);letter-spacing:.015em;
+ }
+ .site-root.rh-reading-context .site-header .rh-waypoint .rh-waypoint-page,
+ .site-root.rh-reading-context .site-header .rh-waypoint .rh-waypoint-chapter{display:none}
+ .site-root.rh-reading-context .site-header .rh-waypoint:hover,
+ .site-root.rh-reading-context .site-header .rh-waypoint:focus-visible{transform:none}
+ .site-root.rh-reading-context .site-header .rh-waypoint:active{transform:scale(.97)}
+}
+@media(max-width:360px){
+ .site-root.rh-reading-context .site-header{grid-template-columns:24px minmax(0,1fr) 68px;gap:4px 6px;padding-inline:8px}
+ .site-root.rh-reading-context .site-header .wordmark svg{width:24px;height:24px}
+ .site-root.rh-reading-context .site-header .rh-waypoint{width:68px;height:61px}
+ .site-root.rh-reading-context .site-header .rh-waypoint .rh-waypoint-icon{width:24px;height:24px;flex-basis:24px}
+}
