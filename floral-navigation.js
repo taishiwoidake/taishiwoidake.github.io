@@ -56,7 +56,7 @@
   const locationLabel=parents[page]?parents[page]+" / "+current.short:current.short;
   const pageText=el("span","rh-waypoint-page",locationLabel);
   const chapterText=el("span","rh-waypoint-chapter");
-  text.append(el("span","rh-waypoint-kicker","百花繚乱 / MENU"),pageText,chapterText);
+  text.append(el("span","rh-waypoint-kicker","MENU"),pageText,chapterText);
   waypoint.append(glyph,text);
   root.append(waypoint);
   function dialogShell(id,cls,kicker){

@@ -125,7 +125,7 @@
 .rh-nav-dialog .rh-brand-roman{font:400 11px/1.45 var(--sans);color:#d6d9bb;margin:0;letter-spacing:.035em}
 @media(max-width:560px){.rh-nav-dialog .rh-brand-heading-row{gap:11px;margin:12px 0 14px}.rh-nav-dialog .rh-brand-crest{width:47px;height:47px;flex-basis:47px}.rh-nav-dialog .rh-brand-heading-row .rh-brand-heading{font-size:29px}.rh-nav-dialog .rh-brand-roman{font-size:10px}}
 @media(max-height:650px){.rh-nav-dialog .rh-brand-heading-row{margin:8px 0 10px}.rh-nav-dialog .rh-brand-crest{width:43px;height:43px;flex-basis:43px}.rh-nav-dialog .rh-brand-heading-row .rh-brand-heading{font-size:27px}}
-@media(prefers-reduced-motion:no-preference){.rh-waypoint .rh-waypoint-crest{transition:transform .35s ease}.rh-waypoint:hover .rh-waypoint-crest,.rh-waypoint:focus-visible .rh-waypoint-crest{transform:rotate(8deg)}}
+
 
 
 /* Hyakka Ryoran / a prominent signature, not a replacement of the garden. */
@@ -303,4 +303,63 @@
 .rh-nav-dialog .rh-hyakka-entry .rh-hyakka-invite:disabled{cursor:progress}
 @media(prefers-reduced-motion:reduce){
  .rh-nav-dialog .rh-hyakka-entry,.rh-nav-dialog .rh-hyakka-entry .rh-brand-heading-row,.rh-nav-dialog .rh-hyakka-entry .rh-hyakka-invite::after{transition:none;transform:none!important}
+}
+
+/* A clear, generous menu trigger with a spinning floral crest. */
+.rh-waypoint{
+ max-width:min(252px,calc(100vw - 24px));min-height:72px;
+ gap:12px;padding:10px 13px 10px 10px;border:1px solid #dfc58fa6;border-radius:10px;
+ background:linear-gradient(135deg,#203b2df5,#344d36f5);
+ box-shadow:0 5px 20px #081f185c,0 0 0 1px #d7ba7a22;
+ touch-action:manipulation;transition:background .18s,border-color .18s,box-shadow .18s,transform .18s;
+}
+.rh-waypoint .rh-waypoint-icon{width:48px;height:48px;flex:0 0 48px}
+.rh-waypoint .rh-waypoint-text{gap:5px;flex:1}
+.rh-waypoint .rh-waypoint-kicker{
+ display:flex;align-items:center;gap:7px;font:700 13px/1.15 var(--sans);letter-spacing:.11em;color:#ffedbd;
+}
+.rh-waypoint .rh-waypoint-kicker::before{
+ content:"";width:17px;height:13px;flex:0 0 17px;
+ background:linear-gradient(currentColor,currentColor) top/100% 2px no-repeat,
+ linear-gradient(currentColor,currentColor) center/100% 2px no-repeat,
+ linear-gradient(currentColor,currentColor) bottom/100% 2px no-repeat;
+}
+.rh-waypoint .rh-waypoint-page{font-size:15px;line-height:1.25}
+.rh-waypoint .rh-waypoint-chapter{font-size:10px;line-height:1.2}
+.rh-waypoint:hover,.rh-waypoint:focus-visible{
+ background:linear-gradient(135deg,#496247,#284935);border-color:#ffe2a6;
+ box-shadow:0 5px 22px #081f1866,0 0 0 2px #e7c98d55,0 0 20px #e8c68d30;
+}
+.rh-waypoint:active{transform:scale(.975)}
+.rh-waypoint .rh-waypoint-crest,.rh-nav-dialog .rh-brand-crest{transform-origin:50% 50%}
+@keyframes rh-crest-spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:no-preference){
+ .rh-waypoint:hover .rh-waypoint-crest,.rh-waypoint:focus-visible .rh-waypoint-crest,
+ .rh-nav-dialog .rh-hyakka-entry:hover .rh-brand-crest,.rh-nav-dialog .rh-hyakka-entry:focus-within .rh-brand-crest{
+  animation:rh-crest-spin .46s linear infinite;
+ }
+}
+@media(max-width:900px){
+ .rh-waypoint{max-width:min(218px,calc(100vw - 24px));min-height:60px;gap:9px;padding:7px 10px 7px 8px}
+ .rh-waypoint .rh-waypoint-icon{width:40px;height:40px;flex-basis:40px}
+ .rh-waypoint .rh-waypoint-page{font-size:13px}
+ .rh-waypoint .rh-waypoint-chapter{font-size:9px}
+ .rh-waypoint .rh-waypoint-kicker{font-size:12px}
+}
+@media(max-width:560px){
+ .rh-waypoint{max-width:calc(100vw - 16px);min-height:49px;gap:8px;padding:5px 9px 5px 6px}
+ .rh-waypoint .rh-waypoint-icon{width:33px;height:33px;flex-basis:33px}
+ .rh-waypoint .rh-waypoint-text{gap:3px}
+ .rh-waypoint .rh-waypoint-kicker{font-size:11px}
+ .rh-waypoint .rh-waypoint-page{font-size:12px}
+ .rh-waypoint .rh-waypoint-chapter{font-size:8px}
+}
+@media(max-height:650px) and (min-width:561px){
+ .rh-waypoint{min-height:55px;max-width:218px;padding:6px 10px}
+ .rh-waypoint .rh-waypoint-icon{width:38px;height:38px;flex-basis:38px}
+ .rh-waypoint .rh-waypoint-page{font-size:13px}
+}
+@media(prefers-reduced-motion:reduce){
+ .rh-waypoint{transition:none}
+ .rh-waypoint:active{transform:none}
 }
