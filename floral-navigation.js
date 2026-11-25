@@ -221,11 +221,8 @@
       if(activeRow)activeRow.closest(".rh-terrace-group").open=true;
       menu.dlg.showModal();
       menu.close.focus({preventScroll:true});
-      // Keep the current path in view without moving the flower garden.
-      requestAnimationFrame(()=>{
-        const selected=chapterItems[lastScene]?.b||activeRow;
-        if(menu.dlg.open&&selected)selected.scrollIntoView({block:"nearest",inline:"nearest",behavior:"instant"});
-      });
+      // Open at the masthead. The entire directory now scrolls as one panel.
+      menu.dlg.scrollTop=0;
     }
     waypoint.setAttribute("aria-expanded","true");
   });

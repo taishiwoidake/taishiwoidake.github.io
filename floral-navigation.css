@@ -64,8 +64,8 @@
 
 /* Terraced directory — applies only while the left menu is open.
    The compact location button and expanded research popups stay unchanged. */
-.rh-nav-dialog{width:min(460px,calc(100vw - 12px));overflow:hidden}
-.rh-nav-dialog .rh-dialog-shell{height:100%;box-sizing:border-box;display:flex;flex-direction:column;min-height:0;padding:0;overflow:hidden}
+.rh-nav-dialog{width:min(460px,calc(100vw - 12px));overflow-x:hidden;overflow-y:auto;overscroll-behavior-y:contain;scrollbar-width:thin;scrollbar-color:#acb28a80 transparent;touch-action:pan-y pinch-zoom;scroll-padding:10px}
+.rh-nav-dialog .rh-dialog-shell{height:auto;min-height:100%;box-sizing:border-box;display:block;padding:0;overflow:visible}
 .rh-nav-dialog .rh-terrace-masthead{flex:none;padding:21px 24px 15px;border-bottom:1px solid #d8c69850;background:linear-gradient(145deg,#284633,#1b362a)}
 .rh-nav-dialog .rh-terrace-masthead .rh-dialog-heading{font-size:clamp(29px,4vw,38px);margin:12px 0 15px;letter-spacing:-.04em}
 .rh-nav-dialog .rh-current-block{margin:0;padding:12px 15px;border-left:3px solid #e2c78e;background:#102d22c7}
@@ -73,7 +73,7 @@
 .rh-nav-dialog .rh-current-block strong{font-size:21px;line-height:1.24;margin:6px 0}
 .rh-nav-dialog .rh-current-block p{font-size:12px;line-height:1.45;color:#e2ead8}
 .rh-nav-dialog .rh-terrace-guide{flex:none;margin:0;padding:11px 24px 8px;font:400 12px/1.5 var(--sans);color:#c9d7c3}
-.rh-nav-dialog .rh-terrace-tree{display:block;flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:#acb28a80 transparent;padding:4px 22px 30px 24px;scroll-padding:10px}
+.rh-nav-dialog .rh-terrace-tree{display:block;min-height:0;overflow:visible;padding:4px 22px max(30px,env(safe-area-inset-bottom)) 24px}
 .rh-nav-dialog .rh-terrace-tree ul{list-style:none;padding:0;margin:0}
 .rh-nav-dialog .rh-terrace-group{margin:0 0 14px;padding:0;border:1px solid #cdd7ad2e;background:#122e2355}
 .rh-nav-dialog .rh-terrace-group-title{display:flex;align-items:center;gap:11px;padding:12px 12px;list-style:none;cursor:pointer;background:linear-gradient(110deg,#426047a8,#2a493680);color:#fff1cf;border-bottom:1px solid #c7c99e26}

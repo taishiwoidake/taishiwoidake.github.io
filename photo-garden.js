@@ -830,7 +830,7 @@
   },{passive:true});
   let lastWheel=0;
   window.addEventListener("wheel",event=>{
-    if(dialog.open||event.ctrlKey||event.metaKey)return;
+    if(document.querySelector("dialog[open]")||event.ctrlKey||event.metaKey)return;
     if(transitionLocked){event.preventDefault();return;}
     const x=event.deltaX,y=event.deltaY;
     if(Math.max(Math.abs(x),Math.abs(y))<5)return;
@@ -860,7 +860,7 @@
   },{passive:true});
   world.addEventListener("touchcancel",()=>{touchStart=null;},{passive:true});
   window.addEventListener("keydown",event=>{
-    if(dialog.open||event.altKey||event.ctrlKey||event.metaKey)return;
+    if(document.querySelector("dialog[open]")||event.altKey||event.ctrlKey||event.metaKey)return;
     if(["ArrowRight","PageDown"].includes(event.key)){event.preventDefault();go(current+1);}
     if(["ArrowLeft","PageUp"].includes(event.key)){event.preventDefault();go(current-1);}
     if(event.key==="Home"){event.preventDefault();go(0);}
