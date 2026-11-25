@@ -526,3 +526,16 @@ img[src*="hyakka-ryoran"],.rh-waypoint-crest,.rh-brand-crest,.hs-crest{
  .site-root .site-controls .scene-arrows{margin-left:auto}
  .rh-chapter-read-toggle{font-size:10px;padding:7px 8px}
 }
+
+/* Long-form editorial research notes, inside the existing vertically scrollable chapter. */
+.rh-research-reading{
+ max-width:800px;margin:28px auto 10px;padding:23px clamp(15px,3vw,32px) 16px;
+ text-align:left;color:#f1eee0;background:#18372be0;border-top:1px solid #cdb88699;
+ border-bottom:1px solid #cdb88644;border-radius:2px;
+}
+.rh-research-reading-kicker{display:block;font:600 10px/1.4 var(--mono);letter-spacing:.14em;color:#e3ca91;margin-bottom:9px}
+.rh-research-reading h3{font:400 clamp(22px,3vw,30px)/1.25 var(--serif);color:#fff1cf;margin:0 0 15px;letter-spacing:-.025em}
+.rh-research-reading p{font:400 15px/1.85 var(--sans);color:#e6ebdc;margin:0 0 15px;overflow-wrap:anywhere;user-select:text}
+.rh-research-reading a{color:#ffe1a3;text-decoration:underline;text-underline-offset:3px;pointer-events:auto}
+.rh-research-reading code{font-family:var(--mono);font-size:.9em;background:#0d271d;padding:2px 4px}
+@media(max-width:780px){.rh-research-reading{margin-top:20px;padding:17px 13px 10px}.rh-research-reading p{font-size:14px;line-height:1.75}.rh-research-reading h3{font-size:23px}}
