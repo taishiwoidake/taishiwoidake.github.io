@@ -196,6 +196,34 @@
   }
   if(!activeRow)tree.append(chapters);
   menu.shell.append(masthead,guide,tree);
+
+  // Show a concrete, readable location outside the navigation drawer.
+  const header=root.querySelector(".site-header");
+  const wordmark=header?.querySelector(".wordmark");
+  let readingCount,readingLabel,readingHeading;
+  if(header&&wordmark){
+    const location=el("div","rh-reading-location");
+    location.setAttribute("role","status");
+    location.setAttribute("aria-live","polite");
+    location.setAttribute("aria-atomic","true");
+    const section=groups.find(([,pages])=>pages.includes(page));
+    const groupName=section?labelCase(section[0].replace(/^\d+\s*\/\s*/,"")):"Research";
+    const ancestor=parents[page];
+    const field=groupName+(ancestor?" / "+ancestor:"");
+    const topic=page==="index.html"?"Ryunosuke Hirata — Home":page==="qtrac.html"?"QTRAC — Quantum Temporal Reconstruction":current.name;
+    readingCount=el("span","rh-reading-count");
+    readingLabel=el("span","rh-reading-label");
+    readingHeading=el("span","rh-reading-heading");
+    const chapter=el("div","rh-reading-chapter");chapter.append(readingCount,readingLabel,readingHeading);
+    location.append(el("span","rh-reading-field",field),el("strong","rh-reading-topic",topic),chapter);
+    if(!wordmark.hasAttribute("aria-label"))wordmark.setAttribute("aria-label",wordmark.textContent.trim()||"Return to research overview");
+    wordmark.after(location);
+    root.classList.add("rh-reading-context");
+    const sizeHeader=()=>root.style.setProperty("--rh-reading-header-height",Math.ceil(header.getBoundingClientRect().height)+"px");
+    sizeHeader();
+    if(typeof ResizeObserver!=="undefined")new ResizeObserver(sizeHeader).observe(header);
+    else window.addEventListener("resize",sizeHeader,{passive:true});
+  }
   let lastScene=-1;
   function sync(){
     const active=scenes.findIndex(s=>s.classList.contains("active"));
@@ -204,6 +232,17 @@
     lastScene=i;
     const caption=pad(i+1)+" / "+pad(scenes.length)+" · "+titleFor(scenes[i]);
     chapterText.textContent=caption;
+    if(readingCount){
+      const scene=scenes[i];
+      const chapterName=labelCase(titleFor(scene));
+      const headingNode=scene.querySelector("h1,h2");
+      const headingCopy=headingNode?.cloneNode(true);
+      headingCopy?.querySelectorAll("br").forEach(n=>n.replaceWith(" "));
+      const headingText=(headingCopy?.textContent||"").replace(/\s+/g," ").trim();
+      readingCount.textContent="CHAPTER "+pad(i+1)+" / "+pad(scenes.length);
+      readingLabel.textContent=chapterName;
+      readingHeading.textContent=headingText&&headingText.toLowerCase()!==chapterName.toLowerCase()?headingText:"";
+    }
     menuCurrentChapter.textContent=pad(i+1)+" / "+pad(scenes.length)+" · "+labelCase(titleFor(scenes[i]));
     waypoint.setAttribute("aria-label","Open research menu. Current page: "+current.name+". Chapter: "+caption);
     waypoint.title=current.name+" — "+caption;
