@@ -539,3 +539,20 @@ img[src*="hyakka-ryoran"],.rh-waypoint-crest,.rh-brand-crest,.hs-crest{
 .rh-research-reading a{color:#ffe1a3;text-decoration:underline;text-underline-offset:3px;pointer-events:auto}
 .rh-research-reading code{font-family:var(--mono);font-size:.9em;background:#0d271d;padding:2px 4px}
 @media(max-width:780px){.rh-research-reading{margin-top:20px;padding:17px 13px 10px}.rh-research-reading p{font-size:14px;line-height:1.75}.rh-research-reading h3{font-size:23px}}
+
+/* Touch devices: vertical gestures read the chapter; horizontal gestures change it. */
+.site-root.rh-touch-reading .rh-chapter-read-toggle{display:none}
+.site-root.rh-touch-reading .horizontal-world{overflow-x:hidden;touch-action:pan-y pinch-zoom}
+.site-root.rh-touch-reading .horizontal-world>.slide{min-height:0}
+.site-root.rh-touch-reading .slide.active .slide-inner,
+.site-root.rh-touch-reading.research-root .slide.active .slide-inner.research-inner,
+.site-root.rh-touch-reading.research-root.deep-dive-root .slide.active .slide-inner.dd-panel{
+ top:calc(var(--rh-reading-header-height,90px) + 10px);
+ transform:translateX(-50%);
+ height:max(64px,calc(100dvh - var(--rh-reading-header-height,90px) - 88px));
+ max-height:max(64px,calc(100dvh - var(--rh-reading-header-height,90px) - 88px));
+ overflow-y:auto;overflow-x:hidden;overscroll-behavior-y:contain;
+ touch-action:pan-y pinch-zoom;pointer-events:auto;
+ scrollbar-width:thin;scrollbar-color:#e2c88988 transparent;scroll-padding:10px;padding-bottom:18px;
+}
+.site-root.rh-touch-reading .scroll-hint{display:none}

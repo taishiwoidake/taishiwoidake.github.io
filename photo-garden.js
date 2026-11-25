@@ -775,9 +775,10 @@
   const controls=root.querySelector(".site-controls");
   if(controls)controls.insertBefore(readToggle,controls.querySelector(".scene-arrows"));
   let readPanel=null;
+  const touchLayout=matchMedia("(hover: none) and (pointer: coarse)");
   function setReading(on){
     if(on){
-      if(transitionLocked||document.querySelector("dialog[open]"))return;
+      if(touchLayout.matches||transitionLocked||document.querySelector("dialog[open]"))return;
       const panel=slides[current]?.querySelector(".slide-inner");
       if(!panel)return;
       readPanel=panel;
@@ -799,9 +800,17 @@
     readToggle.title=readPanel?"Click the chapter again or press Esc to return to slide navigation":"Click the chapter to scroll vertically without changing slides";
   }
   setReading(false);
+  const syncTouchLayout=()=>{
+    if(touchLayout.matches&&readPanel)setReading(false);
+    root.classList.toggle("rh-touch-reading",touchLayout.matches);
+    readToggle.hidden=touchLayout.matches;
+  };
+  syncTouchLayout();
+  if(touchLayout.addEventListener)touchLayout.addEventListener("change",syncTouchLayout);
+  else touchLayout.addListener(syncTouchLayout);
   readToggle.addEventListener("click",()=>setReading(!readPanel));
   world.addEventListener("click",event=>{
-    if(transitionLocked||document.querySelector("dialog[open]")||event.defaultPrevented||event.button!==0||event.ctrlKey||event.metaKey||event.altKey||event.shiftKey)return;
+    if(touchLayout.matches||event.pointerType==="touch"||transitionLocked||document.querySelector("dialog[open]")||event.defaultPrevented||event.button!==0||event.ctrlKey||event.metaKey||event.altKey||event.shiftKey)return;
     if(event.target.closest?.("a,button,input,select,textarea,summary,[role=button],label"))return;
     if(!event.target.closest?.(".slide.active")||window.getSelection()?.toString())return;
     setReading(!readPanel);
@@ -883,6 +892,7 @@
   window.addEventListener("wheel",event=>{
     if(document.querySelector("dialog[open]")||event.ctrlKey||event.metaKey)return;
     if(readPanel)return;
+    if(touchLayout.matches&&Math.abs(event.deltaY)>=Math.abs(event.deltaX)){return;}
     if(transitionLocked){event.preventDefault();return;}
     const x=event.deltaX,y=event.deltaY;
     if(Math.max(Math.abs(x),Math.abs(y))<5)return;
@@ -899,17 +909,30 @@
   world.addEventListener("touchstart",event=>{
     if(readPanel||event.touches.length!==1||document.querySelector("dialog[open]")){touchStart=null;return;}
     const t=event.touches[0];
-    touchStart={x:t.clientX,y:t.clientY,time:performance.now()};
+    touchStart={x:t.clientX,y:t.clientY,id:t.identifier,axis:null};
   },{passive:true});
+  world.addEventListener("touchmove",event=>{
+    if(!touchStart||event.touches.length!==1||readPanel){touchStart=null;return;}
+    const t=event.touches[0];
+    if(t.identifier!==touchStart.id){touchStart=null;return;}
+    const dx=t.clientX-touchStart.x,dy=t.clientY-touchStart.y;
+    if(!touchStart.axis&&Math.max(Math.abs(dx),Math.abs(dy))>=10){
+      if(Math.abs(dx)>Math.abs(dy)*1.3)touchStart.axis="x";
+      else if(Math.abs(dy)>=Math.abs(dx))touchStart.axis="y";
+    }
+    if(touchStart.axis==="x"&&event.cancelable)event.preventDefault();
+  },{passive:false});
   world.addEventListener("touchend",event=>{
     if(readPanel||!touchStart||transitionLocked){touchStart=null;return;}
-    const t=event.changedTouches[0];
-    const dx=t.clientX-touchStart.x,dy=t.clientY-touchStart.y;
-    touchStart=null;
-    if(Math.abs(dx)>45&&Math.abs(dx)>Math.abs(dy)*1.13){
+    const gesture=touchStart;touchStart=null;
+    const t=Array.from(event.changedTouches).find(t=>t.identifier===gesture.id);
+    if(!t)return;
+    const dx=t.clientX-gesture.x,dy=t.clientY-gesture.y;
+    if(gesture.axis!=="y"&&Math.abs(dx)>45&&Math.abs(dx)>Math.abs(dy)*1.3){
+      if(event.cancelable)event.preventDefault();
       go(current+(dx<0?1:-1));
     }
-  },{passive:true});
+  },{passive:false});
   world.addEventListener("touchcancel",()=>{touchStart=null;},{passive:true});
   window.addEventListener("keydown",event=>{
     if(document.querySelector("dialog[open]")||event.altKey||event.ctrlKey||event.metaKey)return;
